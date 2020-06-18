@@ -9,6 +9,7 @@ const Container = styled.div<{ isDragActive: boolean }>`
     outline: none;
     position: relative;
     overflow: hidden;
+    grid-area: content;
 `
 
 const DropTarget = styled.div.attrs<{ targetPosition: { x: number, y: number } }>(({ targetPosition }) => ({
