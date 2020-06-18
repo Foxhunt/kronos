@@ -1,5 +1,13 @@
 import Document, { DocumentContext } from 'next/document'
-import { ServerStyleSheet } from 'styled-components'
+import { ServerStyleSheet, createGlobalStyle } from 'styled-components'
+
+const GlobalStyle = createGlobalStyle`
+   html, body, #__next {
+    margin: 0px;
+    width: 100%;
+    height: 100%;
+  }
+`
 
 export default class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
@@ -10,7 +18,10 @@ export default class MyDocument extends Document {
       ctx.renderPage = () =>
         originalRenderPage({
           enhanceApp: (App) => (props) =>
-            sheet.collectStyles(<App {...props} />),
+            sheet.collectStyles(<>
+              <GlobalStyle />
+              <App {...props} />
+            </>),
         })
 
       const initialProps = await Document.getInitialProps(ctx)
