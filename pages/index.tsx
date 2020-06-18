@@ -1,10 +1,25 @@
-import styled from 'styled-components'
+import styled from "styled-components"
+import Conent from "../components/content"
 
-const Title = styled.h1`
-  color: red;
-  font-size: 50px;
+const Container = styled.div`
+  display: grid;
+  height: 100%;
+  grid-template-columns: 20% auto 20%;
+`
+
+const Project = styled.div`
+  background-color: blue;
+  text-align: center;
+`
+const Context = styled.div`
+  background-color: yellow;
+  text-align: center;
 `
 
 export default function Home() {
-  return <Title>My page</Title>
+  return <Container>
+    <Project>Project</Project>
+    <Conent />
+    <Context>Context</Context>
+  </Container >
 }
