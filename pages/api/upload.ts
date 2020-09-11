@@ -8,10 +8,12 @@ export const config: PageConfig = {
     }
 }
 
+type Form = { fields: Fields, files: Files }
+
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     const form = new IncomingForm()
 
-    const { fields, files } = await new Promise<{ fields: Fields, files: Files }>((resolve, reject) => {
+    const parsedForm = await new Promise<Form>((resolve, reject) => {
         form.parse(req, (err, fields, files) => {
             if (err) {
                 reject(err)
@@ -19,10 +21,18 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             resolve({ fields, files })
         })
     }).catch(console.error)
+
     if (!fs.existsSync("C:\\repos\\kronos\\upload")) {
         await fsPromise.mkdir("C:\\repos\\kronos\\upload")
     }
-    await fsPromise.rename(files.file.path, `C:\\repos\\kronos\\upload\\${files.file.name}`)
 
-    res.status(200).json({ fields, files })
+    if (parsedForm) {
+
+        const { files, fields } = parsedForm
+
+        await fsPromise.rename(parsedForm.files.file.path, `C:\\repos\\kronos\\upload\\${files.file.name}`)
+
+        res.status(200).json({ fields, files })
+
+    }
 }
