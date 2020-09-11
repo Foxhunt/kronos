@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import Conent from "../components/content"
+import Content from "../components/content"
 
 const Container = styled.div`
   display: grid;
@@ -8,7 +8,7 @@ const Container = styled.div`
   grid-template-rows: 20px auto;
   grid-template-areas: 
     "timeline timeline timeline"
-    "project content context";
+    "content content content";
 `
 
 const Timeline = styled.div`
@@ -17,22 +17,9 @@ const Timeline = styled.div`
   grid-area: timeline;
 `
 
-const Project = styled.div`
-  background-color: blue;
-  text-align: center;
-  grid-area: project;
-`
-const Context = styled.div`
-  background-color: yellow;
-  text-align: center;
-  grid-area: context;
-`
-
 export default function Home() {
   return <Container>
     <Timeline>Timeline</Timeline>
-    <Project>Project</Project>
-    <Conent />
-    <Context>Context</Context>
+    <Content />
   </Container >
 }
