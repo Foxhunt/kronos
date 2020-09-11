@@ -7,8 +7,9 @@
     "start": "next start"
   },
   "dependencies": {
+    "firebase": "^7.20.0",
     "formidable": "^1.2.2",
-    "next": "latest",
+    "next": "^9.5.3",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-dropzone": "^11.1.0",
