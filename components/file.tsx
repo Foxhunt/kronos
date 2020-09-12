@@ -1,0 +1,50 @@
+import { useEffect, useState } from "react"
+import styled from "styled-components"
+
+const Container = styled.div<{ background?: string }>`
+    background-color: black;
+
+    background-image: url(${({ background }) => background});
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    width: 400px;
+    height: 400px;
+
+    color: white;
+
+    > * {
+        width: 100%;
+        height: calc(100% - 18px);
+    }
+`
+
+export default function File({ file }: { file: File }) {
+    const [fileContent, setFileContent] = useState({ src: "", type: file.type })
+
+    const isPDF = file.type === "application/pdf"
+
+    useEffect(() => {
+        const reader = new FileReader()
+        reader.addEventListener("load", event => {
+            setFileContent({
+                src: String(event.target?.result),
+                type: file.type
+            })
+        })
+        reader.readAsDataURL(file)
+    }, [file])
+
+    return <>
+        <Container
+            background={fileContent.src}>
+            {file.name}
+            {
+                isPDF && <embed
+                    src={fileContent.src}
+                    type={fileContent.type} />
+            }
+        </Container>
+    </>
+}
