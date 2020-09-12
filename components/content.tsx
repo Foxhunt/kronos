@@ -27,7 +27,7 @@ const DropTarget = styled.div.attrs<{ targetPosition: { x: number, y: number } }
 `
 
 export default function Content() {
-    
+
     const [files, setFiles] = useState<File[]>([])
     const onDrop = useCallback((acceptedFiles: File[]) => {
         acceptedFiles.forEach(async file => {
@@ -37,7 +37,7 @@ export default function Content() {
                 setFiles(files.concat())
             }
         })
-    }, [])
+    }, [files])
 
     // position drop object
     const [dropTargetPosition, setDropTargetPosition] = useState({ x: 0, y: 0 })
@@ -49,8 +49,12 @@ export default function Content() {
 
     return (<Container {...getRootProps({})}>
         {files.map(
-            file =>
+            (file, index) =>
                 <File
+                    onRemoveFile={() => {
+                        files.splice(index, 1)
+                        setFiles(files.concat())
+                    }}
                     key={file.name + file.lastModified + file.size}
                     file={file} />
         )}

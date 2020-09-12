@@ -20,7 +20,9 @@ const Container = styled.div<{ background?: string }>`
     }
 `
 
-export default function File({ file }: { file: File }) {
+type FileProps = { file: File, onRemoveFile: () => void }
+
+export default function File({ file, onRemoveFile }: FileProps) {
     const [fileContent, setFileContent] = useState({ src: "", type: file.type })
 
     const isPDF = file.type === "application/pdf"
@@ -38,6 +40,7 @@ export default function File({ file }: { file: File }) {
 
     return <>
         <Container
+            onClick={onRemoveFile}
             background={fileContent.src}>
             {file.name}
             {
