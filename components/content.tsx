@@ -29,19 +29,12 @@ const File = styled.div`
 `
 
 export default function Content() {
-    // upload files
+    
     const [files, setFiles] = useState<File[]>([])
     const onDrop = useCallback((acceptedFiles: File[]) => {
         acceptedFiles.forEach(async file => {
             console.log(file)
             if (!files.some(_file => _file.name === file.name)) {
-                const form = new FormData()
-                form.append("file", file, file.name)
-
-                await fetch(`${window.location}api/upload`, {
-                    method: "POST",
-                    body: form
-                })
                 files.push(file)
                 setFiles(files.concat())
             }
