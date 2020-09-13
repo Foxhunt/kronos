@@ -9,13 +9,17 @@ A tool to document a projects visual process with the ability to review its iter
 A single design File. 
 Can be a piece of work, a reference or an inspiration.
 
-### atributes
 ```TypeScript
 {
+    // atributes
     name: string
     description: string
     src: string
     thumb: string
+    
+    // methods
+    create: () => void
+    remove: () => void
 }
 ```
 
@@ -24,12 +28,17 @@ Can be a piece of work, a reference or an inspiration.
 A collection of Files.
 Ordered on a Grid for easy presentation and Access.
 
-### atributes
 ```TypeScript
 {
+    // atributes
     name: string
     description: string
     iterations: []
+
+    // methods
+    addFile: () => void
+    removeFile: () => void
+    createSnapshot: () => void
 }
 ```
 
