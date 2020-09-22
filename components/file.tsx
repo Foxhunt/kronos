@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react"
 import styled from "styled-components"
 
-const Container = styled.div<{ background?: string }>`
+const Container = styled.div.attrs<{ background?: string }>
+(({ background }) => ({
+    style: {
+        backgroundImage: `url(${background})`
+    }
+}))<{ background?: string }>`
     background-color: black;
 
-    background-image: url(${({ background }) => background});
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -20,10 +24,11 @@ const Container = styled.div<{ background?: string }>`
     }
 `
 
-type FileProps = { file: File, onRemoveFile: () => void }
+type FileProps = { file: File, removeFile: (name: string) => void }
+type FileContent = { src: string, type: string }
 
-export default function File({ file, onRemoveFile }: FileProps) {
-    const [fileContent, setFileContent] = useState({ src: "", type: file.type })
+export default function File({ file, removeFile }: FileProps) {
+    const [fileContent, setFileContent] = useState<FileContent>({ src: "", type: file.type })
 
     const isPDF = file.type === "application/pdf"
 
@@ -40,7 +45,7 @@ export default function File({ file, onRemoveFile }: FileProps) {
 
     return <>
         <Container
-            onClick={onRemoveFile}
+            onClick={() => removeFile(file.name)}
             background={fileContent.src}>
             {file.name}
             {

@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import styled from "styled-components"
 import { useDropzone } from "react-dropzone"
 
@@ -8,7 +8,6 @@ const Container = styled.div`
     text-align: center;
     outline: none;
     position: relative;
-    overflow: hidden;
     grid-area: content;
 
     padding: 16px;
@@ -41,7 +40,6 @@ export default function Content() {
     const [files, setFiles] = useState<File[]>([])
     const onDrop = useCallback((acceptedFiles: File[]) => {
         acceptedFiles.forEach(async file => {
-            console.log(file)
             if (!files.some(_file => _file.name === file.name)) {
                 files.push(file)
                 setFiles(files.concat())
@@ -51,23 +49,24 @@ export default function Content() {
 
     // position drop object
     const [dropTargetPosition, setDropTargetPosition] = useState({ x: 0, y: 0 })
-    const onDragOver = useCallback(({ nativeEvent }) => {
-        setDropTargetPosition({ x: nativeEvent.offsetX, y: nativeEvent.offsetY })
+    const onDragOver = useCallback((event) => {
+        setDropTargetPosition({ x: event.pageX, y: event.pageY })
     }, [])
 
     const { getRootProps, isDragActive } = useDropzone({ onDrop, onDragOver })
 
-    return (<Container {...getRootProps({})}>
-        {files.map(
-            (file, index) =>
-                <File
-                    onRemoveFile={() => {
-                        files.splice(index, 1)
-                        setFiles(files.concat())
-                    }}
-                    key={file.name + file.lastModified + file.size}
-                    file={file} />
-        )}
+    const fileList = useMemo(() => files.map(
+        file =>
+            <File
+                removeFile={name => setFiles(files.filter(file => file.name != name))}
+                key={file.name + file.lastModified + file.size}
+                file={file} />
+    ), [files])
+
+    return <>
+        <Container {...getRootProps({})}>
+            {fileList}
+        </Container>
         {isDragActive && <DropTarget targetPosition={dropTargetPosition} />}
-    </Container>)
+    </>
 }
