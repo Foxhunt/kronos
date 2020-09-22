@@ -10,6 +10,15 @@ const Container = styled.div`
     position: relative;
     overflow: hidden;
     grid-area: content;
+
+    padding: 16px;
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 200px);
+    grid-template-rows: repeat(auto-fit, 200px);
+    gap: 16px;
+    justify-items: start;
+    align-items: start;
 `
 
 const DropTarget = styled.div.attrs<{ targetPosition: { x: number, y: number } }>
@@ -21,6 +30,7 @@ const DropTarget = styled.div.attrs<{ targetPosition: { x: number, y: number } }
     background-color: black;
     position: absolute;
     top: 0px;
+    left: 0px;
     width: 50px;
     height: 50px;
     pointer-events: none;
