@@ -6,6 +6,8 @@ import File from "./file"
 
 const Container = styled.div`
     text-align: center;
+
+    // wasdds
     outline: none;
     position: relative;
     grid-area: content;
