@@ -1,13 +1,13 @@
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useMemo, useState, useEffect } from "react"
 import styled from "styled-components"
 import { useDropzone } from "react-dropzone"
+
+import firebase from "../firebase/clientApp"
 
 import File from "./file"
 
 const Container = styled.div`
     text-align: center;
-
-    // wasdds
     outline: none;
     position: relative;
     grid-area: content;
@@ -39,11 +39,26 @@ const DropTarget = styled.div.attrs<{ targetPosition: { x: number, y: number } }
 
 export default function Content() {
 
-    const [files, setFiles] = useState<File[]>([])
+    const [files, setFiles] = useState<firebase.storage.Reference[]>([])
+
+    useEffect(() => {
+        const storageRef = firebase.storage().ref()
+        const listRef = storageRef.child("images")
+        listRef.listAll().then( res => {
+            setFiles(res.items)
+        })
+    }, [])
+
     const onDrop = useCallback((acceptedFiles: File[]) => {
         acceptedFiles.forEach(async file => {
             if (!files.some(_file => _file.name === file.name)) {
-                files.push(file)
+
+                const storageRef = firebase.storage().ref()
+                const fileRef = storageRef.child(`images/${file.name}`)
+
+                const snapshot = await fileRef.put(file)
+
+                files.push(snapshot.ref)
                 setFiles(files.concat())
             }
         })
@@ -58,11 +73,10 @@ export default function Content() {
     const { getRootProps, isDragActive } = useDropzone({ onDrop, onDragOver })
 
     const fileList = useMemo(() => files.map(
-        file =>
+        reference =>
             <File
-                removeFile={name => setFiles(files.filter(file => file.name != name))}
-                key={file.name + file.lastModified + file.size}
-                file={file} />
+                key={reference.name}
+                reference={reference} />
     ), [files])
 
     return <>

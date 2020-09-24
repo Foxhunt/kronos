@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import styled from "styled-components"
 
+import firebase from "../firebase/clientApp"
+
 const Container = styled.div.attrs<{ background?: string }>
 (({ background }) => ({
     style: {
@@ -24,35 +26,19 @@ const Container = styled.div.attrs<{ background?: string }>
     }
 `
 
-type FileProps = { file: File, removeFile: (name: string) => void }
-type FileContent = { src: string, type: string }
+type FileProps = { reference: firebase.storage.Reference}
 
-export default function File({ file, removeFile }: FileProps) {
-    const [fileContent, setFileContent] = useState<FileContent>({ src: "", type: file.type })
+export default function File({ reference }: FileProps) {
 
-    const isPDF = file.type === "application/pdf"
-
+    const [src, setSrc] = useState<string>("")
     useEffect(() => {
-        const reader = new FileReader()
-        reader.addEventListener("load", event => {
-            setFileContent({
-                src: String(event.target?.result),
-                type: file.type
-            })
-        })
-        reader.readAsDataURL(file)
-    }, [file])
+        reference.getDownloadURL().then(src => setSrc(src))
+    })
 
     return <>
         <Container
-            onClick={() => removeFile(file.name)}
-            background={fileContent.src}>
-            {file.name}
-            {
-                isPDF && <embed
-                    src={fileContent.src}
-                    type={fileContent.type} />
-            }
+            background={src}>
+            {name}
         </Container>
     </>
 }
