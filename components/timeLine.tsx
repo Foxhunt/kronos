@@ -9,11 +9,11 @@ const Container = styled.div`
 `
 
 export default function Timeline() {
-    const { user, loadingUser, logout } = useUser()
+    const { logout } = { ...useUser() }
     return <Container>
         Timeline
         <Link href={"/login"}>
-            <a onClick={() => logout()}>logout</a>
+            <a onClick={logout}>logout</a>
         </Link>
     </Container>
 }

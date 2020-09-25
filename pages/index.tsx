@@ -15,9 +15,7 @@ const Container = styled.div`
 `
 
 export default function Home() {
-  const { user, loadingUser, logout } = useUser()
-
-  console.log(user)
+  const { user } = { ...useUser() }
 
   return <Container>
     {user ? <>
