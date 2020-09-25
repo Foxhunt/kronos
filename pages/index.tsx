@@ -1,5 +1,8 @@
+import Link from "next/link"
 import styled from "styled-components"
 import Content from "../components/content"
+import Timeline from "../components/timeLine"
+import { useUser } from "../context/userContext"
 
 const Container = styled.div`
   display: grid;
@@ -11,15 +14,18 @@ const Container = styled.div`
     "content content content";
 `
 
-const Timeline = styled.div`
-  background-color: grey;
-  text-align: center;
-  grid-area: timeline;
-`
-
 export default function Home() {
+  const { user, loadingUser, logout } = useUser()
+
+  console.log(user)
+
   return <Container>
-    <Timeline>Timeline</Timeline>
-    <Content />
+    {user ? <>
+      <Timeline />
+      <Content />
+    </> :
+      <Link href={"/login"}>
+        <a>login</a>
+      </Link>}
   </Container >
 }

@@ -18,7 +18,6 @@ const clientCredentials = {
 // Check that `window` is in scope for the analytics module!
 if (typeof window !== 'undefined' && !firebase.apps.length) {
     firebase.initializeApp(clientCredentials)
-    firebase.auth().signInAnonymously()
     // To enable analytics. https://firebase.google.com/docs/analytics/get-started
     if ('measurementId' in clientCredentials) firebase.analytics()
 }
