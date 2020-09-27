@@ -27,6 +27,9 @@ export default function UserContextComp({ children }: props) {
           // You could also look for the user doc in your Firestore (if you have one):
           // const userDoc = await firebase.firestore().doc(`users/${uid}`).get()
           setUser(user)
+
+          firebase.analytics().logEvent(firebase.analytics.EventName.LOGIN, { method: firebase.auth.EmailAuthProvider.PROVIDER_ID })
+          firebase.analytics().setUserId(user.uid)
         } else setUser(null)
       } catch (error) {
         // Most probably a connection error. Handle appropriately.

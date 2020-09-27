@@ -59,17 +59,22 @@ export default function Content() {
                 const storageRef = firebase.storage().ref("images")
                 const fileRef = storageRef.child(`${file.name}`)
 
-                const snapshot = await fileRef.put(file)
+                await fileRef.put(file)
 
                 const db = firebase.firestore()
                 const imageCollection = db.collection("images")
                 const docRef = await imageCollection.add({
-                    name: snapshot.ref.name,
-                    fullPath: snapshot.ref.fullPath
+                    name: fileRef.name,
+                    fullPath: fileRef.fullPath
                 })
 
                 files.push(await docRef.get())
                 setFiles(files.concat())
+
+                firebase.analytics().logEvent("upload_file", {
+                    name: fileRef.name,
+                    fullPath: fileRef.fullPath
+                })
             }
         })
     }, [files])
@@ -91,6 +96,11 @@ export default function Content() {
                         const storage = firebase.storage()
                         const fileRef = storage.ref(fileSnapshot.get("fullPath"))
                         fileRef.delete()
+
+                        firebase.analytics().logEvent("delete_file", {
+                            name: fileSnapshot.get("name"),
+                            fullPath: fileSnapshot.get("fullPath")
+                        })
                     })
                 }}
                 fullPath={fileSnapshot.get("fullPath")} />
