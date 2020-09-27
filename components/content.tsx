@@ -39,26 +39,36 @@ const DropTarget = styled.div.attrs<{ targetPosition: { x: number, y: number } }
 
 export default function Content() {
 
-    const [files, setFiles] = useState<firebase.storage.Reference[]>([])
+    const [files, setFiles] = useState<firebase.firestore.DocumentSnapshot[]>([])
 
     useEffect(() => {
-        const storageRef = firebase.storage().ref()
-        const listRef = storageRef.child("images")
-        listRef.listAll().then( res => {
-            setFiles(res.items)
+        const db = firebase.firestore()
+        const imageCollection = db.collection("images")
+
+        const unsubscribe = imageCollection.onSnapshot(snapshot => {
+            setFiles(snapshot.docs)
         })
+
+        return unsubscribe
     }, [])
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
         acceptedFiles.forEach(async file => {
-            if (!files.some(_file => _file.name === file.name)) {
+            if (!files.some(_file => _file.get("name") === file.name)) {
 
-                const storageRef = firebase.storage().ref()
-                const fileRef = storageRef.child(`images/${file.name}`)
+                const storageRef = firebase.storage().ref("images")
+                const fileRef = storageRef.child(`${file.name}`)
 
                 const snapshot = await fileRef.put(file)
 
-                files.push(snapshot.ref)
+                const db = firebase.firestore()
+                const imageCollection = db.collection("images")
+                const docRef = await imageCollection.add({
+                    name: snapshot.ref.name,
+                    fullPath: snapshot.ref.fullPath
+                })
+
+                files.push(await docRef.get())
                 setFiles(files.concat())
             }
         })
@@ -73,10 +83,17 @@ export default function Content() {
     const { getRootProps, isDragActive } = useDropzone({ onDrop, onDragOver })
 
     const fileList = useMemo(() => files.map(
-        reference =>
+        fileSnapshot =>
             <File
-                key={reference.name}
-                reference={reference} />
+                key={fileSnapshot.get("name")}
+                onDelete={() => {
+                    fileSnapshot.ref.delete().then(() => {
+                        const storage = firebase.storage()
+                        const fileRef = storage.ref(fileSnapshot.get("fullPath"))
+                        fileRef.delete()
+                    })
+                }}
+                fullPath={fileSnapshot.get("fullPath")} />
     ), [files])
 
     return <>

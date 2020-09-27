@@ -4,11 +4,11 @@ import styled from "styled-components"
 import firebase from "../firebase/clientApp"
 
 const Container = styled.div.attrs<{ background?: string }>
-(({ background }) => ({
-    style: {
-        backgroundImage: `url(${background})`
-    }
-}))<{ background?: string }>`
+    (({ background }) => ({
+        style: {
+            backgroundImage: `url(${background})`
+        }
+    })) <{ background?: string }>`
     background-color: black;
 
     background-size: cover;
@@ -26,17 +26,20 @@ const Container = styled.div.attrs<{ background?: string }>
     }
 `
 
-type FileProps = { reference: firebase.storage.Reference}
+type FileProps = { fullPath: string, onDelete: () => void }
 
-export default function File({ reference }: FileProps) {
+export default function File({ fullPath, onDelete }: FileProps) {
 
     const [src, setSrc] = useState<string>("")
     useEffect(() => {
-        reference.getDownloadURL().then(src => setSrc(src))
-    })
+        const storage = firebase.storage()
+        const fileRef = storage.ref(fullPath)
+        fileRef.getDownloadURL().then(src => setSrc(src))
+    }, [fullPath])
 
     return <>
         <Container
+            onClick={onDelete}
             background={src}>
             {name}
         </Container>
