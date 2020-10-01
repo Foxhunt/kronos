@@ -2,10 +2,12 @@ import { useCallback, useMemo, useState, useEffect } from "react"
 import styled from "styled-components"
 import { useDropzone } from "react-dropzone"
 
+import { PDFDocument } from 'pdf-lib'
+
 import firebase from "../firebase/clientApp"
 import uploadFile from "../firebase/uploadFile"
 
-import File from "./file"
+import FileComponent from "./file"
 
 const Container = styled.div`
     text-align: center;
@@ -44,7 +46,7 @@ export default function Content() {
 
     useEffect(() => {
         const db = firebase.firestore()
-        const imageCollection = db.collection("images")
+        const imageCollection = db.collection("images").orderBy("name")
 
         const unsubscribe = imageCollection.onSnapshot(snapshot => {
             setFiles(snapshot.docs)
@@ -54,20 +56,34 @@ export default function Content() {
     }, [])
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
-        acceptedFiles.forEach(async file => {
-            if (!files.some(_file => _file.get("name") === file.name)) {
+        acceptedFiles
+            .filter(newFile => !files.some(existingFile => existingFile.get("name") === newFile.name))
+            .forEach(async newFile => {
+                if (newFile.type === "application/pdf") {
+                    const pdf = await PDFDocument.load(await newFile.arrayBuffer())
+                    const pageIndicies = pdf.getPageIndices()
 
-                const fileRef = await uploadFile(file)
+                    pageIndicies.forEach(async i => {
+                        const newFilePageName = `${newFile.name.substring(0, newFile.name.lastIndexOf(".pdf"))}-${i}.pdf`
+                        if (!files.some(existingFile => existingFile.get("name") === newFilePageName)) {
+                            const extractedPagePDF = await PDFDocument.create()
+                            const [page] = await extractedPagePDF.copyPages(pdf, [i])
+                            extractedPagePDF.addPage(page)
+                            const pdfFile = new File(
+                                [await extractedPagePDF.save()],
+                                newFilePageName,
+                                { type: "application/pdf" }
+                            )
 
-                files.push(fileRef)
-                setFiles(files.concat())
-
-                firebase.analytics().logEvent("upload_file", {
-                    name: fileRef.get("name"),
-                    fullPath: fileRef.get("fullPath")
-                })
-            }
-        })
+                            files.push(await uploadFile(pdfFile))
+                            setFiles(files.concat())
+                        }
+                    })
+                } else {
+                    files.push(await uploadFile(newFile))
+                    setFiles(files.concat())
+                }
+            })
     }, [files])
 
     // position drop object
@@ -80,7 +96,7 @@ export default function Content() {
 
     const fileList = useMemo(() => files.map(
         fileSnapshot =>
-            <File
+            <FileComponent
                 key={fileSnapshot.get("name")}
                 onDelete={() => {
                     fileSnapshot.ref.delete().then(() => {

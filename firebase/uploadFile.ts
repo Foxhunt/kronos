@@ -14,5 +14,12 @@ export default async function uploadFile(file: File) {
         fullPath: fileRef.fullPath
     })
 
-    return docRef.get()
+    const fileDocRef = await docRef.get()
+
+    firebase.analytics().logEvent("upload_file", {
+        name: fileDocRef.get("name"),
+        fullPath: fileDocRef.get("fullPath")
+    })
+
+    return fileDocRef
 }

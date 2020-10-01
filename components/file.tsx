@@ -28,7 +28,7 @@ const Container = styled.div.attrs<{ background?: string }>
 
 type FileProps = { fullPath: string, onDelete: () => void }
 
-export default function File({ fullPath, onDelete }: FileProps) {
+export default function FileComponent({ fullPath, onDelete }: FileProps) {
     const [src, setSrc] = useState<string>("")
     const [metaData, setMetaData] = useState<firebase.storage.FullMetadata>()
     useEffect(() => {
