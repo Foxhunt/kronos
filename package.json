@@ -9,6 +9,7 @@
   "dependencies": {
     "firebase": "^7.21.1",
     "next": "^9.5.3",
+    "p-limit": "^3.0.2",
     "pdf-lib": "^1.11.1",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",

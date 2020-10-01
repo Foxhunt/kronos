@@ -3,6 +3,7 @@ import styled from "styled-components"
 import { useDropzone } from "react-dropzone"
 
 import { PDFDocument } from 'pdf-lib'
+import pLimit from "p-limit"
 
 import firebase from "../firebase/clientApp"
 import uploadFile from "../firebase/uploadFile"
@@ -56,14 +57,16 @@ export default function Content() {
     }, [])
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
+        const limit = pLimit(5)
+
         acceptedFiles
             .filter(newFile => !files.some(existingFile => existingFile.get("name") === newFile.name))
-            .forEach(async newFile => {
+            .map(newFile => limit(async () => {
                 if (newFile.type === "application/pdf") {
                     const pdf = await PDFDocument.load(await newFile.arrayBuffer())
                     const pageIndicies = pdf.getPageIndices()
 
-                    pageIndicies.forEach(async i => {
+                    pageIndicies.map(i => limit(async () => {
                         const newFilePageName = `${newFile.name.substring(0, newFile.name.lastIndexOf(".pdf"))}-${i}.pdf`
                         if (!files.some(existingFile => existingFile.get("name") === newFilePageName)) {
                             const extractedPagePDF = await PDFDocument.create()
@@ -78,12 +81,12 @@ export default function Content() {
                             files.push(await uploadFile(pdfFile))
                             setFiles(files.concat())
                         }
-                    })
+                    }))
                 } else {
                     files.push(await uploadFile(newFile))
                     setFiles(files.concat())
                 }
-            })
+            }))
     }, [files])
 
     // position drop object
