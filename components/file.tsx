@@ -29,19 +29,35 @@ const Container = styled.div.attrs<{ background?: string }>
 type FileProps = { fullPath: string, onDelete: () => void }
 
 export default function File({ fullPath, onDelete }: FileProps) {
-
     const [src, setSrc] = useState<string>("")
+    const [metaData, setMetaData] = useState<firebase.storage.FullMetadata>()
     useEffect(() => {
-        const storage = firebase.storage()
-        const fileRef = storage.ref(fullPath)
-        fileRef.getDownloadURL().then(src => setSrc(src))
+        async function fetchFile() {
+            const storage = firebase.storage()
+            const fileRef = storage.ref(fullPath)
+            const downloadURL = await fileRef.getDownloadURL()
+            const metaData = await fileRef.getMetadata()
+
+            setSrc(downloadURL)
+            setMetaData(metaData)
+        }
+
+        fetchFile()
     }, [fullPath])
+
+    const isPDF = metaData?.contentType === "application/pdf"
 
     return <>
         <Container
             onClick={onDelete}
-            background={src}>
-            {name}
+            background={isPDF ? "" : src}>
+            {metaData?.name}
+            {
+                isPDF &&
+                <object data={src} type="application/pdf">
+                    <embed src={src} type="application/pdf" />
+                </object>
+            }
         </Container>
     </>
 }
