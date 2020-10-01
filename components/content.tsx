@@ -3,6 +3,7 @@ import styled from "styled-components"
 import { useDropzone } from "react-dropzone"
 
 import firebase from "../firebase/clientApp"
+import uploadFile from "../firebase/uploadFile"
 
 import File from "./file"
 
@@ -56,24 +57,14 @@ export default function Content() {
         acceptedFiles.forEach(async file => {
             if (!files.some(_file => _file.get("name") === file.name)) {
 
-                const storageRef = firebase.storage().ref("images")
-                const fileRef = storageRef.child(`${file.name}`)
+                const fileRef = await uploadFile(file)
 
-                await fileRef.put(file)
-
-                const db = firebase.firestore()
-                const imageCollection = db.collection("images")
-                const docRef = await imageCollection.add({
-                    name: fileRef.name,
-                    fullPath: fileRef.fullPath
-                })
-
-                files.push(await docRef.get())
+                files.push(fileRef)
                 setFiles(files.concat())
 
                 firebase.analytics().logEvent("upload_file", {
-                    name: fileRef.name,
-                    fullPath: fileRef.fullPath
+                    name: fileRef.get("name"),
+                    fullPath: fileRef.get("fullPath")
                 })
             }
         })
