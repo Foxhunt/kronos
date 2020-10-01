@@ -57,17 +57,21 @@ export default function Content() {
     }, [])
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
-        const limit = pLimit(5)
+        const limit = pLimit(2)
 
         acceptedFiles
             .filter(newFile => !files.some(existingFile => existingFile.get("name") === newFile.name))
             .map(newFile => limit(async () => {
+                // we want to split PDFs into pages and upload them individualy
                 if (newFile.type === "application/pdf") {
                     const pdf = await PDFDocument.load(await newFile.arrayBuffer())
                     const pageIndicies = pdf.getPageIndices()
 
+                    // map convert and upload tasks
                     pageIndicies.map(i => limit(async () => {
+
                         const newFilePageName = `${newFile.name.substring(0, newFile.name.lastIndexOf(".pdf"))}-${i}.pdf`
+
                         if (!files.some(existingFile => existingFile.get("name") === newFilePageName)) {
                             const extractedPagePDF = await PDFDocument.create()
                             const [page] = await extractedPagePDF.copyPages(pdf, [i])
