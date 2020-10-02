@@ -4,14 +4,22 @@ export default async function uploadFile(file: File) {
     const storageRef = firebase.storage().ref("images")
     const fileRef = storageRef.child(`${file.name}`)
 
-    fileRef.put(file)
+    const uploadTask = fileRef.put(file)
 
-    const db = firebase.firestore()
-    const imageCollection = db.collection("images")
+    const docRef = await new Promise<firebase.firestore.DocumentReference>((resolve) => {
+        uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+            null,
+            null,
+            async () => {
 
-    const docRef = await imageCollection.add({
-        name: fileRef.name,
-        fullPath: fileRef.fullPath
+                const db = firebase.firestore()
+                const imageCollection = db.collection("images")
+
+                resolve(await imageCollection.add({
+                    name: fileRef.name,
+                    fullPath: fileRef.fullPath
+                }))
+            })
     })
 
     const fileDocRef = await docRef.get()
