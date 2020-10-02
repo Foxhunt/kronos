@@ -1,5 +1,8 @@
 # Kronos
 
+Let's iterate.
+Let's rewind.
+
 A tool to document a projects visual process with the ability to review its iterations.
 
 # Elements // Elemente
