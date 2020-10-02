@@ -19,8 +19,8 @@ const Container = styled.div`
     padding: 16px;
 
     display: grid;
-    grid-template-columns: repeat(auto-fit, 200px);
-    grid-template-rows: repeat(auto-fit, 200px);
+    grid-template-columns: repeat(auto-fit, 300px);
+    grid-template-rows: repeat(auto-fit, 300px);
     gap: 16px;
     justify-items: start;
     align-items: start;

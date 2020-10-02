@@ -18,8 +18,8 @@ const Container = styled.div.attrs<{ background?: string }>
     background-repeat: no-repeat;
     background-position: center;
 
-    width: 200px;
-    height: 200px;
+    width: 100%;
+    height: 100%;
 
     display: flex;
 
@@ -64,7 +64,7 @@ export default function FileComponent({ fullPath, onDelete }: FileProps) {
                     <Page
                         renderAnnotationLayer={false}
                         renderTextLayer={false}
-                        height={200}
+                        height={300}
                         pageNumber={1} />
                 </Document>
             }
