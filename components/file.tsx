@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react"
 import styled from "styled-components"
+import { Document, Page, pdfjs } from "react-pdf"
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 
 import firebase from "../firebase/clientApp"
 
@@ -9,6 +11,7 @@ const Container = styled.div.attrs<{ background?: string }>
             backgroundImage: `url(${background})`
         }
     })) <{ background?: string }>`
+    position: relative;
     background-color: black;
 
     background-size: cover;
@@ -18,12 +21,16 @@ const Container = styled.div.attrs<{ background?: string }>
     width: 200px;
     height: 200px;
 
-    color: white;
+    display: flex;
 
-    > * {
-        width: 100%;
-        height: calc(100% - 18px);
-    }
+    justify-content: center;
+`
+
+const Name = styled.div`
+    position: absolute;
+    bottom: 0px;
+
+    color: red;
 `
 
 type FileProps = { fullPath: string, onDelete: () => void }
@@ -51,13 +58,17 @@ export default function FileComponent({ fullPath, onDelete }: FileProps) {
         <Container
             onClick={onDelete}
             background={isPDF ? "" : src}>
-            {metaData?.name}
             {
                 isPDF &&
-                <object data={src} type="application/pdf">
-                    <embed src={src} type="application/pdf" />
-                </object>
+                <Document file={src}>
+                    <Page
+                        renderAnnotationLayer={false}
+                        renderTextLayer={false}
+                        height={200}
+                        pageNumber={1} />
+                </Document>
             }
+            <Name>{metaData?.name}</Name>
         </Container>
     </>
 }
