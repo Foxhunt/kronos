@@ -1,7 +1,4 @@
-import { useEffect, useState } from "react"
 import styled from "styled-components"
-
-import firebase from "../../firebase/clientApp"
 
 const Container = styled.div`
     position: relative;
