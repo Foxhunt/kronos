@@ -5,8 +5,8 @@ import { useDropzone } from "react-dropzone"
 import { PDFDocument } from 'pdf-lib'
 import pLimit from "p-limit"
 
-import firebase from "../firebase/clientApp"
-import uploadFile from "../firebase/uploadFile"
+import firebase from "../../firebase/clientApp"
+import uploadFile from "../../firebase/uploadFile"
 
 import FileComponent from "./file"
 
@@ -24,6 +24,7 @@ const Container = styled.div`
     gap: 16px;
     justify-items: start;
     align-items: start;
+    height: 100vh;
 `
 
 const DropTarget = styled.div.attrs<{ targetPosition: { x: number, y: number } }>
@@ -41,7 +42,7 @@ const DropTarget = styled.div.attrs<{ targetPosition: { x: number, y: number } }
     pointer-events: none;
 `
 
-export default function Content() {
+export default function Collection() {
 
     const [files, setFiles] = useState<firebase.firestore.DocumentSnapshot[]>([])
 

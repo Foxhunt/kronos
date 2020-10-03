@@ -15,6 +15,10 @@ export default function Login() {
             signInSuccessWithAuthResult: authResult => {
                 firebase.analytics().setUserId(authResult.user.uid)
                 if (authResult.additionalUserInfo.isNewUser) {
+                    firebase.firestore().collection("users").doc(authResult.user.uid).set({
+                        name: authResult.user.displayName,
+                        email: authResult.user.email
+                    })
                     firebase.analytics().logEvent(firebase.analytics.EventName.SIGN_UP, { method: firebase.auth.EmailAuthProvider.PROVIDER_ID })
                 }
                 router.push("/")

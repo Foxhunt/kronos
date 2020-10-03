@@ -3,7 +3,7 @@ import styled from "styled-components"
 import { Document, Page, pdfjs } from "react-pdf"
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 
-import firebase from "../firebase/clientApp"
+import firebase from "../../firebase/clientApp"
 
 const Container = styled.div.attrs<{ background?: string }>
     (({ background }) => ({
