@@ -1,7 +1,8 @@
 # Kronos
 
-Let's iterate.
+Let's recall. 
 Let's rewind.
+Let's iterate.
 
 A tool to document a projects visual process with the ability to review its iterations.
 
