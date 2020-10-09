@@ -31,24 +31,25 @@ const Collection = styled.div`
 `
 
 const Folders = styled.div`
-display: grid;
-grid-template-columns: [clients] 300px[projects] 300px[tasks] 300px[designs] auto;
+    display: grid;
+    grid-template-columns: [clients] 300px[projects] 300px[tasks] 300px[designs] auto;
 `
 
 const Folder = styled.div`
-background-color: white;
+    background-color: white;
 `
 
 const Subfolder = styled.div`
-height: 25px;
-border-top: black 1px solid;
+    height: 25px;
+    border-top: black 1px solid;
 
     :hover {
-    background-color: black;
-}
+        background-color: black;
+    }
 `
 
 export default function Navigation() {
+
     const [showFolders, setShowFolders] = useState(false)
 
     return <Container>
@@ -71,6 +72,7 @@ export default function Navigation() {
                 <Subfolder />
                 <Subfolder />
                 <Subfolder />
+                <div>add</div>
             </Folder>
             <Folder>
                 <div>Projects</div>
@@ -78,6 +80,7 @@ export default function Navigation() {
                 <Subfolder />
                 <Subfolder />
                 <Subfolder />
+                <div>add</div>
             </Folder>
             <Folder>
                 <div>Tasks</div>
@@ -85,6 +88,7 @@ export default function Navigation() {
                 <Subfolder />
                 <Subfolder />
                 <Subfolder />
+                <div>add</div>
             </Folder>
             <Folder>
                 <div>Designs</div>
@@ -92,6 +96,7 @@ export default function Navigation() {
                 <Subfolder />
                 <Subfolder />
                 <Subfolder />
+                <div>add</div>
             </Folder>
         </Folders>}
     </Container>
