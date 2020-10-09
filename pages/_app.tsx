@@ -1,8 +1,7 @@
 import { AppProps } from "next/dist/next-server/lib/router/router"
 import { ComponentType } from "react"
 
-import UserArea from "../components/UserArea"
-import Navigation from "../components/Navigation"
+import TopBar from "../components/topBar";
 
 import UserProvider from '../context/userContext'
 
@@ -15,8 +14,7 @@ type Props = {
 export default function App({ Component, pageProps }: Props) {
   return (
     <UserProvider>
-      <UserArea />
-      <Navigation />
+      <TopBar />
       <Component {...pageProps} />
     </UserProvider>
   )
