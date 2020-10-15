@@ -1,5 +1,8 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import styled from "styled-components"
+import { useUser } from "../../context/userContext"
+
+import Folder from "./Folder"
 
 const Container = styled.nav`
     position: relative;
@@ -35,22 +38,19 @@ const Folders = styled.div`
     grid-template-columns: [clients] 300px[projects] 300px[tasks] 300px[designs] auto;
 `
 
-const Folder = styled.div`
-    background-color: white;
-`
-
-const Subfolder = styled.div`
-    height: 25px;
-    border-top: black 1px solid;
-
-    :hover {
-        background-color: black;
-    }
-`
-
 export default function Navigation() {
-
+    const { userDocRef } = { ...useUser() }
     const [showFolders, setShowFolders] = useState(false)
+
+    const [clients, setClients] = useState<firebase.firestore.CollectionReference>()
+    const [projects, setProjects] = useState<firebase.firestore.CollectionReference>()
+    const [tasks, setTasks] = useState<firebase.firestore.CollectionReference>()
+    const [designs, setDesigns] = useState<firebase.firestore.CollectionReference>()
+    const [collections, setCollections] = useState<firebase.firestore.CollectionReference>()
+
+    useEffect(() => {
+        setClients(userDocRef?.collection("Clients"))
+    }, [userDocRef])
 
     return <Container>
         <LocationCollections>
@@ -66,38 +66,34 @@ export default function Navigation() {
             </Collections>
         </LocationCollections>
         {showFolders && <Folders>
-            <Folder>
-                <div>Clients</div>
-                <Subfolder />
-                <Subfolder />
-                <Subfolder />
-                <Subfolder />
-                <div>add</div>
-            </Folder>
-            <Folder>
-                <div>Projects</div>
-                <Subfolder />
-                <Subfolder />
-                <Subfolder />
-                <Subfolder />
-                <div>add</div>
-            </Folder>
-            <Folder>
-                <div>Tasks</div>
-                <Subfolder />
-                <Subfolder />
-                <Subfolder />
-                <Subfolder />
-                <div>add</div>
-            </Folder>
-            <Folder>
-                <div>Designs</div>
-                <Subfolder />
-                <Subfolder />
-                <Subfolder />
-                <Subfolder />
-                <div>add</div>
-            </Folder>
+            <Folder
+                name={"Clients"}
+                selectedId={projects?.parent?.id}
+                collection={clients}
+                onSelectSubfolder={subfolder => {
+                    setProjects(subfolder?.collection("Projects"))
+                }} />
+            <Folder
+                name={"Projects"}
+                selectedId={tasks?.parent?.id}
+                collection={projects}
+                onSelectSubfolder={subfolder => {
+                    setTasks(subfolder?.collection("Tasks"))
+                }} />
+            <Folder
+                name={"Tasks"}
+                selectedId={designs?.parent?.id}
+                collection={tasks}
+                onSelectSubfolder={subfolder => {
+                    setDesigns(subfolder?.collection("Designs"))
+                }} />
+            <Folder
+                name={"Designs"}
+                selectedId={collections?.parent?.id}
+                collection={designs}
+                onSelectSubfolder={subfolder => {
+                    setCollections(subfolder?.collection("Collections"))
+                }} />
         </Folders>}
     </Container>
 }
