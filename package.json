@@ -1,6 +1,10 @@
 {
   "name": "kronos",
   "version": "1.0.0",
+  "private": "true",
+  "repository": {
+    "url": "https://github.com/Foxhunt/kronos"
+  },
   "scripts": {
     "dev": "next",
     "build": "next build",
