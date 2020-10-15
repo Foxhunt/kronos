@@ -32,11 +32,11 @@ const AddClientBtn = styled.div`
 `
 
 export default function Clients() {
-    const { userDoc } = { ...useUser() }
+    const { userDocRef } = { ...useUser() }
     const [clients, setClients] = useState<firebase.firestore.DocumentSnapshot[]>([])
 
     useEffect(() => {
-        const clientCollection = userDoc?.ref.collection("clients")
+        const clientCollection = userDocRef?.collection("clients")
 
         const unsubscribe = clientCollection?.onSnapshot(snapshot => {
             setClients(snapshot.docs)
@@ -64,9 +64,9 @@ export default function Clients() {
             onClick={async () => {
                 const clientDoc = await firebase.firestore().collection("clients").add({
                     name: "someClient",
-                    users: [userDoc?.ref]
+                    users: [userDocRef]
                 })
-                userDoc?.ref.collection("clients").doc().set({
+                userDocRef?.collection("clients").doc().set({
                     reference: clientDoc
                 })
             }} />
