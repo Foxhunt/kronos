@@ -24,7 +24,7 @@ const Container = styled.div`
     gap: 16px;
     justify-items: start;
     align-items: start;
-    height: 100vh;
+    height: 100%;
 `
 
 const DropTarget = styled.div.attrs<{ targetPosition: { x: number, y: number } }>
