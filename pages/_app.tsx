@@ -2,6 +2,8 @@ import { AppProps } from "next/dist/next-server/lib/router/router"
 import { ComponentType } from "react"
 import { Provider } from "jotai"
 
+import "../firebase/clientApp"
+
 import User from "../firebase/User"
 import TopBar from "../components/topBar";
 
