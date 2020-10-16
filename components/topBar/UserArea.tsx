@@ -1,4 +1,4 @@
-import { User } from "firebase"
+import firebase from "firebase"
 import Link from "next/link"
 import styled from "styled-components"
 
@@ -8,15 +8,14 @@ const Container = styled.header`
 `
 
 type props = {
-    user: User | null | undefined,
-    logout: (() => void) | undefined
+    loggedIn: boolean
 }
 
-export default function UserArea({ user, logout }: props) {
+export default function UserArea({ loggedIn }: props) {
     return <Container>
-        {user ?
+        {loggedIn ?
             <Link href={"/login"}>
-                < a onClick={logout} > logout</a >
+                < a onClick={() => firebase.auth().signOut()} > logout</a >
             </Link >
             :
             <Link href={"/login"}>

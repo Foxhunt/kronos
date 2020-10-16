@@ -1,15 +1,14 @@
-import { useUser } from "../../context/userContext"
-
 import UserArea from "./UserArea"
 import Navigation from "./Navigation"
+import { userDocAtom } from "../../store"
+import { useAtom } from "jotai"
 
 export default function TopBar() {
-    const { user, logout } = { ...useUser() }
+    const [userDocRef] = useAtom(userDocAtom)
 
     return <>
         <UserArea
-            user={user}
-            logout={logout} />
-        {user ? <Navigation /> : null}
+            loggedIn={userDocRef !== null} />
+        {userDocRef ? <Navigation /> : null}
     </>
 }

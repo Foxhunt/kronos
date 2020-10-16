@@ -1,6 +1,7 @@
+import { useAtom } from "jotai"
 import { useEffect, useState } from "react"
 import styled from "styled-components"
-import { useUser } from "../../context/userContext"
+import { userDocAtom } from "../../store"
 
 import Folder from "./Folder"
 
@@ -39,7 +40,7 @@ const Folders = styled.div`
 `
 
 export default function Navigation() {
-    const { userDocRef } = { ...useUser() }
+    const [userDocRef] = useAtom(userDocAtom)
     const [showFolders, setShowFolders] = useState(false)
 
     const [clients, setClients] = useState<firebase.firestore.CollectionReference>()
