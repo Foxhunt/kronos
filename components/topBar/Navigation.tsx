@@ -4,6 +4,7 @@ import styled from "styled-components"
 import { userDocAtom } from "../../store"
 
 import Folder from "./Folder"
+import Collections from "./Collections"
 
 const Container = styled.nav`
     position: relative;
@@ -23,17 +24,6 @@ const Location = styled.div<{ inverted: boolean }>`
     color:  ${({ inverted }) => (inverted ? "white" : "black")};
 `
 
-const Collections = styled.div`
-    overflow: auto;
-    white-space: nowrap;
-`
-
-const Collection = styled.div`
-    display: inline-block;
-    width: 150px;
-    height: 100%;
-`
-
 const Folders = styled.div`
     display: grid;
     grid-template-columns: [clients] 300px[projects] 300px[tasks] 300px[designs] auto;
@@ -48,6 +38,7 @@ export default function Navigation() {
     const [tasks, setTasks] = useState<firebase.firestore.CollectionReference>()
     const [designs, setDesigns] = useState<firebase.firestore.CollectionReference>()
     const [collections, setCollections] = useState<firebase.firestore.CollectionReference>()
+    const [files, setFiles] = useState<firebase.firestore.CollectionReference>()
 
     useEffect(() => {
         setClients(userDocRef?.collection("Clients"))
@@ -60,11 +51,13 @@ export default function Navigation() {
                 onClick={() => setShowFolders(!showFolders)}>
                 Location
             </Location>
-            <Collections>
-                <Collection />
-                <Collection />
-                <Collection />
-            </Collections>
+            <Collections
+                selectedId={files?.parent?.id}
+                collection={collections}
+                onSelectCollection={collection => {
+                    setFiles(collection?.collection("files"))
+                }}
+            />
         </LocationCollections>
         {showFolders && <Folders>
             <Folder
