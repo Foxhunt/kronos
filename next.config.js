@@ -1,4 +1,8 @@
-module.exports = {
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+})
+
+module.exports = withBundleAnalyzer({
     webpackDevMiddleware: (config) => {
       // Solve compiling problem via vagrant
       config.watchOptions = {
@@ -7,4 +11,5 @@ module.exports = {
       };
       return config;
     }
-  };
+  })
+  
