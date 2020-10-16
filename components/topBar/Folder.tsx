@@ -23,6 +23,15 @@ const Subfolder = styled.div<{ selected?: boolean }>`
     }
 `
 
+const NewFolderInput = styled.input`
+    padding: unset;
+    width: 100%;
+    height: 25px;
+
+    border: none;
+    border-top: black 1px solid;
+`
+
 type props = {
     name: string,
     selectedId: string | undefined,
@@ -31,14 +40,26 @@ type props = {
 }
 
 export default function Folder({ name, selectedId, collection, onSelectSubfolder }: props) {
-
     const [subFolders, setSubfolders] = useState<firebase.firestore.DocumentSnapshot[]>([])
+    const [addingSubFolder, setAddingSubFolder] = useState(false)
+    const [newFolderName, setNewFolderName] = useState("")
 
     useEffect(() => {
-        const unsubscribe = collection?.onSnapshot(snapshot => setSubfolders(snapshot.docs))
+        const unsubscribe = collection
+            ?.orderBy("createdAt", "desc")
+            ?.onSnapshot(snapshot => {
+                setSubfolders(snapshot.docs)
+
+                // const lastAdedFolder = snapshot.docChanges().filter(change => change.type === "added")
+                // if (lastAdedFolder.length === 1) {
+                //     onSelectSubfolder(lastAdedFolder[0].doc.ref)
+                // }
+            })
+
         return () => {
             unsubscribe && unsubscribe()
             onSelectSubfolder(undefined)
+            setNewFolderName("")
             setSubfolders([])
         }
     }, [collection])
@@ -46,20 +67,48 @@ export default function Folder({ name, selectedId, collection, onSelectSubfolder
     return <Container>
         <div>{name}</div>
         <Subfolder
-            key={"new"}>
-            +++
+            key={"new"}
+            onClick={() => setAddingSubFolder(true)}>
+            {addingSubFolder ? "---" : "+++"}
         </Subfolder>
+        {
+            addingSubFolder &&
+            <form
+                onSubmit={event => {
+                    event.preventDefault()
+                    collection?.add({
+                        name: newFolderName,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    })
+                    setAddingSubFolder(false)
+                    setNewFolderName("")
+                }}>
+                <NewFolderInput
+                    type={"text"}
+                    autoFocus
+                    value={newFolderName}
+                    onBlur={() => setAddingSubFolder(false)}
+                    onChange={event => {
+                        setNewFolderName(event.target.value)
+                    }} />
+            </form>
+        }
         {
             subFolders.map(subFolder =>
                 <Subfolder
                     key={subFolder.id}
                     selected={selectedId === subFolder.id}
+                    onContextMenu={event => {
+                        event.preventDefault()
+                        subFolder.ref.delete()
+                    }}
                     onClick={() => onSelectSubfolder(subFolder.ref)}>
                     {subFolder.get("name")}
                 </Subfolder>)
         }
         {
-            (new Array(25 - subFolders.length)).fill(0).map((_, index) =>
+            (new Array((addingSubFolder ? 24 : 25) - subFolders.length)).fill(0).map((_, index) =>
                 <Subfolder
                     key={index} />)
         }
