@@ -9,6 +9,8 @@ import firebase from "../../firebase/clientApp"
 import uploadFile from "../../firebase/uploadFile"
 
 import FileComponent from "./file"
+import { useAtom } from "jotai"
+import { filesColRefAtom } from "../../store"
 
 const Container = styled.div`
     text-align: center;
@@ -43,56 +45,55 @@ const DropTarget = styled.div.attrs<{ targetPosition: { x: number, y: number } }
 `
 
 export default function Collection() {
-
+    const [filesColRef] = useAtom(filesColRefAtom)
     const [files, setFiles] = useState<firebase.firestore.DocumentSnapshot[]>([])
 
     useEffect(() => {
-        const db = firebase.firestore()
-        const imageCollection = db.collection("images").orderBy("name")
-
-        const unsubscribe = imageCollection.onSnapshot(snapshot => {
+        const unsubscribe = filesColRef?.onSnapshot(snapshot => {
             setFiles(snapshot.docs)
         })
 
         return unsubscribe
-    }, [])
+    }, [filesColRef])
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
-        const limit = pLimit(2)
+        const limit = pLimit(5)
 
-        acceptedFiles
-            .filter(newFile => !files.some(existingFile => existingFile.get("name") === newFile.name))
-            .map(newFile => limit(async () => {
-                // we want to split PDFs into pages and upload them individualy
-                if (newFile.type === "application/pdf") {
-                    const pdf = await PDFDocument.load(await newFile.arrayBuffer())
-                    const pageIndicies = pdf.getPageIndices()
+        if (filesColRef?.path) {
+            acceptedFiles
+                .filter(newFile => !files.some(existingFile => existingFile.get("name") === newFile.name))
+                .map(newFile => limit(async () => {
+                    // we want to split PDFs into pages and upload them individualy
+                    if (newFile.type === "application/pdf") {
+                        const pdf = await PDFDocument.load(await newFile.arrayBuffer())
+                        const pageIndicies = pdf.getPageIndices()
 
-                    // map convert and upload tasks
-                    pageIndicies.map(i => limit(async () => {
+                        // map convert and upload tasks
+                        pageIndicies.map(i => limit(async () => {
 
-                        const newFilePageName = `${newFile.name.substring(0, newFile.name.lastIndexOf(".pdf"))}-${i}.pdf`
+                            const newFilePageName = `${newFile.name.substring(0, newFile.name.lastIndexOf(".pdf"))}-${i}.pdf`
 
-                        if (!files.some(existingFile => existingFile.get("name") === newFilePageName)) {
-                            const extractedPagePDF = await PDFDocument.create()
-                            const [page] = await extractedPagePDF.copyPages(pdf, [i])
-                            extractedPagePDF.addPage(page)
-                            const pdfFile = new File(
-                                [await extractedPagePDF.save()],
-                                newFilePageName,
-                                { type: "application/pdf" }
-                            )
+                            if (!files.some(existingFile => existingFile.get("name") === newFilePageName)) {
+                                const extractedPagePDF = await PDFDocument.create()
+                                const [page] = await extractedPagePDF.copyPages(pdf, [i])
+                                extractedPagePDF.addPage(page)
+                                const pdfFile = new File(
+                                    [await extractedPagePDF.save()],
+                                    newFilePageName,
+                                    { type: "application/pdf" }
+                                )
 
-                            files.push(await uploadFile(pdfFile))
-                            setFiles(files.concat())
-                        }
-                    }))
-                } else {
-                    files.push(await uploadFile(newFile))
-                    setFiles(files.concat())
-                }
-            }))
-    }, [files])
+                                files.push(await uploadFile(pdfFile, filesColRef.path))
+                                setFiles(files.concat())
+                            }
+                        }))
+                    } else {
+                        files.push(await uploadFile(newFile, filesColRef.path))
+                        setFiles(files.concat())
+                    }
+                }))
+        }
+    }, [files, filesColRef?.path])
 
     // position drop object
     const [dropTargetPosition, setDropTargetPosition] = useState({ x: 0, y: 0 })

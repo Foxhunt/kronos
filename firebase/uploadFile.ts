@@ -1,10 +1,12 @@
 import firebase from "./clientApp"
 
-export default async function uploadFile(file: File) {
-    const storageRef = firebase.storage().ref("images")
+export default async function uploadFile(file: File, path: string) {
+    const storageRef = firebase.storage().ref(path)
     const fileRef = storageRef.child(`${file.name}`)
 
-    const uploadTask = fileRef.put(file)
+    const uploadTask = fileRef.put(file, {
+        cacheControl: "private, max-age=3600"
+    })
 
     const docRef = await new Promise<firebase.firestore.DocumentReference>((resolve) => {
         uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
@@ -13,7 +15,7 @@ export default async function uploadFile(file: File) {
             async () => {
 
                 const db = firebase.firestore()
-                const imageCollection = db.collection("images")
+                const imageCollection = db.collection(path)
 
                 resolve(await imageCollection.add({
                     name: fileRef.name,

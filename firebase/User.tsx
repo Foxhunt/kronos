@@ -2,10 +2,12 @@ import firebase from "firebase"
 import { useEffect } from "react"
 import { useAtom } from "jotai"
 
-import { userDocAtom } from "../store"
+import {
+    userDocRefAtom
+} from "../store"
 
 export default function User() {
-    const [, setUserDoc] = useAtom(userDocAtom)
+    const [, setUserDoc] = useAtom(userDocRefAtom)
 
     useEffect(() => {
         // Listen authenticated user
@@ -19,7 +21,7 @@ export default function User() {
                     firebase.analytics().setUserId(user.uid)
                     firebase.analytics().logEvent(firebase.analytics.EventName.LOGIN, { method: firebase.auth.EmailAuthProvider.PROVIDER_ID })
                 } else {
-                    setUserDoc(null)
+                    setUserDoc()
                 }
             } catch (error) {
                 // Most probably a connection error. Handle appropriately.

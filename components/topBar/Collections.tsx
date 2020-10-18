@@ -61,16 +61,10 @@ export default function Collections({ selectedId, collection, onSelectCollection
             ?.orderBy("createdAt", "asc")
             ?.onSnapshot(snapshot => {
                 setCollections(snapshot.docs)
-
-                // const lastAdedFolder = snapshot.docChanges().filter(change => change.type === "added")
-                // if (lastAdedFolder.length === 1) {
-                //     onSelectSubfolder(lastAdedFolder[0].doc.ref)
-                // }
             })
 
         return () => {
             unsubscribe && unsubscribe()
-            onSelectCollection(undefined)
             setNewCollectionName("")
             setCollections([])
         }

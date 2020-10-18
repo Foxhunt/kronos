@@ -1,7 +1,14 @@
 import { useAtom } from "jotai"
 import { useEffect, useState } from "react"
 import styled from "styled-components"
-import { userDocAtom } from "../../store"
+import {
+    userDocRefAtom,
+    clientsColRefAtom,
+    projectsColRefAtom,
+    tasksColRefAtom,
+    collectionsColRefAtom,
+    filesColRefAtom,
+} from "../../store"
 
 import Folder from "./Folder"
 import Collections from "./Collections"
@@ -10,7 +17,7 @@ const Container = styled.nav`
     position: relative;
     z-index: 1;
     background-color: white;
-    height: 25px;
+    /* height: 25px; */
 `
 
 const LocationCollections = styled.div`
@@ -26,22 +33,21 @@ const Location = styled.div<{ inverted: boolean }>`
 
 const Folders = styled.div`
     display: grid;
-    grid-template-columns: [clients] 300px[projects] 300px[tasks] 300px[designs] auto;
+    grid-template-columns: [clients] 300px [projects] 300px[tasks] auto;
 `
 
 export default function Navigation() {
-    const [userDocRef] = useAtom(userDocAtom)
+    const [userDocRef] = useAtom(userDocRefAtom)
     const [showFolders, setShowFolders] = useState(false)
 
-    const [clients, setClients] = useState<firebase.firestore.CollectionReference>()
-    const [projects, setProjects] = useState<firebase.firestore.CollectionReference>()
-    const [tasks, setTasks] = useState<firebase.firestore.CollectionReference>()
-    const [designs, setDesigns] = useState<firebase.firestore.CollectionReference>()
-    const [collections, setCollections] = useState<firebase.firestore.CollectionReference>()
-    const [files, setFiles] = useState<firebase.firestore.CollectionReference>()
+    const [clients, setClients] = useAtom(clientsColRefAtom)
+    const [projects, setProjects] = useAtom(projectsColRefAtom)
+    const [tasks, setTasks] = useAtom(tasksColRefAtom)
+    const [collections, setCollections] = useAtom(collectionsColRefAtom)
+    const [files, setFiles] = useAtom(filesColRefAtom)
 
     useEffect(() => {
-        setClients(userDocRef?.collection("Clients"))
+        setClients(userDocRef?.collection("clients"))
     }, [userDocRef])
 
     return <Container>
@@ -55,7 +61,9 @@ export default function Navigation() {
                 selectedId={files?.parent?.id}
                 collection={collections}
                 onSelectCollection={collection => {
-                    setFiles(collection?.collection("files"))
+                    if (collection?.collection("files").path !== files?.path) {
+                        setFiles(collection?.collection("files"))
+                    }
                 }}
             />
         </LocationCollections>
@@ -65,28 +73,27 @@ export default function Navigation() {
                 selectedId={projects?.parent?.id}
                 collection={clients}
                 onSelectSubfolder={subfolder => {
-                    setProjects(subfolder?.collection("Projects"))
+                    if (subfolder?.collection("projects").path !== projects?.path) {
+                        setProjects(subfolder?.collection("projects"))
+                    }
                 }} />
             <Folder
                 name={"Projects"}
                 selectedId={tasks?.parent?.id}
                 collection={projects}
                 onSelectSubfolder={subfolder => {
-                    setTasks(subfolder?.collection("Tasks"))
+                    if (subfolder?.collection("tasks").path !== tasks?.path) {
+                        setTasks(subfolder?.collection("tasks"))
+                    }
                 }} />
             <Folder
                 name={"Tasks"}
-                selectedId={designs?.parent?.id}
+                selectedId={collections?.parent?.id}
                 collection={tasks}
                 onSelectSubfolder={subfolder => {
-                    setDesigns(subfolder?.collection("Designs"))
-                }} />
-            <Folder
-                name={"Designs"}
-                selectedId={collections?.parent?.id}
-                collection={designs}
-                onSelectSubfolder={subfolder => {
-                    setCollections(subfolder?.collection("Collections"))
+                    if (subfolder?.collection("collections").path !== collections?.path) {
+                        setCollections(subfolder?.collection("collections"))
+                    }
                 }} />
         </Folders>}
     </Container>

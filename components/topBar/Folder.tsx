@@ -49,16 +49,10 @@ export default function Folder({ name, selectedId, collection, onSelectSubfolder
             ?.orderBy("createdAt", "desc")
             ?.onSnapshot(snapshot => {
                 setSubfolders(snapshot.docs)
-
-                // const lastAdedFolder = snapshot.docChanges().filter(change => change.type === "added")
-                // if (lastAdedFolder.length === 1) {
-                //     onSelectSubfolder(lastAdedFolder[0].doc.ref)
-                // }
             })
 
         return () => {
             unsubscribe && unsubscribe()
-            onSelectSubfolder(undefined)
             setNewFolderName("")
             setSubfolders([])
         }
@@ -67,7 +61,6 @@ export default function Folder({ name, selectedId, collection, onSelectSubfolder
     return <Container>
         <div>{name}</div>
         <Subfolder
-            key={"new"}
             onClick={() => setAddingSubFolder(true)}>
             {addingSubFolder ? "---" : "+++"}
         </Subfolder>
@@ -108,7 +101,7 @@ export default function Folder({ name, selectedId, collection, onSelectSubfolder
                 </Subfolder>)
         }
         {
-            (new Array((addingSubFolder ? 24 : 25) - subFolders.length)).fill(0).map((_, index) =>
+            (new Array((addingSubFolder ? 4 : 5) - subFolders.length)).fill(0).map((_, index) =>
                 <Subfolder
                     key={index} />)
         }

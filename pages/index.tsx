@@ -1,15 +1,11 @@
 import { useAtom } from "jotai"
-import styled from "styled-components"
 import Collection from "../components/collection"
-import { userDocAtom } from "../store"
-
-const Container = styled.div`
-`
+import { userDocRefAtom } from "../store"
 
 export default function Home() {
-  const [userDocRef] = useAtom(userDocAtom)
+  const [userDocRef] = useAtom(userDocRefAtom)
 
-  return <Container>
+  return <>
     {userDocRef ? <Collection /> : null}
-  </Container >
+  </ >
 }
