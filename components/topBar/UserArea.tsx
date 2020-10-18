@@ -1,4 +1,4 @@
-import firebase from "firebase"
+import firebase from "../../firebase/clientApp"
 import Link from "next/link"
 import styled from "styled-components"
 

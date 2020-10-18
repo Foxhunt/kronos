@@ -2,7 +2,6 @@ import { useCallback, useMemo, useState, useEffect } from "react"
 import styled from "styled-components"
 import { useDropzone } from "react-dropzone"
 
-import { PDFDocument } from 'pdf-lib'
 import pLimit from "p-limit"
 
 import firebase from "../../firebase/clientApp"
@@ -56,7 +55,10 @@ export default function Collection() {
         return unsubscribe
     }, [filesColRef])
 
-    const onDrop = useCallback((acceptedFiles: File[]) => {
+    const onDrop = useCallback(async (acceptedFiles: File[]) => {
+
+        const PDFDocument = (await import("pdf-lib")).PDFDocument
+
         const limit = pLimit(5)
 
         if (filesColRef?.path) {

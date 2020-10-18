@@ -1,4 +1,4 @@
-import firebase from "firebase"
+import firebase from "./clientApp"
 import { useEffect } from "react"
 import { useAtom } from "jotai"
 
