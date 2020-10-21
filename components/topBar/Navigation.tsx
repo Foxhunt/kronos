@@ -1,5 +1,5 @@
 import { useAtom } from "jotai"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import styled from "styled-components"
 import {
     userDocRefAtom,
@@ -9,6 +9,8 @@ import {
     collectionsColRefAtom,
     filesColRefAtom,
 } from "../../store"
+
+import useClickedOutside from "../hooks/useClickedOutside"
 
 import Folder from "./Folder"
 import Collections from "./Collections"
@@ -50,7 +52,15 @@ export default function Navigation() {
         setClients(userDocRef?.collection("clients"))
     }, [userDocRef])
 
-    return <Container>
+    const containerRef = useRef(null)
+    const handleClickedOutside = useCallback(() => {
+        setShowFolders(false)
+    }, [])
+
+    useClickedOutside(containerRef, handleClickedOutside)
+
+    return <Container
+        ref={containerRef}>
         <LocationCollections>
             <Location
                 inverted={showFolders}
