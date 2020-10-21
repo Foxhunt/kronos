@@ -5,6 +5,7 @@ import styled from "styled-components"
 const Container = styled.header`
     background-color: black;
     height: 25px;
+    flex-shrink: 0;
 `
 
 type props = {
