@@ -21,7 +21,7 @@ export default function User() {
                     firebase.analytics().setUserId(user.uid)
                     firebase.analytics().logEvent(firebase.analytics.EventName.LOGIN, { method: firebase.auth.EmailAuthProvider.PROVIDER_ID })
                 } else {
-                    setUserDoc()
+                    setUserDoc(undefined)
                 }
             } catch (error) {
                 // Most probably a connection error. Handle appropriately.
@@ -33,5 +33,5 @@ export default function User() {
         return unsubscribe
     }, [])
 
-    return <></>
+    return null
 }

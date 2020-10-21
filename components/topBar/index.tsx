@@ -8,7 +8,7 @@ export default function TopBar() {
 
     return <>
         <UserArea
-            loggedIn={userDocRef !== null} />
+            loggedIn={userDocRef !== undefined} />
         {userDocRef ? <Navigation /> : null}
     </>
 }
