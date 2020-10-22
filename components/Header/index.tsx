@@ -1,14 +1,14 @@
-import UserArea from "./UserArea"
 import Navigation from "./Navigation"
+import Location from "./Location"
 import { userDocRefAtom } from "../../store"
 import { useAtom } from "jotai"
 
-export default function TopBar() {
+export default function Header() {
     const [userDocRef] = useAtom(userDocRefAtom)
 
-    return <>
-        <UserArea
+    return <header>
+        <Navigation
             loggedIn={userDocRef !== undefined} />
-        {userDocRef ? <Navigation /> : null}
-    </>
+        {userDocRef ? <Location /> : null}
+    </header>
 }

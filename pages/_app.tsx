@@ -5,21 +5,19 @@ import { Provider } from "jotai"
 import "../firebase/clientApp"
 
 import User from "../firebase/User"
-import TopBar from "../components/topBar";
+import Header from "../components/Header";
 
 type Props = {
   Component: ComponentType<any>
   pageProps: AppProps
 }
 
-const isOnClient = typeof window !== "undefined";
-
 // Custom App to wrap it with context provider
 export default function App({ Component, pageProps }: Props) {
   return (
     <Provider>
-      {isOnClient && <User />}
-      <TopBar />
+      <User />
+      <Header />
       <Component {...pageProps} />
     </Provider>
   )
