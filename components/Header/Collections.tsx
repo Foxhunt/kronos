@@ -68,7 +68,6 @@ export default function Collections() {
                 .where("client", "==", client.ref)
                 .where("project", "==", project.ref)
                 .where("task", "==", task.ref)
-                .orderBy("createdAt", "desc")
                 .onSnapshot(snapshot => {
                     setCollections(snapshot.docs)
                 })
