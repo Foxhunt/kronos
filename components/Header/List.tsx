@@ -32,23 +32,24 @@ const NewItemInput = styled.input`
 `
 
 type props = {
-    name: string,
-    selected: firebase.firestore.DocumentSnapshot | undefined,
-    items: firebase.firestore.DocumentSnapshot[] | undefined,
+    name: string
+    selected: firebase.firestore.DocumentSnapshot | undefined
+    items: firebase.firestore.DocumentSnapshot[] | undefined
+    allowAdding: boolean
     onSelect: (docRef: firebase.firestore.DocumentSnapshot | undefined) => void
     onAdd: (itemName: string) => void
 }
 
-export default function List({ name, selected, items, onSelect, onAdd }: props) {
+export default function List({ name, selected, items, allowAdding, onSelect, onAdd }: props) {
     const [addingItem, setAddingItem] = useState(false)
     const [newItemName, setNewItemName] = useState("")
 
     return <Container>
         <Item>{name}</Item>
-        <Item
+        {allowAdding && <Item
             onClick={() => setAddingItem(true)}>
             {addingItem ? "---" : "+++"}
-        </Item>
+        </Item>}
         {
             addingItem &&
             <form

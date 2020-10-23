@@ -76,6 +76,7 @@ export default function Folders() {
                     setTasks([])
                 }
             }}
+            allowAdding={Boolean(userDocRef)}
             onAdd={itemName => {
                 userDocRef?.collection("clients").add({
                     name: itemName,
@@ -95,6 +96,7 @@ export default function Folders() {
                     setTasks([])
                 }
             }}
+            allowAdding={Boolean(client)}
             onAdd={itemName => {
                 userDocRef?.collection("projects").add({
                     name: itemName,
@@ -111,6 +113,7 @@ export default function Folders() {
             onSelect={selectedDoc => {
                 setTask(selectedDoc)
             }}
+            allowAdding={Boolean(client && project)}
             onAdd={itemName => {
                 userDocRef?.collection("tasks").add({
                     name: itemName,
