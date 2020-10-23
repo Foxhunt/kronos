@@ -15,9 +15,9 @@ export default async function uploadFile(file: File, path: string) {
             async () => {
 
                 const db = firebase.firestore()
-                const imageCollection = db.collection(path)
+                const fileCollection = db.collection(path)
 
-                resolve(await imageCollection.add({
+                resolve(await fileCollection.add({
                     name: fileRef.name,
                     fullPath: fileRef.fullPath
                 }))

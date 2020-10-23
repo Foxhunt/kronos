@@ -43,7 +43,7 @@ const DropTarget = styled.div.attrs<{ targetPosition: { x: number, y: number } }
     pointer-events: none;
 `
 
-export default function Collection() {
+export default function Files() {
     const [filesColRef] = useAtom(filesColRefAtom)
     const [files, setFiles] = useState<firebase.firestore.DocumentSnapshot[]>([])
 
