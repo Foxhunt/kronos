@@ -1,6 +1,14 @@
 import firebase from "../../firebase/clientApp"
 import { useEffect, useState } from "react"
+import { useAtom } from "jotai"
 import styled from "styled-components"
+import {
+    selectedClientDocRefAtom,
+    selectedCollectionDocRefAtom,
+    selectedProjectDocRefAtom,
+    selectedTaskDocRefAtom,
+    userDocRefAtom
+} from "../../store"
 
 const Container = styled.div`
     overflow: auto;
@@ -10,7 +18,7 @@ const Container = styled.div`
     }
 `
 
-const Subfolder = styled.div<{ selected?: boolean }>`
+const Item = styled.div<{ selected?: boolean }>`
     display: inline-block;
     border-left: black solid 1px;
     width: 150px;
@@ -29,7 +37,7 @@ const Subfolder = styled.div<{ selected?: boolean }>`
     }
 `
 
-const NewCollectionForm = styled.form`
+const NewItemForm = styled.form`
     display: inline-block;
     height: 100%;
     width: 150px;
@@ -37,7 +45,7 @@ const NewCollectionForm = styled.form`
     border-left: black solid 1px;
 `
 
-const NewCollectionInput = styled.input`
+const NewItemInput = styled.input`
     padding: unset;
     height: 100%;
     width: 100%;
@@ -45,75 +53,77 @@ const NewCollectionInput = styled.input`
     border: none;
 `
 
-type props = {
-    selectedId: string | undefined,
-    collection: firebase.firestore.CollectionReference | undefined,
-    onSelectCollection: (docRef: firebase.firestore.DocumentReference | undefined) => void
-}
+export default function Collections() {
+    const [userDocRef] = useAtom(userDocRefAtom)
+    const [client] = useAtom(selectedClientDocRefAtom)
+    const [project] = useAtom(selectedProjectDocRefAtom)
+    const [task] = useAtom(selectedTaskDocRefAtom)
 
-export default function Collections({ selectedId, collection, onSelectCollection }: props) {
+    const [selectedCollection, setCollection] = useAtom(selectedCollectionDocRefAtom)
     const [collections, setCollections] = useState<firebase.firestore.DocumentSnapshot[]>([])
-    const [addingCollection, setAddingCollection] = useState(false)
-    const [newCollectionName, setNewCollectionName] = useState("")
-
     useEffect(() => {
-        const unsubscribe = collection
-            ?.orderBy("createdAt", "asc")
-            ?.onSnapshot(snapshot => {
-                setCollections(snapshot.docs)
-            })
-
-        return () => {
-            unsubscribe && unsubscribe()
-            setNewCollectionName("")
-            setCollections([])
+        if (client && project && task) {
+            userDocRef
+                ?.collection("collections")
+                .where("client", "==", client.ref)
+                .where("project", "==", project.ref)
+                .where("task", "==", task.ref)
+                .orderBy("createdAt", "desc")
+                .onSnapshot(snapshot => {
+                    setCollections(snapshot.docs)
+                })
         }
-    }, [collection])
+    }, [userDocRef, client, project, task])
+
+    const [addingItem, setAddingItem] = useState(false)
+    const [newItemName, setNewItemName] = useState("")
 
     return <Container
         onWheel={event => {
             event.currentTarget.scrollBy({ left: event.deltaY * 0.6 })
         }}>
         {
-            collections.map(subFolder =>
-                <Subfolder
-                    key={subFolder.id}
-                    selected={selectedId === subFolder.id}
+            collections?.map(collection =>
+                <Item
+                    key={collection.id}
+                    selected={selectedCollection?.id === collection.id}
                     onContextMenu={event => {
                         event.preventDefault()
-                        subFolder.ref.delete()
+                        collection.ref.delete()
                     }}
-                    onClick={() => onSelectCollection(subFolder.ref)}>
-                    {subFolder.get("name")}
-                </Subfolder>)
+                    onClick={() => setCollection(collection)}>
+                    {collection.get("name")}
+                </Item>)
         }
         {
-            addingCollection &&
-            <NewCollectionForm
+            addingItem &&
+            <NewItemForm
                 onSubmit={event => {
                     event.preventDefault()
-                    collection?.add({
-                        name: newCollectionName,
+                    userDocRef?.collection("collections").add({
+                        name: newItemName,
+                        client: client?.ref,
+                        project: project?.ref,
+                        task: task?.ref,
                         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                         lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
                     })
-                    setAddingCollection(false)
-                    setNewCollectionName("")
+                    setAddingItem(false)
+                    setNewItemName("")
                 }}>
-                <NewCollectionInput
+                <NewItemInput
                     type={"text"}
                     autoFocus
-                    value={newCollectionName}
-                    onBlur={() => setAddingCollection(false)}
+                    value={newItemName}
+                    onBlur={() => setAddingItem(false)}
                     onChange={event => {
-                        setNewCollectionName(event.target.value)
+                        setNewItemName(event.target.value)
                     }} />
-            </NewCollectionForm>
+            </NewItemForm>
         }
-        <Subfolder
-            key={"new"}
-            onClick={() => setAddingCollection(!addingCollection)}>
-            {addingCollection ? "---" : "+++"}
-        </Subfolder>
+        <Item
+            onClick={() => setAddingItem(!addingItem)}>
+            {addingItem ? "---" : "+++"}
+        </Item>
     </Container>
 }

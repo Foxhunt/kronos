@@ -3,12 +3,11 @@ import { useState } from "react"
 import styled from "styled-components"
 
 const Container = styled.div`
-    background-color: white;
 `
 
 const Item = styled.div<{ selected?: boolean }>`
     height: 25px;
-    border-top: black 1px solid;
+    border-bottom: black 1px solid;
 
     ${({ selected }) => selected ?
         `
@@ -18,7 +17,7 @@ const Item = styled.div<{ selected?: boolean }>`
     }
 
     :hover {
-        background-color: black;
+        background-color: #6d6d6d;
         color: white;
     }
 `
@@ -29,23 +28,23 @@ const NewItemInput = styled.input`
     height: 25px;
 
     border: none;
-    border-top: black 1px solid;
+    border-bottom: black 1px solid;
 `
 
 type props = {
     name: string,
-    selected: firebase.firestore.DocumentReference | undefined,
+    selected: firebase.firestore.DocumentSnapshot | undefined,
     items: firebase.firestore.DocumentSnapshot[] | undefined,
-    onSelect: (docRef: firebase.firestore.DocumentReference | undefined) => void
+    onSelect: (docRef: firebase.firestore.DocumentSnapshot | undefined) => void
     onAdd: (itemName: string) => void
 }
 
-export default function List({ name, selected, items, onSelect: onSelect, onAdd }: props) {
+export default function List({ name, selected, items, onSelect, onAdd }: props) {
     const [addingItem, setAddingItem] = useState(false)
     const [newItemName, setNewItemName] = useState("")
 
     return <Container>
-        <div>{name}</div>
+        <Item>{name}</Item>
         <Item
             onClick={() => setAddingItem(true)}>
             {addingItem ? "---" : "+++"}
@@ -78,7 +77,7 @@ export default function List({ name, selected, items, onSelect: onSelect, onAdd 
                         event.preventDefault()
                         item.ref.delete()
                     }}
-                    onClick={() => onSelect(item.ref)}>
+                    onClick={() => onSelect(item)}>
                     {item.get("name")}
                 </Item>)
         }

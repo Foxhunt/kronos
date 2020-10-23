@@ -1,5 +1,5 @@
 import Navigation from "./Navigation"
-import Location from "./Location"
+import LocationAndFolders from "./LocationAndFolders"
 import { userDocRefAtom } from "../../store"
 import { useAtom } from "jotai"
 
@@ -9,6 +9,6 @@ export default function Header() {
     return <header>
         <Navigation
             loggedIn={userDocRef !== undefined} />
-        {userDocRef ? <Location /> : null}
+        {userDocRef ? <LocationAndFolders /> : null}
     </header>
 }
