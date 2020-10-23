@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react"
 import styled from "styled-components"
-import { Document, Page, pdfjs } from "react-pdf"
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
+import dynamic from "next/dynamic"
 
 import firebase from "../../firebase/clientApp"
+
+const PDFViewer = dynamic(import("./PDFViewer"), { ssr: false })
 
 const Container = styled.div.attrs<{ background?: string }>
     (({ background }) => ({
@@ -58,17 +59,10 @@ export default function FileComponent({ fullPath, onDelete }: FileProps) {
         <Container
             onClick={onDelete}
             background={isPDF ? "" : src}>
-            {
-                isPDF &&
-                <Document file={src}>
-                    <Page
-                        renderAnnotationLayer={false}
-                        renderTextLayer={false}
-                        height={300}
-                        pageNumber={1} />
-                </Document>
-            }
+            {isPDF && <PDFViewer file={src} />}
             <Name>{metaData?.name}</Name>
         </Container>
     </>
+
+
 }
