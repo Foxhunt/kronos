@@ -8,6 +8,7 @@ import {
     selectedClientDocRefAtom,
     selectedProjectDocRefAtom,
     selectedTaskDocRefAtom,
+    selectedCollectionDocRefAtom,
 } from "../../store"
 
 import List from "./List"
@@ -20,46 +21,57 @@ const Container = styled.div`
 export default function Folders() {
     const [userDocRef] = useAtom(userDocRefAtom)
 
+    const [, setCollection] = useAtom(selectedCollectionDocRefAtom)
+
     const [client, setClient] = useAtom(selectedClientDocRefAtom)
     const [clients, setClients] = useState<firebase.firestore.DocumentSnapshot[]>([])
     useEffect(() => {
-        const unsubscribe = userDocRef?.collection("clients").onSnapshot(snapshot => {
-            setClients(snapshot.docs)
-        })
-        return unsubscribe
+        const unsubscribe = userDocRef
+            ?.collection("clients")
+            .onSnapshot(snapshot => {
+                setClients(snapshot.docs)
+            })
+        return () => {
+            unsubscribe && unsubscribe()
+            setClients([])
+        }
     }, [userDocRef])
 
     const [project, setProject] = useAtom(selectedProjectDocRefAtom)
     const [projects, setProjects] = useState<firebase.firestore.DocumentSnapshot[]>([])
     useEffect(() => {
-        let unsubscribe: (() => void) | undefined
-        if (client) {
-            unsubscribe = userDocRef
-                ?.collection("projects")
+        if (userDocRef && client) {
+            const unsubscribe = userDocRef
+                .collection("projects")
                 .where("client", "==", client.ref)
                 .orderBy("createdAt", "desc")
                 .onSnapshot(snapshot => {
                     setProjects(snapshot.docs)
                 })
+            return () => {
+                unsubscribe()
+                setProjects([])
+            }
         }
-        return unsubscribe
     }, [userDocRef, client])
 
     const [task, setTask] = useAtom(selectedTaskDocRefAtom)
     const [tasks, setTasks] = useState<firebase.firestore.DocumentSnapshot[]>([])
     useEffect(() => {
-        let unsubscribe: (() => void) | undefined
-        if (client && project) {
-            unsubscribe = userDocRef
-                ?.collection("tasks")
+        if (userDocRef && client && project) {
+            const unsubscribe = userDocRef
+                .collection("tasks")
                 .where("client", "==", client.ref)
                 .where("project", "==", project.ref)
                 .orderBy("createdAt", "desc")
                 .onSnapshot(snapshot => {
                     setTasks(snapshot.docs)
                 })
+            return () => {
+                unsubscribe()
+                setTasks([])
+            }
         }
-        return unsubscribe
     }, [userDocRef, client, project])
 
     return <Container>
@@ -70,11 +82,10 @@ export default function Folders() {
             onSelect={selectedDoc => {
                 if (selectedDoc !== client) {
                     setClient(selectedDoc)
-                    setProject(undefined)
-                    setProjects([])
-                    setTask(undefined)
-                    setTasks([])
                 }
+                setProject(undefined)
+                setTask(undefined)
+                setCollection(undefined)
             }}
             allowAdding={Boolean(userDocRef)}
             onAdd={itemName => {
@@ -92,9 +103,9 @@ export default function Folders() {
             onSelect={selectedDoc => {
                 if (selectedDoc !== project) {
                     setProject(selectedDoc)
-                    setTask(undefined)
-                    setTasks([])
                 }
+                setTask(undefined)
+                setCollection(undefined)
             }}
             allowAdding={Boolean(client)}
             onAdd={itemName => {
@@ -111,7 +122,10 @@ export default function Folders() {
             selected={task}
             items={tasks}
             onSelect={selectedDoc => {
-                setTask(selectedDoc)
+                if (selectedDoc !== task) {
+                    setTask(selectedDoc)
+                }
+                setCollection(undefined)
             }}
             allowAdding={Boolean(client && project)}
             onAdd={itemName => {

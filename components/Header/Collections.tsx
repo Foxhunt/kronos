@@ -62,15 +62,21 @@ export default function Collections() {
     const [selectedCollection, setCollection] = useAtom(selectedCollectionDocRefAtom)
     const [collections, setCollections] = useState<firebase.firestore.DocumentSnapshot[]>([])
     useEffect(() => {
-        if (client && project && task) {
-            userDocRef
-                ?.collection("collections")
+        if (userDocRef && client && project && task) {
+            const unsubscribe = userDocRef
+                .collection("collections")
                 .where("client", "==", client.ref)
                 .where("project", "==", project.ref)
                 .where("task", "==", task.ref)
+                .orderBy("createdAt", "asc")
                 .onSnapshot(snapshot => {
                     setCollections(snapshot.docs)
                 })
+
+            return () => {
+                unsubscribe()
+                setCollections([])
+            }
         }
     }, [userDocRef, client, project, task])
 
@@ -120,9 +126,14 @@ export default function Collections() {
                     }} />
             </NewItemForm>
         }
-        <Item
-            onClick={() => setAddingItem(!addingItem)}>
-            {addingItem ? "---" : "+++"}
-        </Item>
-    </Container>
+        {
+            client &&
+            project &&
+            task &&
+            <Item
+                onClick={() => setAddingItem(!addingItem)}>
+                {addingItem ? "---" : "+++"}
+            </Item>
+        }
+    </Container >
 }

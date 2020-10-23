@@ -2,10 +2,6 @@ import React, { useCallback, useRef, useState } from "react"
 import { useAtom } from "jotai"
 import styled from "styled-components"
 import {
-    selectedCollectionDocRefAtom,
-    selectedClientDocRefAtom,
-    selectedProjectDocRefAtom,
-    selectedTaskDocRefAtom,
     pathAtom,
 } from "../../store"
 
@@ -31,23 +27,13 @@ const Path = styled.div<{ inverted: boolean }>`
 `
 
 export default function LocationAndFolders() {
-    const [, setClient] = useAtom(selectedClientDocRefAtom)
-    const [, setProject] = useAtom(selectedProjectDocRefAtom)
-    const [, setTask] = useAtom(selectedTaskDocRefAtom)
-    const [collection] = useAtom(selectedCollectionDocRefAtom)
-
     const [path] = useAtom(pathAtom)
 
     const containerRef = useRef(null)
     const [showFolders, setShowFolders] = useState(false)
     const handleClickedOutside = useCallback(async () => {
         setShowFolders(false)
-        if (collection) {
-            setClient(await collection?.get("client").get({ source: "cache" }))
-            setProject(await collection?.get("project").get({ source: "cache" }))
-            setTask(await collection?.get("task").get({ source: "cache" }))
-        }
-    }, [collection])
+    }, [])
 
     useClickedOutside(containerRef, handleClickedOutside)
 
