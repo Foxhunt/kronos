@@ -9,7 +9,13 @@ import uploadFile from "../../firebase/uploadFile"
 
 import FileComponent from "./file"
 import { useAtom } from "jotai"
-import { filesColRefAtom } from "../../store"
+import {
+    selectedClientDocRefAtom,
+    selectedCollectionDocRefAtom,
+    selectedProjectDocRefAtom,
+    selectedTaskDocRefAtom,
+    userDocRefAtom
+} from "../../store"
 
 const Container = styled.div`
     text-align: center;
@@ -44,24 +50,88 @@ const DropTarget = styled.div.attrs<{ targetPosition: { x: number, y: number } }
 `
 
 export default function Files() {
-    const [filesColRef] = useAtom(filesColRefAtom)
+    const [userDocRef] = useAtom(userDocRefAtom)
+    const [client] = useAtom(selectedClientDocRefAtom)
+    const [project] = useAtom(selectedProjectDocRefAtom)
+    const [task] = useAtom(selectedTaskDocRefAtom)
+    const [collection] = useAtom(selectedCollectionDocRefAtom)
+
     const [files, setFiles] = useState<firebase.firestore.DocumentSnapshot[]>([])
 
     useEffect(() => {
-        const unsubscribe = filesColRef?.onSnapshot(snapshot => {
-            setFiles(snapshot.docs)
-        })
+        if (userDocRef && client && project && task && collection) {
+            const unsubscribe = userDocRef
+                .collection("files")
+                .where("client", "==", client?.ref)
+                .where("project", "==", project?.ref)
+                .where("task", "==", task?.ref)
+                .where("collection", "==", collection?.ref)
+                .orderBy("createdAt", "desc")
+                .onSnapshot(snapshot => {
+                    setFiles(snapshot.docs)
+                })
+
+            return unsubscribe
+        }
+        if (userDocRef && client && project && task) {
+            const unsubscribe = userDocRef
+                .collection("files")
+                .where("client", "==", client?.ref)
+                .where("project", "==", project?.ref)
+                .where("task", "==", task?.ref)
+                .orderBy("createdAt", "desc")
+                .onSnapshot(snapshot => {
+                    setFiles(snapshot.docs)
+                })
+
+            return unsubscribe
+        }
+        if (userDocRef && client && project) {
+            const unsubscribe = userDocRef
+                .collection("files")
+                .where("client", "==", client?.ref)
+                .where("project", "==", project?.ref)
+                .orderBy("createdAt", "desc")
+                .onSnapshot(snapshot => {
+                    setFiles(snapshot.docs)
+                })
+
+            return unsubscribe
+        }
+        if (userDocRef && client) {
+            const unsubscribe = userDocRef
+                .collection("files")
+                .where("client", "==", client?.ref)
+                .orderBy("createdAt", "desc")
+                .onSnapshot(snapshot => {
+                    setFiles(snapshot.docs)
+                })
+
+            return unsubscribe
+        }
+
+        const unsubscribe = userDocRef
+            ?.collection("files")
+            .orderBy("createdAt", "desc")
+            .onSnapshot(snapshot => {
+                setFiles(snapshot.docs)
+            })
 
         return unsubscribe
-    }, [filesColRef])
+    }, [userDocRef, client, project, task, collection])
 
     const onDrop = useCallback(async (acceptedFiles: File[]) => {
-
         const PDFDocument = (await import("pdf-lib")).PDFDocument
 
         const limit = pLimit(5)
 
-        if (filesColRef?.path) {
+        if (
+            userDocRef &&
+            client &&
+            project &&
+            task &&
+            collection
+        ) {
             acceptedFiles
                 .filter(newFile => !files.some(existingFile => existingFile.get("name") === newFile.name))
                 .map(newFile => limit(async () => {
@@ -85,17 +155,15 @@ export default function Files() {
                                     { type: "application/pdf" }
                                 )
 
-                                files.push(await uploadFile(pdfFile, filesColRef.path))
-                                setFiles(files.concat())
+                                await uploadFile(pdfFile, client, project, task, collection, userDocRef)
                             }
                         }))
                     } else {
-                        files.push(await uploadFile(newFile, filesColRef.path))
-                        setFiles(files.concat())
+                        await uploadFile(newFile, client, project, task, collection, userDocRef)
                     }
                 }))
         }
-    }, [files, filesColRef?.path])
+    }, [userDocRef, files, collection])
 
     // position drop object
     const [dropTargetPosition, setDropTargetPosition] = useState({ x: 0, y: 0 })
@@ -108,7 +176,7 @@ export default function Files() {
     const fileList = useMemo(() => files.map(
         fileSnapshot =>
             <FileComponent
-                key={fileSnapshot.get("name")}
+                key={fileSnapshot.id}
                 onDelete={() => {
                     fileSnapshot.ref.delete().then(() => {
                         const storage = firebase.storage()

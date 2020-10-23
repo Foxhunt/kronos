@@ -17,5 +17,3 @@ export const pathAtom = atom(get => {
 })
 
 export const selectedCollectionDocRefAtom = atom<firebase.firestore.DocumentSnapshot | undefined>(undefined)
-
-export const filesColRefAtom = atom<firebase.firestore.DocumentReference | undefined>(undefined)
