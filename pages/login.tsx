@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 
 import firebase from "../firebase/clientApp"
 
-export default function Login() {
+export default function login() {
     const router = useRouter()
     const uiConfig: firebaseui.auth.Config = {
         signInSuccessUrl: "/",
