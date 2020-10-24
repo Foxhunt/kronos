@@ -20,11 +20,10 @@ export default function Overview() {
         }
     }, [userDocRef])
 
-    return <>
-        {tasks.map(task => (
-            <Task
-                key={task.id}
-                task={task} />
-        ))}
-    </>
+    return tasks.map(task => (
+        <Task
+            key={task.id}
+            task={task} />
+    ))
+
 }
