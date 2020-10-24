@@ -17,10 +17,10 @@ export const pathAtom = atom<string, firebase.firestore.DocumentSnapshot[]>(
 
         return path.length ? path.join(" / ") : "Folders"
     },
-    (_, set, [client, project, task, collection]) => {
+    (_, set, [client, project, task]) => {
         set(selectedClientDocRefAtom, client)
         set(selectedProjectDocRefAtom, project)
         set(selectedTaskDocRefAtom, task)
-        set(selectedCollectionDocRefAtom, collection)
+        set(selectedCollectionDocRefAtom, undefined)
     }
 )
