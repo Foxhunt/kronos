@@ -96,7 +96,13 @@ export default function Collections() {
                         event.preventDefault()
                         collection.ref.delete()
                     }}
-                    onClick={() => setCollection(collection)}>
+                    onClick={() => {
+                        if (collection === selectedCollection) {
+                            setCollection(undefined)
+                        } else {
+                            setCollection(collection)
+                        }
+                    }}>
                     {collection.get("name")}
                 </Item>)
         }
