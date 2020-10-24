@@ -46,12 +46,8 @@ export default function List({ name, selected, items, allowAdding, onSelect, onA
 
     return <Container>
         <Item>{name}</Item>
-        {allowAdding && <Item
-            onClick={() => setAddingItem(true)}>
-            {addingItem ? "---" : "+++"}
-        </Item>}
-        {
-            addingItem &&
+        {allowAdding &&
+            addingItem ?
             <form
                 onSubmit={event => {
                     event.preventDefault()
@@ -67,8 +63,10 @@ export default function List({ name, selected, items, allowAdding, onSelect, onA
                     onChange={event => {
                         setNewItemName(event.target.value)
                     }} />
-            </form>
-        }
+            </form> : <Item
+                onClick={() => setAddingItem(true)}>
+                +++
+        </Item>}
         {
             items?.map(item =>
                 <Item

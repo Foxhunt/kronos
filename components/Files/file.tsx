@@ -34,9 +34,12 @@ const Name = styled.div`
     color: red;
 `
 
-type FileProps = { fullPath: string, onDelete: () => void }
+type props = {
+    fullPath: string
+    onDelete?: () => void
+}
 
-export default function FileComponent({ fullPath, onDelete }: FileProps) {
+export default function FileComponent({ fullPath, onDelete }: props) {
     const [src, setSrc] = useState<string>("")
     const [metaData, setMetaData] = useState<firebase.storage.FullMetadata>()
     useEffect(() => {
@@ -55,14 +58,10 @@ export default function FileComponent({ fullPath, onDelete }: FileProps) {
 
     const isPDF = metaData?.contentType === "application/pdf"
 
-    return <>
-        <Container
-            onClick={onDelete}
-            background={isPDF ? "" : src}>
-            {isPDF && <PDFViewer file={src} />}
-            <Name>{metaData?.name}</Name>
-        </Container>
-    </>
-
-
+    return <Container
+        onClick={onDelete}
+        background={isPDF ? "" : src}>
+        {isPDF && <PDFViewer file={src} />}
+        <Name>{metaData?.name}</Name>
+    </Container>
 }
