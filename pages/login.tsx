@@ -6,7 +6,6 @@ import firebase from "../firebase/clientApp"
 export default function login() {
     const router = useRouter()
     const uiConfig: firebaseui.auth.Config = {
-        signInSuccessUrl: "/",
         credentialHelper: 'none',
         signInOptions: [
             firebase.auth.EmailAuthProvider.PROVIDER_ID
