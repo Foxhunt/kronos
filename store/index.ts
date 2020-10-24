@@ -7,7 +7,7 @@ export const selectedProjectDocRefAtom = atom<firebase.firestore.DocumentSnapsho
 export const selectedTaskDocRefAtom = atom<firebase.firestore.DocumentSnapshot | undefined>(undefined)
 export const selectedCollectionDocRefAtom = atom<firebase.firestore.DocumentSnapshot | undefined>(undefined)
 
-export const pathAtom = atom(
+export const pathAtom = atom<string, firebase.firestore.DocumentSnapshot[]>(
     get => {
         const clientName = get(selectedClientDocRefAtom)?.get("name")
         const projectName = get(selectedProjectDocRefAtom)?.get("name")
