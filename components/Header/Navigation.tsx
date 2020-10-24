@@ -8,7 +8,7 @@ const Container = styled.nav`
 
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     
     background-color: black;
 
@@ -24,13 +24,11 @@ type props = {
 
 export default function Navigation({ loggedIn }: props) {
     return <Container>
+        <Link href={"/"}><a>home</a></Link >
+        <Link href={"/files"}><a>files</a></Link >
         {loggedIn ?
             <Link href={"/login"}>
-                <a onClick={() => {
-                    firebase.auth().signOut()
-                }}>
-                    logout
-                </a>
+                <a onClick={() => { firebase.auth().signOut() }}> logout</a>
             </Link >
             :
             <Link href={"/login"}>

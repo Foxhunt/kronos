@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState, useEffect } from "react"
+import React, { useCallback, useMemo, useState, useEffect } from "react"
 import styled from "styled-components"
 import { useDropzone } from "react-dropzone"
 
@@ -16,6 +16,7 @@ import {
     selectedTaskDocRefAtom,
     userDocRefAtom
 } from "../../store"
+import LocationAndFolders from "./LocationAndFolders"
 
 const Container = styled.div`
     text-align: center;
@@ -193,6 +194,7 @@ export default function Files() {
     ), [files])
 
     return <>
+        {userDocRef ? <LocationAndFolders /> : null}
         <Container {...getRootProps({})}>
             {fileList}
         </Container>
