@@ -28,11 +28,11 @@ export default function Task({ task }: props) {
 
     const [, setPath] = useAtom(pathAtom)
 
-    return <Link href={"/files"}>
+    return (client && project) ? <Link href={"/files"}>
         <div onClick={() => {
             setPath([client, project, task])
         }}>
-            {client && project && `${task.get("createdAt").toDate().toDateString()} ${task.get("lastUpdatedAt").toDate().toDateString()} ${client?.get("name")} ${project?.get("name")} ${task.get("name")}`}
+            {`${task.get("createdAt").toDate().toDateString()} ${task.get("lastUpdatedAt").toDate().toDateString()} ${client?.get("name")} ${project?.get("name")} ${task.get("name")}`}
         </div>
-    </Link>
+    </Link> : <></>
 }
