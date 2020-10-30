@@ -42,6 +42,7 @@ export default function Task({ task }: props) {
                 .collection("files")
                 .where("task", "==", task.ref)
                 .orderBy("createdAt", "desc")
+                .limit(4)
                 .onSnapshot(snapshot => {
                     setFiles(snapshot.docs)
                 })
