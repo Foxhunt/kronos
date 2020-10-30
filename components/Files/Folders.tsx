@@ -11,7 +11,7 @@ import {
     selectedCollectionDocRefAtom,
 } from "../../store"
 
-import List from "./List"
+import FolderList from "./FolderList"
 
 const Container = styled.div`
     display: grid;
@@ -75,7 +75,7 @@ export default function Folders() {
     }, [userDocRef, client, project])
 
     return <Container>
-        <List
+        <FolderList
             name={"Clients"}
             selected={client}
             items={clients}
@@ -96,7 +96,7 @@ export default function Folders() {
                 })
             }}
         />
-        <List
+        <FolderList
             name={"Projects"}
             selected={project}
             items={projects}
@@ -117,7 +117,7 @@ export default function Folders() {
                 })
             }}
         />
-        <List
+        <FolderList
             name={"Tasks"}
             selected={task}
             items={tasks}

@@ -1,8 +1,8 @@
+import firebase from "../../firebase/clientApp"
+
 import { useEffect, useState } from "react"
 import styled from "styled-components"
 import dynamic from "next/dynamic"
-
-import firebase from "../../firebase/clientApp"
 
 const PDFViewer = dynamic(import("./PDFViewer"), { ssr: false })
 
@@ -19,8 +19,8 @@ const Container = styled.div.attrs<{ background?: string }>
     background-repeat: no-repeat;
     background-position: center;
 
-    width: 100%;
-    height: 100%;
+    width: 300px;
+    height: 300px;
 
     display: flex;
 

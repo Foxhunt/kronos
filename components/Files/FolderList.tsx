@@ -40,7 +40,7 @@ type props = {
     onAdd: (itemName: string) => void
 }
 
-export default function List({ name, selected, items, allowAdding, onSelect, onAdd }: props) {
+export default function FolderList({ name, selected, items, allowAdding, onSelect, onAdd }: props) {
     const [addingItem, setAddingItem] = useState(false)
     const [newItemName, setNewItemName] = useState("")
 

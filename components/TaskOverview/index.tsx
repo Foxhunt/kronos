@@ -13,6 +13,7 @@ export default function Overview() {
             const unsubscribe = userDocRef
                 .collection("tasks")
                 .orderBy("createdAt", "desc")
+                .limit(10)
                 .onSnapshot(snapshot => {
                     setTasks(snapshot.docs)
                 })

@@ -1,30 +1,14 @@
 import firebase from "../../firebase/clientApp"
-import { useState, useEffect, useMemo } from "react"
-import styled from "styled-components"
+import { useState, useEffect } from "react"
 import Link from "next/link"
+
 import { useAtom } from "jotai"
 import {
     pathAtom,
     userDocRefAtom,
 } from "../../store"
 
-import FileComponent from "../Files/file"
-
-const Container = styled.div`
-    text-align: center;
-    outline: none;
-    position: relative;
-    grid-area: content;
-
-    padding: 16px;
-
-    display: grid;
-    grid-template-columns: repeat(auto-fit, 300px);
-    grid-template-rows: repeat(auto-fit, 300px);
-    gap: 16px;
-    justify-items: start;
-    align-items: start;
-`
+import FileGrid from "../FileGrid"
 
 type props = {
     task: firebase.firestore.DocumentSnapshot
@@ -66,13 +50,6 @@ export default function Task({ task }: props) {
         }
     }, [userDocRef, task])
 
-    const fileList = useMemo(() => files.map(
-        fileSnapshot =>
-            <FileComponent
-                key={fileSnapshot.id}
-                fullPath={fileSnapshot.get("fullPath")} />
-    ), [files])
-
     return (client && project) ? <div>
         <Link href={"/files"}>
             <div
@@ -86,9 +63,8 @@ export default function Task({ task }: props) {
             onClick={() => setShowFiles(!showFiles)}>{showFiles ? "-" : "+"}</div>
         {
             showFiles &&
-            <Container>
-                {fileList}
-            </Container>
+            <FileGrid
+                files={files} />
         }
     </div> : null
 }
