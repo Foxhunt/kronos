@@ -6,7 +6,7 @@ import pLimit from "p-limit"
 
 import uploadFile from "../../firebase/uploadFile"
 
-import useFilteredFiles from "../hooks/useFilteredFiles"
+import useFiles from "../hooks/useFiles"
 
 import { useAtom } from "jotai"
 import {
@@ -42,7 +42,7 @@ export default function Files() {
     const [task] = useAtom(selectedTaskDocRefAtom)
     const [collection] = useAtom(selectedCollectionDocRefAtom)
 
-    const files = useFilteredFiles()
+    const files = useFiles()
 
     const onDrop = useCallback(async (acceptedFiles: File[]) => {
         const PDFDocument = (await import("pdf-lib")).PDFDocument
