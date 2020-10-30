@@ -11,7 +11,7 @@ const Container = styled.div`
     text-align: center;
     outline: none;
     position: relative;
-    grid-area: content;
+    grid-area: files;
 
     padding: 16px;
 
@@ -30,7 +30,6 @@ type props = {
 }
 
 export default function FileGrid({ files, getRootProps }: props) {
-
     const fileList = useMemo(() => files.map(
         fileSnapshot =>
             <FileComponent
