@@ -32,7 +32,7 @@ const Path = styled.div<{ inverted: boolean }>`
 export default function LocationAndFolders() {
     const [path] = useAtom(pathAtom)
 
-    const [showFolders, setShowFolders] = useState(true)
+    const [showFolders, setShowFolders] = useState(false)
 
     return <Container
         onPointerLeave={() => setShowFolders(false)}>

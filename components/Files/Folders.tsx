@@ -39,6 +39,9 @@ export default function Folders() {
             .orderBy("createdAt", "desc")
             .onSnapshot(snapshot => {
                 setClients(snapshot.docs)
+                if (snapshot.docs.length === 1) {
+                    setClient(snapshot.docs[0])
+                }
             })
         return () => {
             unsubscribe && unsubscribe()
@@ -56,6 +59,9 @@ export default function Folders() {
                 .orderBy("createdAt", "desc")
                 .onSnapshot(snapshot => {
                     setProjects(snapshot.docs)
+                    if (snapshot.docs.length === 1) {
+                        setProject(snapshot.docs[0])
+                    }
                 })
             return () => {
                 unsubscribe()
@@ -75,6 +81,9 @@ export default function Folders() {
                 .orderBy("createdAt", "desc")
                 .onSnapshot(snapshot => {
                     setTasks(snapshot.docs)
+                    if (snapshot.docs.length === 1) {
+                        setTask(snapshot.docs[0])
+                    }
                 })
             return () => {
                 unsubscribe()
@@ -95,6 +104,9 @@ export default function Folders() {
                 .orderBy("createdAt", "desc")
                 .onSnapshot(snapshot => {
                     setCollections(snapshot.docs)
+                    if (snapshot.docs.length === 1) {
+                        setCollection(snapshot.docs[0])
+                    }
                 })
             return () => {
                 unsubscribe()
