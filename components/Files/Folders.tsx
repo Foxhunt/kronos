@@ -15,7 +15,14 @@ import FolderList from "./FolderList"
 
 const Container = styled.div`
     display: grid;
-    grid-template-columns: [clients] 300px [projects] 300px[tasks] auto;
+    grid-template-columns: [clients] 400px [projects] 400px [tasks] 400px [collections] auto;
+
+    position: absolute;
+    z-index: 1;
+    
+    width: 100%;
+    background-color: rgb(255 255 255 / 0.7);
+    backdrop-filter: blur(5px);
 `
 
 export default function Folders() {
