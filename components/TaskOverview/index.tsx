@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react"
-import styled from "styled-components"
 import { useAtom } from "jotai"
 import { userDocRefAtom } from "../../store"
 
 import Task from "./Task"
-
-const Container = styled.div`
-`
 
 export default function Overview() {
     const [userDocRef] = useAtom(userDocRefAtom)
@@ -25,11 +21,11 @@ export default function Overview() {
         }
     }, [userDocRef])
 
-    return <Container>
+    return <>
         {tasks.map(task => (
             <Task
                 key={task.id}
                 task={task} />
         ))}
-    </Container>
+    </>
 }

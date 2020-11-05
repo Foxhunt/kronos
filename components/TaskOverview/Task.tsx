@@ -13,8 +13,11 @@ import FileGrid from "../FileGrid"
 
 const Container = styled.div`
     display: grid;
-    grid-template-columns: [upload] 100px [change] 100px [client] 400px [project] 400px [task] 400px [pin] auto [expand] 20px;
-    grid-template-rows: [info] 40px [files] auto;
+    grid-template-columns: 200px 200px 200px 200px 200px auto 40px;
+    grid-template-rows: 40px auto;
+    grid-template-areas:
+        "upload change client project task pin expand"
+        "files files files files files files files";
 `
 
 const Uploaded = styled.div`
