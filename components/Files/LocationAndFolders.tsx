@@ -1,11 +1,9 @@
-import React, { useCallback, useRef, useState } from "react"
+import React, { useState } from "react"
 import { useAtom } from "jotai"
 import styled from "styled-components"
 import {
     pathAtom,
 } from "../../store"
-
-import useClickedOutside from "../hooks/useClickedOutside"
 
 import Collections from "./Collections"
 import Folders from "./Folders"
@@ -18,10 +16,15 @@ const Container = styled.div`
 const PathAndCollections = styled.div`
     display: grid;
     grid-template-columns: [location] 300px [collections] auto;
-    grid-template-rows: 25px;
+    grid-template-rows: 30px;
 `
 
 const Path = styled.div<{ inverted: boolean }>`
+    display: flex;
+    align-items: center;
+
+    padding-left: 25px;
+
     background-color: ${({ inverted }) => (inverted ? "black" : "white")};
     color:  ${({ inverted }) => (inverted ? "white" : "black")};
 `
@@ -29,20 +32,14 @@ const Path = styled.div<{ inverted: boolean }>`
 export default function LocationAndFolders() {
     const [path] = useAtom(pathAtom)
 
-    const containerRef = useRef(null)
-    const [showFolders, setShowFolders] = useState(false)
-    const handleClickedOutside = useCallback(async () => {
-        setShowFolders(false)
-    }, [])
-
-    useClickedOutside(containerRef, handleClickedOutside)
+    const [showFolders, setShowFolders] = useState(true)
 
     return <Container
-        ref={containerRef}>
+        onPointerLeave={() => setShowFolders(false)}>
         <PathAndCollections>
             <Path
                 inverted={showFolders}
-                onClick={() => setShowFolders(!showFolders)}>
+                onPointerEnter={() => setShowFolders(true)}>
                 {path}
             </Path>
             <Collections />

@@ -3,10 +3,15 @@ import { useState } from "react"
 import styled from "styled-components"
 
 const Container = styled.div`
+    display: grid;
+    grid-auto-rows: 30px;
 `
 
 const Item = styled.div<{ selected?: boolean }>`
-    height: 25px;
+    display: flex;
+    align-items: center;
+    
+    padding-left: 5px;
     border-bottom: black 1px solid;
 
     ${({ selected }) => selected ?
@@ -15,20 +20,20 @@ const Item = styled.div<{ selected?: boolean }>`
         color: white;
         ` : ""
     }
-
-    :hover {
-        background-color: #6d6d6d;
-        color: white;
-    }
 `
 
 const NewItemInput = styled.input`
-    padding: unset;
     width: 100%;
-    height: 25px;
+    height: 100%;
+    padding: unset;
 
     border: none;
     border-bottom: black 1px solid;
+    box-shadow: none;
+
+    &:focus {
+        outline: none!important;
+    }
 `
 
 type props = {
@@ -76,7 +81,7 @@ export default function FolderList({ name, selected, items, allowAdding, onSelec
                         event.preventDefault()
                         item.ref.delete()
                     }}
-                    onClick={() => onSelect(item)}>
+                    onPointerEnter={() => onSelect(item)}>
                     {item.get("name")}
                 </Item>)
         }

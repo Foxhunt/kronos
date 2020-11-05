@@ -5,7 +5,7 @@ import { useAtom } from "jotai"
 import { userDocRefAtom } from "../../store"
 
 const Navigation = styled.nav`
-    height: 25px;
+    height: 30px;
     flex-shrink: 0;
 
     display: flex;

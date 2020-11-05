@@ -19,7 +19,11 @@ const Container = styled.div`
 `
 
 const Item = styled.div<{ selected?: boolean }>`
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+
+    padding-left: 5px;
+    
     border-left: black solid 1px;
     width: 150px;
     height: 100%;
@@ -50,7 +54,13 @@ const NewItemInput = styled.input`
     height: 100%;
     width: 100%;
 
-    border: none;
+    border: none; 
+    border-width: 0; 
+    box-shadow: none;
+
+    &:focus {
+        outline: none!important;
+    }
 `
 
 export default function Collections() {
@@ -136,9 +146,10 @@ export default function Collections() {
             client &&
             project &&
             task &&
+            !addingItem &&
             <Item
                 onClick={() => setAddingItem(!addingItem)}>
-                {addingItem ? "---" : "+++"}
+                +++
             </Item>
         }
     </Container >

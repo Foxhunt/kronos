@@ -15,26 +15,28 @@ import FolderList from "./FolderList"
 
 const Container = styled.div`
     display: grid;
-    grid-template-columns: [clients] 400px [projects] 400px [tasks] 400px [collections] auto;
+    grid-template-columns: [clients] 300px [projects] 300px [tasks] 300px [collections] 300px;
+    column-gap: 40px;
+
+    padding: 20px;
+    padding-top: 10px;
 
     position: absolute;
     z-index: 1;
     
-    width: 100%;
-    background-color: rgb(255 255 255 / 0.7);
+    background-color: rgb(200 200 200 / 0.7);
     backdrop-filter: blur(5px);
 `
 
 export default function Folders() {
     const [userDocRef] = useAtom(userDocRefAtom)
 
-    const [, setCollection] = useAtom(selectedCollectionDocRefAtom)
-
     const [client, setClient] = useAtom(selectedClientDocRefAtom)
     const [clients, setClients] = useState<firebase.firestore.DocumentSnapshot[]>([])
     useEffect(() => {
         const unsubscribe = userDocRef
             ?.collection("clients")
+            .orderBy("createdAt", "desc")
             .onSnapshot(snapshot => {
                 setClients(snapshot.docs)
             })
@@ -81,6 +83,26 @@ export default function Folders() {
         }
     }, [userDocRef, client, project])
 
+    const [collection, setCollection] = useAtom(selectedCollectionDocRefAtom)
+    const [collections, setCollections] = useState<firebase.firestore.DocumentSnapshot[]>([])
+    useEffect(() => {
+        if (userDocRef && client && project && task) {
+            const unsubscribe = userDocRef
+                .collection("collections")
+                .where("client", "==", client.ref)
+                .where("project", "==", project.ref)
+                .where("task", "==", task.ref)
+                .orderBy("createdAt", "desc")
+                .onSnapshot(snapshot => {
+                    setCollections(snapshot.docs)
+                })
+            return () => {
+                unsubscribe()
+                setCollections([])
+            }
+        }
+    }, [userDocRef, client, project, task])
+
     return <Container>
         <FolderList
             name={"Clients"}
@@ -89,10 +111,10 @@ export default function Folders() {
             onSelect={selectedDoc => {
                 if (selectedDoc !== client) {
                     setClient(selectedDoc)
+                    setProject(undefined)
+                    setTask(undefined)
+                    setCollection(undefined)
                 }
-                setProject(undefined)
-                setTask(undefined)
-                setCollection(undefined)
             }}
             allowAdding={Boolean(userDocRef)}
             onAdd={itemName => {
@@ -110,9 +132,9 @@ export default function Folders() {
             onSelect={selectedDoc => {
                 if (selectedDoc !== project) {
                     setProject(selectedDoc)
+                    setTask(undefined)
+                    setCollection(undefined)
                 }
-                setTask(undefined)
-                setCollection(undefined)
             }}
             allowAdding={Boolean(client)}
             onAdd={itemName => {
@@ -131,8 +153,8 @@ export default function Folders() {
             onSelect={selectedDoc => {
                 if (selectedDoc !== task) {
                     setTask(selectedDoc)
+                    setCollection(undefined)
                 }
-                setCollection(undefined)
             }}
             allowAdding={Boolean(client && project)}
             onAdd={itemName => {
@@ -140,6 +162,27 @@ export default function Folders() {
                     name: itemName,
                     client: client?.ref,
                     project: project?.ref,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                })
+            }}
+        />
+        <FolderList
+            name={"Collections"}
+            selected={collection}
+            items={collections}
+            onSelect={selectedDoc => {
+                if (selectedDoc !== collection) {
+                    setCollection(selectedDoc)
+                }
+            }}
+            allowAdding={Boolean(client && project && task)}
+            onAdd={itemName => {
+                userDocRef?.collection("collections").add({
+                    name: itemName,
+                    client: client?.ref,
+                    project: project?.ref,
+                    task: task?.ref,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                     lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
                 })
