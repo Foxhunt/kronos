@@ -25,8 +25,7 @@ export default function Header() {
 
     return <header>
         <Navigation>
-            <Link href={"/"}><a>home</a></Link >
-            <Link href={"/files"}><a>files</a></Link >
+            <Link href={"/"}><a>index</a></Link >
             <Link href={"/favorites"}><a>favorites</a></Link >
             <Link href={"/info"}><a>info</a></Link >
             {userDocRef ?

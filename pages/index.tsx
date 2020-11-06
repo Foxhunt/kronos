@@ -1,11 +1,9 @@
 import { useAtom } from "jotai"
-import TaskOverview from "../components/TaskOverview"
+import Files from "../components/Files"
 import { userDocRefAtom } from "../store"
 
-export default function index() {
-  const [userDocRef] = useAtom(userDocRefAtom)
+export default function files() {
+    const [userDocRef] = useAtom(userDocRefAtom)
 
-  return <>
-    {userDocRef ? <TaskOverview /> : null}
-  </ >
+    return userDocRef ? <Files /> : null
 }

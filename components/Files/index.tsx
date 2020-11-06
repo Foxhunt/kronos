@@ -10,6 +10,7 @@ import useFiles from "../hooks/useFiles"
 
 import { useAtom } from "jotai"
 import {
+    pathAtom,
     selectedClientDocRefAtom,
     selectedCollectionDocRefAtom,
     selectedProjectDocRefAtom,
@@ -19,6 +20,7 @@ import {
 import LocationAndFolders from "./LocationAndFolders"
 
 import FileGrid from "../FileGrid"
+import TaskList from "../TaskList"
 
 const DropTarget = styled.div.attrs<{ targetPosition: { x: number, y: number } }>
     (({ targetPosition }) => ({
@@ -91,11 +93,22 @@ export default function Files() {
 
     const { getRootProps, isDragActive } = useDropzone({ onDrop, onDragOver })
 
+    const [showTasks, setShowTasks] = useState(true)
+    const [, setPath] = useAtom(pathAtom)
+
     return <>
         {userDocRef ? <LocationAndFolders /> : null}
-        <FileGrid
-            files={files}
-            getRootProps={getRootProps} />
+        <div onClick={() => setPath([])} >Clear Path</div>
+        <div onClick={() => setShowTasks(true)} >Tasks</div>
+        <div onClick={() => setShowTasks(false)} >Files</div>
+        {
+            showTasks ?
+                <TaskList />
+                :
+                <FileGrid
+                    files={files}
+                    getRootProps={getRootProps} />
+        }
         {isDragActive && collection && <DropTarget targetPosition={dropTargetPosition} />}
     </>
 }
