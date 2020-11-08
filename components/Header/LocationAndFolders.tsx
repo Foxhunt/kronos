@@ -9,8 +9,6 @@ import Collections from "./Collections"
 import Folders from "./Folders"
 
 const Container = styled.div`
-    position: relative;
-    background-color: white;
 `
 
 const PathAndCollections = styled.div`

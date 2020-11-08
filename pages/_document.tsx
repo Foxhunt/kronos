@@ -2,10 +2,12 @@ import Document, { DocumentContext } from 'next/document'
 import { ServerStyleSheet, createGlobalStyle } from 'styled-components'
 
 const GlobalStyle = createGlobalStyle`
-   html, body, #__next {
+   html, body {
     margin: 0px;
-    width: 100%;
-    height: 100%;
+  }
+
+  #__next {
+    height: 100vh;
     display: flex;
     flex-direction: column;
   }

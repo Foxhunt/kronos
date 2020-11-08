@@ -1,4 +1,4 @@
-import firebase from "../../firebase/clientApp"
+import firebase from "../../../firebase/clientApp"
 
 import { useEffect, useState } from "react"
 import styled from "styled-components"
@@ -23,8 +23,9 @@ const Container = styled.div.attrs<{ background?: string }>
     height: 300px;
 
     display: flex;
-
     justify-content: center;
+    
+    overflow: hidden;
 `
 
 const Name = styled.div`
@@ -59,8 +60,11 @@ export default function FileComponent({ fullPath, onDelete }: props) {
     const isPDF = metaData?.contentType === "application/pdf"
 
     return <Container
-        onClick={onDelete}
-        background={isPDF ? "" : src}>
+        background={isPDF ? "" : src}
+        onContextMenu={event => {
+            event.preventDefault()
+            onDelete && onDelete()
+        }}>
         {isPDF && <PDFViewer file={src} />}
         <Name>{metaData?.name}</Name>
     </Container>

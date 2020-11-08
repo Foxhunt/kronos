@@ -1,5 +1,5 @@
 import { useAtom } from "jotai"
-import Files from "../components/Files"
+import Files from "../components/TasksAndFiles"
 import { userDocRefAtom } from "../store"
 
 export default function files() {

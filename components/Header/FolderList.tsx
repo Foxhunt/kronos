@@ -3,13 +3,15 @@ import { useState } from "react"
 import styled from "styled-components"
 
 const Container = styled.div`
-    display: grid;
-    grid-auto-rows: 30px;
+    max-height: 100%;
+    overflow: auto;
 `
 
 const Item = styled.div<{ selected?: boolean }>`
     display: flex;
     align-items: center;
+
+    height: 30px;
     
     padding-left: 5px;
     border-bottom: black 1px solid;
@@ -24,7 +26,7 @@ const Item = styled.div<{ selected?: boolean }>`
 
 const NewItemInput = styled.input`
     width: 100%;
-    height: 100%;
+    height: 30px;
     padding: unset;
 
     border: none;

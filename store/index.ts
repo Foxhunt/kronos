@@ -24,3 +24,5 @@ export const pathAtom = atom<string, firebase.firestore.DocumentSnapshot[]>(
         set(selectedCollectionDocRefAtom, undefined)
     }
 )
+
+export const showTasksAtom = atom<boolean>(true)

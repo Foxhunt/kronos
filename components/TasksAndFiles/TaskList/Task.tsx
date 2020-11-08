@@ -1,18 +1,18 @@
-import firebase from "../../firebase/clientApp"
+import firebase from "../../../firebase/clientApp"
 import { useState, useEffect } from "react"
 import styled from "styled-components"
 
 import { useAtom } from "jotai"
 import {
     pathAtom,
-} from "../../store"
+} from "../../../store"
 
 import FileGrid from "../FileGrid"
-import useFiles from "../hooks/useFiles"
+import useFiles from "../../hooks/useFiles"
 
 const Container = styled.div`
     display: grid;
-    grid-template-columns: 200px 200px 200px 200px 200px auto 40px;
+    grid-template-columns: repeat(5, 1fr) auto 40px;
     grid-template-rows: 40px auto;
     grid-template-areas:
         "upload change client project task pin expand"

@@ -1,4 +1,4 @@
-import useTasks from "../hooks/useTasks"
+import useTasks from "../../hooks/useTasks"
 import Task from "./Task"
 
 export default function TaskList() {

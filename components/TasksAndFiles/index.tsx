@@ -4,23 +4,21 @@ import { useDropzone } from "react-dropzone"
 
 import pLimit from "p-limit"
 
-import uploadFile from "../../firebase/uploadFile"
-
-import useFiles from "../hooks/useFiles"
-
 import { useAtom } from "jotai"
 import {
-    pathAtom,
     selectedClientDocRefAtom,
     selectedCollectionDocRefAtom,
     selectedProjectDocRefAtom,
     selectedTaskDocRefAtom,
+    showTasksAtom,
     userDocRefAtom
 } from "../../store"
-import LocationAndFolders from "./LocationAndFolders"
 
-import FileGrid from "../FileGrid"
-import TaskList from "../TaskList"
+import uploadFile from "../../firebase/uploadFile"
+import useFiles from "../hooks/useFiles"
+
+import FileGrid from "./FileGrid"
+import TaskList from "./TaskList"
 
 const DropTarget = styled.div.attrs<{ targetPosition: { x: number, y: number } }>
     (({ targetPosition }) => ({
@@ -93,14 +91,9 @@ export default function Files() {
 
     const { getRootProps, isDragActive } = useDropzone({ onDrop, onDragOver })
 
-    const [showTasks, setShowTasks] = useState(true)
-    const [, setPath] = useAtom(pathAtom)
+    const [showTasks] = useAtom(showTasksAtom)
 
     return <>
-        {userDocRef ? <LocationAndFolders /> : null}
-        <div onClick={() => setPath([])} >Clear Path</div>
-        <div onClick={() => setShowTasks(true)} >Tasks</div>
-        <div onClick={() => setShowTasks(false)} >Files</div>
         {
             showTasks ?
                 <TaskList />
