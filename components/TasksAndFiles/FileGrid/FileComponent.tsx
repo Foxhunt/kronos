@@ -2,11 +2,12 @@ import firebase from "../../../firebase/clientApp"
 
 import { useEffect, useState } from "react"
 import styled from "styled-components"
+import { motion, Variants } from "framer-motion"
 import dynamic from "next/dynamic"
 
 const PDFViewer = dynamic(import("./PDFViewer"), { ssr: false })
 
-const Container = styled.div.attrs<{ background?: string }>
+const Container = styled(motion.div).attrs<{ background?: string }>
     (({ background }) => ({
         style: {
             backgroundImage: `url(${background})`
@@ -59,7 +60,24 @@ export default function FileComponent({ fullPath, onDelete }: props) {
 
     const isPDF = metaData?.contentType === "application/pdf"
 
+    const variants: Variants = {
+        hidden: {
+            opacity: 0,
+            transition: {
+                duration: 0.5
+            }
+        },
+        visible: {
+            opacity: 1,
+            transition: {
+                duration: 0.5
+            }
+        }
+    }
+
     return <Container
+        layout
+        variants={variants}
         background={isPDF ? "" : src}
         onContextMenu={event => {
             event.preventDefault()

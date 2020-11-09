@@ -2,12 +2,14 @@ import firebase from "../../../firebase/clientApp"
 
 import { useMemo } from "react"
 import styled from "styled-components"
+import { AnimatePresence, motion, Variants } from "framer-motion"
 
 import FileComponent from "./FileComponent"
 
 import { DropzoneRootProps } from "react-dropzone"
 
-const Container = styled.div`
+const Container = styled(motion.div)`
+    flex: 1;
     grid-area: files;
     outline: none;
     
@@ -46,7 +48,26 @@ export default function FileGrid({ files, getRootProps }: props) {
                 fullPath={fileSnapshot.get("fullPath")} />
     ), [files])
 
-    return <Container {...(getRootProps ? getRootProps({}) : {})}>
-        {fileList}
+    const variants: Variants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                when: "beforeChildren",
+                staggerChildren: 0.1,
+            }
+        }
+    }
+
+    // @ts-ignore
+    return <Container
+        initial="hidden"
+        animate="visible"
+        exit="hidden"
+        variants={variants}
+        {...(getRootProps ? getRootProps({}) : {})}>
+        <AnimatePresence>
+            {fileList}
+        </AnimatePresence>
     </Container>
 }

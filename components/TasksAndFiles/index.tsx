@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from "react"
 import styled from "styled-components"
+import motion, { AnimatePresence } from "framer-motion"
 import { useDropzone } from "react-dropzone"
 
 import pLimit from "p-limit"
@@ -94,14 +95,16 @@ export default function Files() {
     const [showTasks] = useAtom(showTasksAtom)
 
     return <>
-        {
-            showTasks ?
-                <TaskList />
-                :
-                <FileGrid
-                    files={files}
-                    getRootProps={getRootProps} />
-        }
+        <AnimatePresence>
+            {
+                showTasks ?
+                    <TaskList />
+                    :
+                    <FileGrid
+                        files={files}
+                        getRootProps={getRootProps} />
+            }
+        </AnimatePresence>
         {isDragActive && collection && <DropTarget targetPosition={dropTargetPosition} />}
     </>
 }
