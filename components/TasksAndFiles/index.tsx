@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react"
 import styled from "styled-components"
-import motion, { AnimatePresence } from "framer-motion"
+import { AnimatePresence } from "framer-motion"
 import { useDropzone } from "react-dropzone"
 
 import pLimit from "p-limit"
