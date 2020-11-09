@@ -16,8 +16,10 @@ module.exports = withBundleAnalyzer({
         test: /\.svg$/,
         use: ["@svgr/webpack"]
       });
-  
       return config
+    },
+    images: {
+      domains: ["firebasestorage.googleapis.com"]
     }
   })
   

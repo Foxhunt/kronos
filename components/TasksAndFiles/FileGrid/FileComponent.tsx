@@ -4,21 +4,17 @@ import { useEffect, useState } from "react"
 import styled from "styled-components"
 import { motion, Variants } from "framer-motion"
 import dynamic from "next/dynamic"
+import Image from "next/image"
+
+const StyledImage = styled(Image)`
+    object-fit: cover;
+`
 
 const PDFViewer = dynamic(import("./PDFViewer"), { ssr: false })
 
-const Container = styled(motion.div).attrs<{ background?: string }>
-    (({ background }) => ({
-        style: {
-            backgroundImage: `url(${background})`
-        }
-    })) <{ background?: string }>`
+const Container = styled(motion.div)`
     position: relative;
     background-color: black;
-
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
 
     width: 300px;
     height: 300px;
@@ -78,12 +74,19 @@ export default function FileComponent({ fullPath, onDelete }: props) {
     return <Container
         layout
         variants={variants}
-        background={isPDF ? "" : src}
         onContextMenu={event => {
             event.preventDefault()
             onDelete && onDelete()
         }}>
-        {isPDF && <PDFViewer file={src} />}
+        {
+            isPDF ?
+                <PDFViewer file={src} />
+                :
+                src && <StyledImage
+                    src={src}
+                    width={300}
+                    height={300} />
+        }
         <Name>{metaData?.name}</Name>
     </Container>
 }
