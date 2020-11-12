@@ -30,22 +30,22 @@ type props = {
 
 export default function FileGrid({ files, getRootProps }: props) {
     const fileList = useMemo(() => files.map(
-        fileSnapshot =>
+        fileDocSnap =>
             <FileComponent
-                key={fileSnapshot.id}
+                fileDocSnap={fileDocSnap}
+                key={fileDocSnap.id}
                 onDelete={() => {
-                    fileSnapshot.ref.delete().then(() => {
+                    fileDocSnap.ref.delete().then(() => {
                         const storage = firebase.storage()
-                        const fileRef = storage.ref(fileSnapshot.get("fullPath"))
+                        const fileRef = storage.ref(fileDocSnap.get("fullPath"))
                         fileRef.delete()
 
                         firebase.analytics().logEvent("delete_file", {
-                            name: fileSnapshot.get("name"),
-                            fullPath: fileSnapshot.get("fullPath")
+                            name: fileDocSnap.get("name"),
+                            fullPath: fileDocSnap.get("fullPath")
                         })
                     })
-                }}
-                fullPath={fileSnapshot.get("fullPath")} />
+                }} />
     ), [files])
 
     const variants: Variants = {

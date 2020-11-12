@@ -33,17 +33,17 @@ const Name = styled.div`
 `
 
 type props = {
-    fullPath: string
+    fileDocSnap: firebase.firestore.DocumentSnapshot
     onDelete?: () => void
 }
 
-export default function FileComponent({ fullPath, onDelete }: props) {
+export default function FileComponent({ fileDocSnap, onDelete }: props) {
     const [src, setSrc] = useState<string>("")
     const [metaData, setMetaData] = useState<firebase.storage.FullMetadata>()
     useEffect(() => {
         async function fetchFile() {
             const storage = firebase.storage()
-            const fileRef = storage.ref(fullPath)
+            const fileRef = storage.ref(fileDocSnap.get("fullPath"))
             const downloadURL = await fileRef.getDownloadURL()
             const metaData = await fileRef.getMetadata()
 
@@ -52,7 +52,7 @@ export default function FileComponent({ fullPath, onDelete }: props) {
         }
 
         fetchFile()
-    }, [fullPath])
+    }, [fileDocSnap])
 
     const isPDF = metaData?.contentType === "application/pdf"
 
@@ -87,6 +87,16 @@ export default function FileComponent({ fullPath, onDelete }: props) {
                     width={300}
                     height={300} />
         }
-        <Name>{metaData?.name}</Name>
+        <Name>
+            {metaData?.name}
+            <input
+                type="checkbox"
+                checked={fileDocSnap.get("favorite")}
+                onChange={event => {
+                    fileDocSnap.ref.update({
+                        favorite: event.target.checked
+                    })
+                }} />
+        </Name>
     </Container>
 }

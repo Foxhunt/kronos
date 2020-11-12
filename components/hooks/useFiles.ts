@@ -22,6 +22,7 @@ export default function useFiles() {
         if (userDocRef && client && project && task && collection) {
             const unsubscribe = userDocRef
                 .collection("files")
+                .where("favorite", "in", [true, false])
                 .where("client", "==", client?.ref)
                 .where("project", "==", project?.ref)
                 .where("task", "==", task?.ref)
@@ -36,6 +37,7 @@ export default function useFiles() {
         if (userDocRef && client && project && task) {
             const unsubscribe = userDocRef
                 .collection("files")
+                .where("favorite", "in", [true, false])
                 .where("client", "==", client?.ref)
                 .where("project", "==", project?.ref)
                 .where("task", "==", task?.ref)
@@ -49,6 +51,7 @@ export default function useFiles() {
         if (userDocRef && client && project) {
             const unsubscribe = userDocRef
                 .collection("files")
+                .where("favorite", "in", [true, false])
                 .where("client", "==", client?.ref)
                 .where("project", "==", project?.ref)
                 .orderBy("createdAt", "desc")
@@ -61,6 +64,7 @@ export default function useFiles() {
         if (userDocRef && client) {
             const unsubscribe = userDocRef
                 .collection("files")
+                .where("favorite", "in", [true, false])
                 .where("client", "==", client?.ref)
                 .orderBy("createdAt", "desc")
                 .onSnapshot(snapshot => {
@@ -72,6 +76,7 @@ export default function useFiles() {
 
         const unsubscribe = userDocRef
             ?.collection("files")
+            .where("favorite", "in", [true, false])
             .orderBy("createdAt", "desc")
             .onSnapshot(snapshot => {
                 setFiles(snapshot.docs)
