@@ -18,6 +18,7 @@ export default function useTasks() {
         if (userDocRef && client && project) {
             const unsubscribe = userDocRef
                 .collection("tasks")
+                .where("pinned", "in", [true, false])
                 .where("client", "==", client?.ref)
                 .where("project", "==", project?.ref)
                 .orderBy("createdAt", "desc")
@@ -30,6 +31,7 @@ export default function useTasks() {
         if (userDocRef && client) {
             const unsubscribe = userDocRef
                 .collection("tasks")
+                .where("pinned", "in", [true, false])
                 .where("client", "==", client?.ref)
                 .orderBy("createdAt", "desc")
                 .onSnapshot(snapshot => {
@@ -41,6 +43,7 @@ export default function useTasks() {
 
         const unsubscribe = userDocRef
             ?.collection("tasks")
+            .where("pinned", "in", [true, false])
             .orderBy("createdAt", "desc")
             .onSnapshot(snapshot => {
                 setTasks(snapshot.docs)

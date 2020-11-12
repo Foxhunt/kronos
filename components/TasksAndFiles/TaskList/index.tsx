@@ -8,7 +8,7 @@ export default function TaskList() {
         {tasks.map(task => (
             <Task
                 key={task.id}
-                task={task} />
+                taskDocSnap={task} />
         ))}
     </>
 }

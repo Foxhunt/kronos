@@ -50,10 +50,10 @@ const Pined = styled.div`
 `
 
 type props = {
-    task: firebase.firestore.DocumentSnapshot
+    taskDocSnap: firebase.firestore.DocumentSnapshot
 }
 
-export default function Task({ task }: props) {
+export default function Task({ taskDocSnap }: props) {
 
     const [client, setClient] = useState<firebase.firestore.DocumentSnapshot>()
     const [project, setProject] = useState<firebase.firestore.DocumentSnapshot>()
@@ -61,14 +61,14 @@ export default function Task({ task }: props) {
     useEffect(() => {
         async function fetchData() {
             const [client, project] = await Promise.all([
-                task.get("client").get(),
-                task.get("project").get(),
+                taskDocSnap.get("client").get(),
+                taskDocSnap.get("project").get(),
             ])
             setClient(client)
             setProject(project)
         }
         fetchData()
-    }, [task])
+    }, [taskDocSnap])
 
     const files = useFiles()
 
@@ -78,8 +78,8 @@ export default function Task({ task }: props) {
 
     return (client && project) ?
         <Container>
-            <Uploaded>{task.get("createdAt")?.toDate().toDateString()}</Uploaded>
-            <Changed>{task.get("lastUpdatedAt")?.toDate().toDateString()}</Changed>
+            <Uploaded>{taskDocSnap.get("createdAt")?.toDate().toDateString()}</Uploaded>
+            <Changed>{taskDocSnap.get("lastUpdatedAt")?.toDate().toDateString()}</Changed>
             <ClientName
                 onClick={() => {
                     setPath([client])
@@ -94,16 +94,16 @@ export default function Task({ task }: props) {
             </ProjectName>
             <TaskName
                 onClick={() => {
-                    setPath([client, project, task])
+                    setPath([client, project, taskDocSnap])
                 }}>
-                {task.get("name")}
+                {taskDocSnap.get("name")}
             </TaskName>
             <Pined>
                 <input
                     type="checkbox"
-                    checked={task.get("pinned")}
+                    checked={taskDocSnap.get("pinned")}
                     onChange={event => {
-                        task.ref.update({
+                        taskDocSnap.ref.update({
                             pinned: event.target.checked
                         })
                     }} />
