@@ -174,6 +174,7 @@ export default function Folders() {
             onAdd={itemName => {
                 userDocRef?.collection("tasks").add({
                     name: itemName,
+                    pinned: false,
                     client: client?.ref,
                     project: project?.ref,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),

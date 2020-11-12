@@ -12,11 +12,17 @@ import useFiles from "../../hooks/useFiles"
 
 const Container = styled.div`
     display: grid;
-    grid-template-columns: repeat(5, 1fr) auto 40px;
+    grid-template-columns: repeat(7, 1fr);
     grid-template-rows: 40px auto;
     grid-template-areas:
-        "upload change client project task pin expand"
+        "info info info info info info info"
         "files files files files files files files";
+
+    & > div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 `
 
 const Uploaded = styled.div`
@@ -72,8 +78,8 @@ export default function Task({ task }: props) {
 
     return (client && project) ?
         <Container>
-            <Uploaded>{task.get("createdAt").toDate().toDateString()}</Uploaded>
-            <Changed>{task.get("lastUpdatedAt").toDate().toDateString()}</Changed>
+            <Uploaded>{task.get("createdAt")?.toDate().toDateString()}</Uploaded>
+            <Changed>{task.get("lastUpdatedAt")?.toDate().toDateString()}</Changed>
             <ClientName
                 onClick={() => {
                     setPath([client])
@@ -92,7 +98,16 @@ export default function Task({ task }: props) {
                 }}>
                 {task.get("name")}
             </TaskName>
-            <Pined></Pined>
+            <Pined>
+                <input
+                    type="checkbox"
+                    checked={task.get("pinned")}
+                    onChange={event => {
+                        task.ref.update({
+                            pinned: event.target.checked
+                        })
+                    }} />
+            </Pined>
             <div
                 onClick={event => {
                     event.stopPropagation()
