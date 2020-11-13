@@ -19,65 +19,59 @@ export default function useFiles() {
     const [files, setFiles] = useState<firebase.firestore.DocumentSnapshot[]>([])
 
     useEffect(() => {
-        if (userDocRef && client && project && task && collection) {
-            const unsubscribe = userDocRef
-                .collection("files")
-                .where("favorite", "in", [true, false])
-                .where("client", "==", client?.ref)
-                .where("project", "==", project?.ref)
-                .where("task", "==", task?.ref)
-                .where("collection", "==", collection?.ref)
-                .orderBy("createdAt", "desc")
-                .onSnapshot(snapshot => {
-                    setFiles(snapshot.docs)
-                })
-
-            return unsubscribe
-        }
-        if (userDocRef && client && project && task) {
-            const unsubscribe = userDocRef
-                .collection("files")
-                .where("favorite", "in", [true, false])
-                .where("client", "==", client?.ref)
-                .where("project", "==", project?.ref)
-                .where("task", "==", task?.ref)
-                .orderBy("createdAt", "desc")
-                .onSnapshot(snapshot => {
-                    setFiles(snapshot.docs)
-                })
-
-            return unsubscribe
-        }
-        if (userDocRef && client && project) {
-            const unsubscribe = userDocRef
-                .collection("files")
-                .where("favorite", "in", [true, false])
-                .where("client", "==", client?.ref)
-                .where("project", "==", project?.ref)
-                .orderBy("createdAt", "desc")
-                .onSnapshot(snapshot => {
-                    setFiles(snapshot.docs)
-                })
-
-            return unsubscribe
-        }
-        if (userDocRef && client) {
-            const unsubscribe = userDocRef
-                .collection("files")
-                .where("favorite", "in", [true, false])
-                .where("client", "==", client?.ref)
-                .orderBy("createdAt", "desc")
-                .onSnapshot(snapshot => {
-                    setFiles(snapshot.docs)
-                })
-
-            return unsubscribe
-        }
-
-        const unsubscribe = userDocRef
+        const query = userDocRef
             ?.collection("files")
             .where("favorite", "in", [true, false])
-            .orderBy("createdAt", "desc")
+
+        if (client && project && task && collection) {
+            const unsubscribe = query
+                ?.where("client", "==", client.ref)
+                .where("project", "==", project.ref)
+                .where("task", "==", task.ref)
+                .where("collection", "==", collection.ref)
+                .orderBy("createdAt", "desc")
+                .onSnapshot(snapshot => {
+                    setFiles(snapshot.docs)
+                })
+
+            return unsubscribe
+        }
+        if (client && project && task) {
+            const unsubscribe = query
+                ?.where("client", "==", client.ref)
+                .where("project", "==", project.ref)
+                .where("task", "==", task.ref)
+                .orderBy("createdAt", "desc")
+                .onSnapshot(snapshot => {
+                    setFiles(snapshot.docs)
+                })
+
+            return unsubscribe
+        }
+        if (client && project) {
+            const unsubscribe = query
+                ?.where("client", "==", client.ref)
+                .where("project", "==", project.ref)
+                .orderBy("createdAt", "desc")
+                .onSnapshot(snapshot => {
+                    setFiles(snapshot.docs)
+                })
+
+            return unsubscribe
+        }
+        if (client) {
+            const unsubscribe = query
+                ?.where("client", "==", client.ref)
+                .orderBy("createdAt", "desc")
+                .onSnapshot(snapshot => {
+                    setFiles(snapshot.docs)
+                })
+
+            return unsubscribe
+        }
+
+        const unsubscribe = query
+            ?.orderBy("createdAt", "desc")
             .onSnapshot(snapshot => {
                 setFiles(snapshot.docs)
             })

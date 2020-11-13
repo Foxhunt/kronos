@@ -17,36 +17,12 @@ const Container = styled.div`
     grid-template-areas:
         "info info info info info info info"
         "files files files files files files files";
-
-    & > div {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
 `
 
-const Uploaded = styled.div`
-
-`
-
-const Changed = styled.div`
-
-`
-
-const ClientName = styled.div`
-
-`
-
-const ProjectName = styled.div`
-
-`
-
-const TaskName = styled.div`
-
-`
-
-const Pined = styled.div`
-
+const Item = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `
 
 type props = {
@@ -78,27 +54,27 @@ export default function Task({ taskDocSnap }: props) {
 
     return (client && project) ?
         <Container>
-            <Uploaded>{taskDocSnap.get("createdAt")?.toDate().toDateString()}</Uploaded>
-            <Changed>{taskDocSnap.get("lastUpdatedAt")?.toDate().toDateString()}</Changed>
-            <ClientName
+            <Item>{taskDocSnap.get("createdAt")?.toDate().toDateString()}</Item>
+            <Item>{taskDocSnap.get("lastUpdatedAt")?.toDate().toDateString()}</Item>
+            <Item
                 onClick={() => {
                     setPath([client])
                 }}>
                 {client?.get("name")}
-            </ClientName>
-            <ProjectName
+            </Item>
+            <Item
                 onClick={() => {
                     setPath([client, project])
                 }}>
                 {project?.get("name")}
-            </ProjectName>
-            <TaskName
+            </Item>
+            <Item
                 onClick={() => {
                     setPath([client, project, taskDocSnap])
                 }}>
                 {taskDocSnap.get("name")}
-            </TaskName>
-            <Pined>
+            </Item>
+            <Item>
                 <input
                     type="checkbox"
                     checked={taskDocSnap.get("pinned")}
@@ -107,14 +83,14 @@ export default function Task({ taskDocSnap }: props) {
                             pinned: event.target.checked
                         })
                     }} />
-            </Pined>
-            <div
+            </Item>
+            <Item
                 onClick={event => {
                     event.stopPropagation()
                     setShowFiles(!showFiles)
                 }}>
                 {showFiles ? "-" : "+"}
-            </div>
+            </Item>
             {showFiles && <FileGrid files={files} />}
         </Container> : null
 }

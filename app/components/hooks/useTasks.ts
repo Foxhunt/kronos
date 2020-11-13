@@ -15,36 +15,34 @@ export default function useTasks() {
     const [tasks, setTasks] = useState<firebase.firestore.DocumentSnapshot[]>([])
 
     useEffect(() => {
-        if (userDocRef && client && project) {
-            const unsubscribe = userDocRef
-                .collection("tasks")
-                .where("pinned", "in", [true, false])
-                .where("client", "==", client?.ref)
-                .where("project", "==", project?.ref)
-                .orderBy("createdAt", "desc")
-                .onSnapshot(snapshot => {
-                    setTasks(snapshot.docs)
-                })
-
-            return unsubscribe
-        }
-        if (userDocRef && client) {
-            const unsubscribe = userDocRef
-                .collection("tasks")
-                .where("pinned", "in", [true, false])
-                .where("client", "==", client?.ref)
-                .orderBy("createdAt", "desc")
-                .onSnapshot(snapshot => {
-                    setTasks(snapshot.docs)
-                })
-
-            return unsubscribe
-        }
-
-        const unsubscribe = userDocRef
+        const query = userDocRef
             ?.collection("tasks")
             .where("pinned", "in", [true, false])
-            .orderBy("createdAt", "desc")
+
+        if (client && project) {
+            const unsubscribe = query
+                ?.where("client", "==", client.ref)
+                .where("project", "==", project.ref)
+                .orderBy("createdAt", "desc")
+                .onSnapshot(snapshot => {
+                    setTasks(snapshot.docs)
+                })
+
+            return unsubscribe
+        }
+        if (client) {
+            const unsubscribe = query
+                ?.where("client", "==", client.ref)
+                .orderBy("createdAt", "desc")
+                .onSnapshot(snapshot => {
+                    setTasks(snapshot.docs)
+                })
+
+            return unsubscribe
+        }
+
+        const unsubscribe = query
+            ?.orderBy("createdAt", "desc")
             .onSnapshot(snapshot => {
                 setTasks(snapshot.docs)
             })
