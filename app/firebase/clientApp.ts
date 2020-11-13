@@ -18,6 +18,12 @@ const clientCredentials = {
 // Check that `window` is in scope for the analytics module!
 if (typeof window !== 'undefined' && !firebase.apps.length) {
     firebase.initializeApp(clientCredentials)
+
+    if (location.hostname === "localhost") {
+        firebase.auth().useEmulator('http://localhost:9099/')
+        firebase.firestore().useEmulator("localhost", 8080)
+    }
+
     firebase.firestore().enablePersistence({
         synchronizeTabs: true
     })
