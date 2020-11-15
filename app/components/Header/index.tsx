@@ -9,6 +9,7 @@ import LocationAndFolders from "./LocationAndFolders"
 import GridSVG from "../../assets/svg/grid.svg"
 import ListSVG from "../../assets/svg/list.svg"
 import XCircleSVG from "../../assets/svg/x-circle.svg"
+import { useRouter } from "next/router"
 
 const StyledGridSVG = styled(GridSVG)`
     color: currentColor;
@@ -46,6 +47,7 @@ const Navigation = styled.nav`
 `
 
 export default function Header() {
+    const router = useRouter()
     const [userDocRef] = useAtom(userDocRefAtom)
 
     const [, setShowTasks] = useAtom(showTasksAtom)
@@ -53,9 +55,9 @@ export default function Header() {
 
     return <Container>
         <Navigation>
-            <Link href={"/"}><a>index</a></Link >
-            <Link href={"/favorites"}><a>favorites</a></Link >
-            <Link href={"/info"}><a>info</a></Link >
+            <Link href={"/"}>index</Link >
+            <Link href={"/tags"}>tags</Link >
+            <Link href={"/info"}>info</Link >
             {userDocRef ?
                 <Link href={"/login"}>
                     <a onClick={() => { firebase.auth().signOut() }}> logout</a>
@@ -66,11 +68,11 @@ export default function Header() {
                 </Link>
             }
         </Navigation>
-        {userDocRef ? <>
+        {userDocRef && router.pathname == "/" && <>
             <LocationAndFolders />
             <StyledXCircleSVG onClick={() => setPath([])} />
             <StyledListSVG onClick={() => setShowTasks(true)} />
             <StyledGridSVG onClick={() => setShowTasks(false)} />
-        </> : null}
+        </>}
     </Container>
 }
