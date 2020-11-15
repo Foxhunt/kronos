@@ -76,12 +76,12 @@ export default function FolderList({ items, onAdd, onRemove }: props) {
         {
             items?.map(item =>
                 <Item
-                    key={item.id}
+                    key={item}
                     onContextMenu={event => {
                         event.preventDefault()
                         onRemove(item)
                     }}>
-                    {item.id}
+                    {item}
                 </Item>)
         }
     </Container>

@@ -68,7 +68,7 @@ export default function Overlay({ fileDocSnap }: props) {
                 const tagRef = userDocRef?.collection("tags").doc(tagName)
                 tagRef?.set({ name: tagName })
                 fileDocSnap.ref.update({
-                    tags: firebase.firestore.FieldValue.arrayUnion(tagRef)
+                    tags: firebase.firestore.FieldValue.arrayUnion(tagName)
                 })
             }}
             onRemove={item => {
