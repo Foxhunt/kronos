@@ -2,9 +2,11 @@ import firebase from "../../../firebase/clientApp"
 
 import { useEffect, useState } from "react"
 import styled from "styled-components"
-import { motion, Variants } from "framer-motion"
+import { AnimatePresence, motion, Variants } from "framer-motion"
 import dynamic from "next/dynamic"
 import Image from "next/image"
+
+import Overlay from "./Overlay"
 
 const StyledImage = styled(Image)`
     object-fit: cover;
@@ -39,6 +41,7 @@ type props = {
 
 export default function FileComponent({ fileDocSnap, onDelete }: props) {
     const [src, setSrc] = useState<string>("")
+    const [showOverlay, setShowOverlay] = useState(false)
     const [metaData, setMetaData] = useState<firebase.storage.FullMetadata>()
     useEffect(() => {
         async function fetchFile() {
@@ -74,6 +77,12 @@ export default function FileComponent({ fileDocSnap, onDelete }: props) {
     return <Container
         layout
         variants={variants}
+        onHoverStart={() => {
+            setShowOverlay(true)
+        }}
+        onHoverEnd={() => {
+            setShowOverlay(false)
+        }}
         onContextMenu={event => {
             event.preventDefault()
             onDelete && onDelete()
@@ -98,5 +107,10 @@ export default function FileComponent({ fileDocSnap, onDelete }: props) {
                     })
                 }} />
         </Name>
+        <AnimatePresence>
+            {showOverlay &&
+                <Overlay
+                    fileDocSnap={fileDocSnap} />}
+        </AnimatePresence>
     </Container>
 }
