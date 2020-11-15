@@ -19,27 +19,35 @@ export default function favorites() {
         return cleanup
     }, [userDocRef])
 
+    const [favorites, setFavorites] = useState(false)
     const [files, setFiles] = useState<firebase.firestore.DocumentSnapshot[]>([])
     useEffect(() => {
+        const query = userDocRef
+            ?.collection("files")
+            .where("favorite", "in", [true, favorites])
+
         if (selectedTag) {
-            const cleanup = userDocRef
-                ?.collection("files")
-                .where("tags", "array-contains", selectedTag.get("name"))
+            const cleanup = query
+                ?.where("tags", "array-contains", selectedTag.get("name"))
                 .onSnapshot(snapshot => {
                     setFiles(snapshot.docs)
                 })
             return cleanup
         }
-        const cleanup = userDocRef
-            ?.collection("files")
-            .onSnapshot(snapshot => {
+        const cleanup = query
+            ?.onSnapshot(snapshot => {
                 setFiles(snapshot.docs)
             })
         return cleanup
-    }, [selectedTag])
+    }, [selectedTag, favorites])
 
-    return <>{
-        tags.map(tag => <div
+    return <>
+        <input
+            type="checkbox"
+            onChange={event => {
+                setFavorites(event.target.checked)
+            }} />
+        {tags.map(tag => <div
             key={tag.id}
             onClick={() => {
                 selectedTag === tag ?
