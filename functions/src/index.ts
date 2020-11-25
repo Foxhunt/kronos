@@ -5,7 +5,7 @@ admin.initializeApp()
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
 
-export const createNewUser = functions.auth.user().onCreate(async user => {
+export const createNewUser = functions.region("europe-west1").auth.user().onCreate(async user => {
     try {
         await admin.firestore().collection("users").doc(user.uid).set({
             email: user.email
