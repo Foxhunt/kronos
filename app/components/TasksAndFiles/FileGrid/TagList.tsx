@@ -76,7 +76,7 @@ export default function FolderList({ items, onAdd, onRemove }: props) {
         {
             items?.map(item =>
                 <Item
-                    key={item}
+                    key={item.id}
                     onContextMenu={event => {
                         event.preventDefault()
                         onRemove(item)
