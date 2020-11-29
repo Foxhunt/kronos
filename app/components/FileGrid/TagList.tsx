@@ -38,7 +38,7 @@ type props = {
     onRemove: (item: firebase.firestore.DocumentReference) => void
 }
 
-export default function FolderList({ items, onAdd, onRemove }: props) {
+export default function TagList({ items, onAdd, onRemove }: props) {
     const [addingItem, setAddingItem] = useState(false)
     const [newItemName, setNewItemName] = useState("")
 
@@ -52,7 +52,7 @@ export default function FolderList({ items, onAdd, onRemove }: props) {
         onContextMenu={event => {
             event.stopPropagation()
         }}>
-        <Item>{name}</Item>
+        <Item>tags</Item>
         {addingItem ?
             <form
                 onSubmit={event => {
