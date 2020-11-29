@@ -1,11 +1,11 @@
-import firebase from "../../../firebase/clientApp"
+import firebase from "../../firebase/clientApp"
 import { useState, useEffect } from "react"
 import styled from "styled-components"
 
 import { useAtom } from "jotai"
 import {
     pathAtom,
-} from "../../../store"
+} from "../../store"
 
 import FileGrid from "../FileGrid"
 import useFiles from "../../hooks/useFiles"

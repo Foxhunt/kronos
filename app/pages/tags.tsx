@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { useAtom } from "jotai"
 import { userDocRefAtom } from "../store"
 
-import FileGrid from "../components/TasksAndFiles/FileGrid"
+import FileGrid from "../components/FileGrid"
 
 export default function favorites() {
     const [userDocRef] = useAtom(userDocRefAtom)

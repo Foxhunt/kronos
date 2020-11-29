@@ -1,4 +1,4 @@
-import firebase from "../../firebase/clientApp"
+import firebase from "../firebase/clientApp"
 import { useState, useEffect } from "react"
 import { useAtom } from "jotai"
 import {
@@ -7,7 +7,7 @@ import {
     selectedProjectDocRefAtom,
     selectedTaskDocRefAtom,
     userDocRefAtom
-} from "../../store"
+} from "../store"
 
 export default function useFiles() {
     const [userDocRef] = useAtom(userDocRefAtom)

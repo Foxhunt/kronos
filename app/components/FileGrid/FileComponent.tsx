@@ -1,4 +1,4 @@
-import firebase from "../../../firebase/clientApp"
+import firebase from "../../firebase/clientApp"
 
 import { useEffect, useState } from "react"
 import styled from "styled-components"

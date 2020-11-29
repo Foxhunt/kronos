@@ -11,15 +11,14 @@ import {
     selectedCollectionDocRefAtom,
     selectedProjectDocRefAtom,
     selectedTaskDocRefAtom,
-    showTasksAtom,
     userDocRefAtom
-} from "../../store"
+} from "../store"
 
-import uploadFile from "../../firebase/uploadFile"
+import uploadFile from "../firebase/uploadFile"
 import useFiles from "../hooks/useFiles"
 
-import FileGrid from "./FileGrid"
-import TaskList from "./TaskList"
+import FileGrid from "../components/FileGrid"
+import LocationAndFolders from "../components/Location"
 
 const DropTarget = styled.div.attrs<{ targetPosition: { x: number, y: number } }>
     (({ targetPosition }) => ({
@@ -36,7 +35,7 @@ const DropTarget = styled.div.attrs<{ targetPosition: { x: number, y: number } }
     pointer-events: none;
 `
 
-export default function Files() {
+export default function Archive() {
     const [userDocRef] = useAtom(userDocRefAtom)
     const [client] = useAtom(selectedClientDocRefAtom)
     const [project] = useAtom(selectedProjectDocRefAtom)
@@ -92,18 +91,12 @@ export default function Files() {
 
     const { getRootProps, isDragActive } = useDropzone({ onDrop, onDragOver })
 
-    const [showTasks] = useAtom(showTasksAtom)
-
     return <>
+        {userDocRef && <LocationAndFolders />}
         <AnimatePresence>
-            {
-                showTasks ?
-                    <TaskList />
-                    :
-                    <FileGrid
-                        files={files}
-                        getRootProps={getRootProps} />
-            }
+            <FileGrid
+                files={files}
+                getRootProps={getRootProps} />
         </AnimatePresence>
         {isDragActive && collection && <DropTarget targetPosition={dropTargetPosition} />}
     </>

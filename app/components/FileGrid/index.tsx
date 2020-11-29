@@ -1,4 +1,4 @@
-import firebase from "../../../firebase/clientApp"
+import firebase from "../../firebase/clientApp"
 
 import { useMemo } from "react"
 import styled from "styled-components"
@@ -29,6 +29,7 @@ type props = {
 }
 
 export default function FileGrid({ files, getRootProps }: props) {
+
     const fileList = useMemo(() => files.map(
         fileDocSnap =>
             <FileComponent

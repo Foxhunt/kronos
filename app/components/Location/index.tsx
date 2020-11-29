@@ -6,7 +6,7 @@ import {
 } from "../../store"
 
 import Collections from "./Collections"
-import Folders from "./Folders"
+import Folders from "../Folders"
 
 const Container = styled.div`
 `

@@ -1,4 +1,4 @@
-import firebase from "../../../firebase/clientApp"
+import firebase from "../../firebase/clientApp"
 import { useState } from "react"
 import styled from "styled-components"
 import { motion, Variants } from "framer-motion"

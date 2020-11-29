@@ -1,9 +1,9 @@
 import { useAtom } from "jotai"
-import Files from "../components/TasksAndFiles"
+import TaskList from "../components/TaskList"
 import { userDocRefAtom } from "../store"
 
 export default function files() {
     const [userDocRef] = useAtom(userDocRefAtom)
 
-    return userDocRef ? <Files /> : null
+    return userDocRef ? <TaskList /> : null
 }

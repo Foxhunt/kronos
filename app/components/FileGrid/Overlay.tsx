@@ -1,10 +1,10 @@
-import firebase from "../../../firebase/clientApp"
+import firebase from "../../firebase/clientApp"
 import { motion, Variants } from "framer-motion"
 import styled from "styled-components"
 
 import TagList from "./TagList"
 import { useAtom } from "jotai"
-import { userDocRefAtom } from "../../../store"
+import { userDocRefAtom } from "../../store"
 
 const Container = styled(motion.div)`
     position: absolute;

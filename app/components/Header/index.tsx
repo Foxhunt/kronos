@@ -2,26 +2,7 @@ import firebase from "../../firebase/clientApp"
 import Link from "next/link"
 import styled from "styled-components"
 import { useAtom } from "jotai"
-import { pathAtom, showTasksAtom, userDocRefAtom } from "../../store"
-
-import LocationAndFolders from "./LocationAndFolders"
-
-import GridSVG from "../../assets/svg/grid.svg"
-import ListSVG from "../../assets/svg/list.svg"
-import XCircleSVG from "../../assets/svg/x-circle.svg"
-import { useRouter } from "next/router"
-
-const StyledGridSVG = styled(GridSVG)`
-    color: currentColor;
-`
-
-const StyledListSVG = styled(ListSVG)`
-    color: currentColor;
-`
-
-const StyledXCircleSVG = styled(XCircleSVG)`
-    color: currentColor;
-`
+import { userDocRefAtom } from "../../store"
 
 const Container = styled.header`
     position: sticky;
@@ -47,15 +28,13 @@ const Navigation = styled.nav`
 `
 
 export default function Header() {
-    const router = useRouter()
     const [userDocRef] = useAtom(userDocRefAtom)
-
-    const [, setShowTasks] = useAtom(showTasksAtom)
-    const [, setPath] = useAtom(pathAtom)
 
     return <Container>
         <Navigation>
-            <Link href={"/"}>index</Link >
+            <Link href={"/"}>Index</Link >
+            <Link href={"/archive"}>Archive</Link >
+            <Link href={"/catalogue"}>Catalogue</Link >
             <Link href={"/tags"}>tags</Link >
             <Link href={"/info"}>info</Link >
             {userDocRef ?
@@ -68,11 +47,5 @@ export default function Header() {
                 </Link>
             }
         </Navigation>
-        {userDocRef && router.pathname == "/" && <>
-            <LocationAndFolders />
-            <StyledXCircleSVG onClick={() => setPath([])} />
-            <StyledListSVG onClick={() => setShowTasks(true)} />
-            <StyledGridSVG onClick={() => setShowTasks(false)} />
-        </>}
     </Container>
 }
