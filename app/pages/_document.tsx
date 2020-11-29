@@ -1,4 +1,4 @@
-import Document, { DocumentContext } from 'next/document'
+import Document, { Html, Head, Main, NextScript, DocumentContext } from 'next/document'
 import { ServerStyleSheet, createGlobalStyle } from 'styled-components'
 
 const GlobalStyle = createGlobalStyle`
@@ -41,5 +41,17 @@ export default class MyDocument extends Document {
     } finally {
       sheet.seal()
     }
+  }
+
+  render() {
+    return <Html>
+      <Head>
+        <script data-ad-client="ca-pub-9255037415133399" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" />
+      </Head>
+      <body>
+        <Main />
+        <NextScript />
+      </body>
+    </Html >
   }
 }
