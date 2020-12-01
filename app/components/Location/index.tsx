@@ -27,7 +27,7 @@ const Path = styled.div<{ inverted: boolean }>`
     color:  ${({ inverted }) => (inverted ? "white" : "black")};
 `
 
-export default function LocationAndFolders() {
+export default function Location() {
     const [path] = useAtom(pathAtom)
 
     const [showFolders, setShowFolders] = useState(false)

@@ -5,10 +5,6 @@ import { useAtom } from "jotai"
 import { userDocRefAtom } from "../../store"
 
 const Container = styled.header`
-    position: sticky;
-    top: 0px;
-    z-index: 2;
-    background-color: white;
 `
 
 const Navigation = styled.nav`

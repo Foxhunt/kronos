@@ -21,6 +21,8 @@ const Container = styled(motion.div)`
     gap: 16px;
 
     justify-content: center;
+
+    overflow-y: auto;
 `
 
 type props = {

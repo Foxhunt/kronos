@@ -14,6 +14,7 @@ import {
 import FolderList from "./FolderList"
 
 const Container = styled.div`
+    z-index: 1;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: 50vh;

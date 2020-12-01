@@ -18,7 +18,7 @@ import uploadFile from "../firebase/uploadFile"
 import useFiles from "../hooks/useFiles"
 
 import FileGrid from "../components/FileGrid"
-import LocationAndFolders from "../components/Location"
+import Location from "../components/Location"
 
 const DropTarget = styled.div.attrs<{ targetPosition: { x: number, y: number } }>
     (({ targetPosition }) => ({
@@ -92,7 +92,7 @@ export default function Archive() {
     const { getRootProps, isDragActive } = useDropzone({ onDrop, onDragOver })
 
     return <>
-        {userDocRef && <LocationAndFolders />}
+        {userDocRef && <Location />}
         <AnimatePresence>
             <FileGrid
                 files={files}
