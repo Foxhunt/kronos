@@ -1,4 +1,5 @@
 import firebase from "../../firebase/clientApp"
+import { useRouter } from 'next/router'
 import { useState, useEffect } from "react"
 import styled from "styled-components"
 
@@ -26,8 +27,8 @@ type props = {
     taskDocSnap: firebase.firestore.DocumentSnapshot
 }
 
-export default function Task({ taskDocSnap }: props) {
-
+export default function Collection({ taskDocSnap }: props) {
+    const router = useRouter()
     const [client, setClient] = useState<firebase.firestore.DocumentSnapshot>()
     const [project, setProject] = useState<firebase.firestore.DocumentSnapshot>()
 
@@ -50,7 +51,11 @@ export default function Task({ taskDocSnap }: props) {
     const [showFiles, setShowFiles] = useState(false)
 
     return (client && project) ?
-        <Container>
+        <Container
+            onClick={async () => {
+                await setPath([client, project, taskDocSnap])
+                router.push("archive")
+            }}>
             <Cell>
                 {taskDocSnap.get("createdAt")?.toDate().getDate()}
                 .

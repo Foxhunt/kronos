@@ -1,6 +1,6 @@
 
 import useTasks from "../../hooks/useTasks"
-import Task from "./Task"
+import Collection from "./Collection"
 import { Row } from "./Row"
 import { Cell } from "./Cell"
 import { useState } from "react"
@@ -48,7 +48,7 @@ export default function TaskList() {
             <Cell></Cell>
         </Row>
         {tasks.map(task => (
-            <Task
+            <Collection
                 key={task.id}
                 taskDocSnap={task} />
         ))}
