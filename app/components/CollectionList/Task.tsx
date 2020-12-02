@@ -9,6 +9,7 @@ import {
 
 import FileGrid from "../FileGrid"
 import useFiles from "../../hooks/useFiles"
+import { Cell } from "./Cell"
 
 const Container = styled.div`
     display: grid;
@@ -17,12 +18,8 @@ const Container = styled.div`
     grid-template-areas:
         "info info info info info info info"
         "files files files files files files files";
-`
 
-const Item = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    border-bottom: 1px solid black;
 `
 
 type props = {
@@ -54,27 +51,35 @@ export default function Task({ taskDocSnap }: props) {
 
     return (client && project) ?
         <Container>
-            <Item>{taskDocSnap.get("createdAt")?.toDate().toDateString()}</Item>
-            <Item>{taskDocSnap.get("lastUpdatedAt")?.toDate().toDateString()}</Item>
-            <Item
+            <Cell>
+                {taskDocSnap.get("createdAt")?.toDate().getDate()}
+                .
+                {taskDocSnap.get("createdAt")?.toDate().getFullYear()}
+            </Cell>
+            <Cell>
+                {taskDocSnap.get("lastUpdatedAt")?.toDate().getDate()}
+                .
+                {taskDocSnap.get("lastUpdatedAt")?.toDate().getFullYear()}
+            </Cell>
+            <Cell
                 onClick={() => {
-                    setPath([client])
+                    // setPath([client])
                 }}>
                 {client?.get("name")}
-            </Item>
-            <Item
+            </Cell>
+            <Cell
                 onClick={() => {
-                    setPath([client, project])
+                    // setPath([client, project])
                 }}>
                 {project?.get("name")}
-            </Item>
-            <Item
+            </Cell>
+            <Cell
                 onClick={() => {
-                    setPath([client, project, taskDocSnap])
+                    // setPath([client, project, taskDocSnap])
                 }}>
                 {taskDocSnap.get("name")}
-            </Item>
-            <Item>
+            </Cell>
+            <Cell>
                 <input
                     type="checkbox"
                     checked={taskDocSnap.get("pinned")}
@@ -83,14 +88,14 @@ export default function Task({ taskDocSnap }: props) {
                             pinned: event.target.checked
                         })
                     }} />
-            </Item>
-            <Item
+            </Cell>
+            <Cell
                 onClick={event => {
                     event.stopPropagation()
                     setShowFiles(!showFiles)
                 }}>
                 {showFiles ? "-" : "+"}
-            </Item>
+            </Cell>
             {showFiles && <FileGrid files={files} />}
         </Container> : null
 }

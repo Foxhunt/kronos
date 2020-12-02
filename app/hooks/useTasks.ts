@@ -7,7 +7,10 @@ import {
     userDocRefAtom
 } from "../store"
 
-export default function useTasks() {
+export default function useTasks(
+    orderBy: string,
+    orderDirection: "asc" | "desc"
+) {
     const [userDocRef] = useAtom(userDocRefAtom)
     const [client] = useAtom(selectedClientDocRefAtom)
     const [project] = useAtom(selectedProjectDocRefAtom)
@@ -15,40 +18,29 @@ export default function useTasks() {
     const [tasks, setTasks] = useState<firebase.firestore.DocumentSnapshot[]>([])
 
     useEffect(() => {
-        const query = userDocRef
+        let query = userDocRef
             ?.collection("tasks")
             .where("pinned", "in", [true, false])
 
         if (client && project) {
-            const unsubscribe = query
+            query = query
                 ?.where("client", "==", client.ref)
                 .where("project", "==", project.ref)
-                .orderBy("createdAt", "desc")
-                .onSnapshot(snapshot => {
-                    setTasks(snapshot.docs)
-                })
-
-            return unsubscribe
         }
-        if (client) {
-            const unsubscribe = query
-                ?.where("client", "==", client.ref)
-                .orderBy("createdAt", "desc")
-                .onSnapshot(snapshot => {
-                    setTasks(snapshot.docs)
-                })
 
-            return unsubscribe
+        if (client) {
+            query = query
+                ?.where("client", "==", client.ref)
         }
 
         const unsubscribe = query
-            ?.orderBy("createdAt", "desc")
+            ?.orderBy(orderBy, orderDirection)
             .onSnapshot(snapshot => {
                 setTasks(snapshot.docs)
             })
 
         return unsubscribe
-    }, [userDocRef, client, project])
+    }, [userDocRef, client, project, orderBy, orderDirection])
 
     return tasks
 }
