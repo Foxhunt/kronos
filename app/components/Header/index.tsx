@@ -15,11 +15,13 @@ const Navigation = styled.nav`
     align-items: center;
     justify-content: space-around;
     
-    background-color: black;
+    background-color: white;
+
+    border-bottom: 4px solid black;
 
     & a {
         text-decoration: none;
-        color: white;
+        color: black;
     }
 `
 
@@ -31,8 +33,6 @@ export default function Header() {
             <Link href={"/"}>Index</Link >
             <Link href={"/archive"}>Archive</Link >
             <Link href={"/catalogue"}>Catalogue</Link >
-            <Link href={"/tags"}>tags</Link >
-            <Link href={"/info"}>info</Link >
             {userDocRef ?
                 <Link href={"/login"}>
                     <a onClick={() => { firebase.auth().signOut() }}> logout</a>
