@@ -61,29 +61,22 @@ export default function Task({ taskDocSnap }: props) {
                 .
                 {taskDocSnap.get("lastUpdatedAt")?.toDate().getFullYear()}
             </Cell>
-            <Cell
-                onClick={() => {
-                    // setPath([client])
-                }}>
+            <Cell>
                 {client?.get("name")}
             </Cell>
-            <Cell
-                onClick={() => {
-                    // setPath([client, project])
-                }}>
+            <Cell>
                 {project?.get("name")}
             </Cell>
-            <Cell
-                onClick={() => {
-                    // setPath([client, project, taskDocSnap])
-                }}>
+            <Cell>
                 {taskDocSnap.get("name")}
             </Cell>
             <Cell>
                 <input
                     type="checkbox"
                     checked={taskDocSnap.get("pinned")}
+                    onClick={event => event.stopPropagation()}
                     onChange={event => {
+                        event.stopPropagation()
                         taskDocSnap.ref.update({
                             pinned: event.target.checked
                         })
