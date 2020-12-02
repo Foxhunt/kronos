@@ -177,7 +177,9 @@ export default function Folders() {
                     name: itemName,
                     pinned: false,
                     client: client?.ref,
+                    clientName: client?.get("name"),
                     project: project?.ref,
+                    projectName: project?.get("name"),
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                     lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
                 })

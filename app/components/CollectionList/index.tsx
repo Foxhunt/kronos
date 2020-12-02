@@ -16,7 +16,7 @@ export default function TaskList() {
             setOrderDirection(orderDirection === "desc" ? "asc" : "desc")
         } else {
             setOrderBy(newOrderBy)
-            setOrderDirection("desc")
+            setOrderDirection(["createdAt", "lastUpdatedAt", "pinned"].includes(newOrderBy) ? "desc" : "asc")
         }
     }
 
@@ -30,11 +30,11 @@ export default function TaskList() {
                 Change {orderDirection}
             </Cell>
             <Cell
-                onClick={() => setOrder("client")}>
+                onClick={() => setOrder("clientName")}>
                 Client {orderDirection}
             </Cell>
             <Cell
-                onClick={() => setOrder("project")}>
+                onClick={() => setOrder("projectName")}>
                 Project {orderDirection}
             </Cell>
             <Cell
