@@ -3,6 +3,8 @@ import Link from "next/link"
 import styled from "styled-components"
 import { useAtom } from "jotai"
 import { userDocRefAtom } from "../../store"
+import { useState } from "react"
+import AddCollection from "./AddCollection"
 
 const Container = styled.header`
 `
@@ -27,12 +29,17 @@ const Navigation = styled.nav`
 
 export default function Header() {
     const [userDocRef] = useAtom(userDocRefAtom)
+    const [showAddCollection, setShowAddCollection] = useState(false)
 
     return <Container>
         <Navigation>
             <Link href={"/"}>Index</Link >
             <Link href={"/archive"}>Archive</Link >
             <Link href={"/catalogue"}>Catalogue</Link >
+            <div
+                onClick={() => setShowAddCollection(!showAddCollection)}>
+                + CREATE NEW COLLECTION
+            </div >
             {userDocRef ?
                 <Link href={"/login"}>
                     <a onClick={() => { firebase.auth().signOut() }}> logout</a>
@@ -43,5 +50,10 @@ export default function Header() {
                 </Link>
             }
         </Navigation>
+        {
+            showAddCollection &&
+            <AddCollection
+                hideAddCollection={() => setShowAddCollection(false)} />
+        }
     </Container>
 }
