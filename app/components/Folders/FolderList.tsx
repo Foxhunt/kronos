@@ -83,7 +83,7 @@ export default function FolderList({ name, selected, items, allowAdding, onSelec
                         event.preventDefault()
                         item.ref.delete()
                     }}
-                    onPointerEnter={() => onSelect(item)}>
+                    onClick={() => onSelect(item)}>
                     {item.get("name")}
                 </Item>)
         }
