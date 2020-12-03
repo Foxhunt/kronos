@@ -1,5 +1,5 @@
 
-import useTasks from "../../hooks/useTasks"
+import { useTasks } from "../../hooks"
 import Collection from "./Collection"
 import { Row } from "./Row"
 import { Cell } from "./Cell"
@@ -9,7 +9,7 @@ export default function TaskList() {
     const [orderBy, setOrderBy] = useState("createdAt")
     const [orderDirection, setOrderDirection] = useState<"asc" | "desc">("desc")
 
-    const tasks = useTasks(orderBy, orderDirection)
+    const tasks = useTasks({ orderBy, orderDirection })
 
     const setOrder = (newOrderBy: string) => {
         if (orderBy === newOrderBy) {
