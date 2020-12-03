@@ -5,12 +5,13 @@ import {
     userDocRefAtom
 } from "../store"
 
-export default function useTasks(
+type orderOptions = {
     orderBy: string,
     orderDirection: "asc" | "desc"
-) {
-    const [userDocRef] = useAtom(userDocRefAtom)
+}
 
+export function useTasks({ orderBy, orderDirection }: orderOptions) {
+    const [userDocRef] = useAtom(userDocRefAtom)
     const [tasks, setTasks] = useState<firebase.firestore.DocumentSnapshot[]>([])
 
     useEffect(() => {

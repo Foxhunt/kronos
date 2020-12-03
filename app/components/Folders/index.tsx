@@ -11,6 +11,8 @@ import {
     selectedCollectionDocRefAtom,
 } from "../../store"
 
+import { useClients, useProjects } from "../../hooks"
+
 import FolderList from "./FolderList"
 
 const Container = styled.div`
@@ -19,7 +21,7 @@ const Container = styled.div`
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: 50vh;
 
-    column-gap: 40px;
+    column-gap: 0px;
 
     width: calc(100vw - 40px);
     padding: 20px;
@@ -35,43 +37,10 @@ export default function Folders() {
     const [userDocRef] = useAtom(userDocRefAtom)
 
     const [client, setClient] = useAtom(selectedClientDocRefAtom)
-    const [clients, setClients] = useState<firebase.firestore.DocumentSnapshot[]>([])
-    useEffect(() => {
-        const unsubscribe = userDocRef
-            ?.collection("clients")
-            .orderBy("createdAt", "desc")
-            .onSnapshot(snapshot => {
-                setClients(snapshot.docs)
-                if (snapshot.docs.length === 1) {
-                    setClient(snapshot.docs[0])
-                }
-            })
-        return () => {
-            unsubscribe && unsubscribe()
-            setClients([])
-        }
-    }, [userDocRef])
+    const clients = useClients()
 
     const [project, setProject] = useAtom(selectedProjectDocRefAtom)
-    const [projects, setProjects] = useState<firebase.firestore.DocumentSnapshot[]>([])
-    useEffect(() => {
-        if (userDocRef && client) {
-            const unsubscribe = userDocRef
-                .collection("projects")
-                .where("client", "==", client.ref)
-                .orderBy("createdAt", "desc")
-                .onSnapshot(snapshot => {
-                    setProjects(snapshot.docs)
-                    if (snapshot.docs.length === 1) {
-                        setProject(snapshot.docs[0])
-                    }
-                })
-            return () => {
-                unsubscribe()
-                setProjects([])
-            }
-        }
-    }, [userDocRef, client])
+    const projects = useProjects(client)
 
     const [task, setTask] = useAtom(selectedTaskDocRefAtom)
     const [tasks, setTasks] = useState<firebase.firestore.DocumentSnapshot[]>([])
@@ -138,8 +107,7 @@ export default function Folders() {
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                     lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
                 })
-            }}
-        />
+            }} />
         <FolderList
             name={"Projects"}
             selected={project}
@@ -159,8 +127,7 @@ export default function Folders() {
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                     lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
                 })
-            }}
-        />
+            }} />
         <FolderList
             name={"Tasks"}
             selected={task}
@@ -183,8 +150,7 @@ export default function Folders() {
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                     lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
                 })
-            }}
-        />
+            }} />
         <FolderList
             name={"Collections"}
             selected={collection}
@@ -204,7 +170,6 @@ export default function Folders() {
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                     lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
                 })
-            }}
-        />
+            }} />
     </Container>
 }
