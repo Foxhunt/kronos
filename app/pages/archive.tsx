@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from "react"
+import Head from "next/head"
 import styled from "styled-components"
 import { AnimatePresence } from "framer-motion"
 import { useDropzone } from "react-dropzone"
@@ -92,6 +93,9 @@ export default function Archive() {
     const { getRootProps, isDragActive } = useDropzone({ onDrop, onDragOver })
 
     return <>
+        <Head>
+            <title>Archive</title>
+        </Head>
         {userDocRef && <Location />}
         <AnimatePresence>
             <FileGrid

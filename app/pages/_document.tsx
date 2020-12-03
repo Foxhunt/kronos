@@ -44,9 +44,11 @@ export default class MyDocument extends Document {
   }
 
   render() {
-    return <Html>
+    return <Html lang="en">
       <Head>
-        <script data-ad-client="ca-pub-9255037415133399" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" />
+        <meta
+          name="description"
+          content="Indexed is a digital online archive for visual designes." />
       </Head>
       <body>
         <Main />
