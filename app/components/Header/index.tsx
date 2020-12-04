@@ -1,9 +1,12 @@
 import firebase from "../../firebase/clientApp"
+import { useState } from "react"
 import Link from "next/link"
 import styled from "styled-components"
+
 import { useAtom } from "jotai"
 import { userDocRefAtom } from "../../store"
-import { useState } from "react"
+
+import Folders from "../Folders"
 import AddCollection from "./AddCollection"
 
 const Container = styled.header`
@@ -29,17 +32,25 @@ const Navigation = styled.nav`
 
 export default function Header() {
     const [userDocRef] = useAtom(userDocRefAtom)
+    const [showFolders, setShowFolders] = useState(false)
     const [showAddCollection, setShowAddCollection] = useState(false)
 
     return <Container>
         <Navigation>
-            <Link href={"/"}>Index</Link >
-            <Link href={"/archive"}>Archive</Link >
-            <Link href={"/catalogue"}>Catalogue</Link >
-            <div
-                onClick={() => setShowAddCollection(!showAddCollection)}>
+            <Link href={"/"}>
+                Index
+            </Link >
+            <Link href={"/archive"}>
+                <a onClick={() => setShowFolders(true)}>
+                    Archive
+                </a>
+            </Link >
+            <Link href={"/catalogue"}>
+                Catalogue
+            </Link >
+            <a onClick={() => setShowAddCollection(!showAddCollection)}>
                 + CREATE NEW COLLECTION
-            </div >
+            </a >
             {userDocRef ?
                 <Link href={"/login"}>
                     <a onClick={() => { firebase.auth().signOut() }}> logout</a>
@@ -47,13 +58,13 @@ export default function Header() {
                 :
                 <Link href={"/login"}>
                     <a>login</a>
-                </Link>
-            }
+                </Link>}
         </Navigation>
-        {
-            showAddCollection &&
+        {showFolders &&
+            <Folders
+                onHide={() => setShowFolders(false)} />}
+        {showAddCollection &&
             <AddCollection
-                hideAddCollection={() => setShowAddCollection(false)} />
-        }
+                onHide={() => setShowAddCollection(false)} />}
     </Container>
 }

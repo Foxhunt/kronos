@@ -20,13 +20,13 @@ const Container = styled.div`
 
     display: flex;
     justify-content: center;
-
-    background-color: rgb(126 126 126 / 50%);
 `
 
 const AddCollectionForm = styled.div`
     width: 50%;
     height: 300px;
+
+    margin-top: 34px;
     
     display: flex;
     align-items: center;
@@ -36,10 +36,10 @@ const AddCollectionForm = styled.div`
 `
 
 type props = {
-    hideAddCollection: () => void
+    onHide: () => void
 }
 
-export default function AddCollection({ hideAddCollection }: props) {
+export default function AddCollection({ onHide }: props) {
     const [userDocRef] = useAtom(userDocRefAtom)
 
     const [collectionName, setCollectionName] = useState("")
@@ -51,7 +51,7 @@ export default function AddCollection({ hideAddCollection }: props) {
     const projects = useProjects(client)
 
     const fromRef = useRef<HTMLDivElement>(null)
-    useClickedOutside(fromRef, hideAddCollection)
+    useClickedOutside(fromRef, onHide)
 
     return <Container>
         <AddCollectionForm
@@ -113,7 +113,7 @@ export default function AddCollection({ hideAddCollection }: props) {
                             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                             lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
                         })
-                        hideAddCollection()
+                        onHide()
                     }
                 }}>
                 add Collection

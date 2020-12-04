@@ -1,10 +1,10 @@
 import firebase from "../../firebase/clientApp"
-import { useState } from "react"
 import styled from "styled-components"
 
 const Container = styled.div`
     max-height: 100%;
     overflow: auto;
+    background-color: white;
 `
 
 const Item = styled.div<{ selected?: boolean }>`
@@ -24,20 +24,6 @@ const Item = styled.div<{ selected?: boolean }>`
     }
 `
 
-const NewItemInput = styled.input`
-    width: 100%;
-    height: 30px;
-    padding: unset;
-
-    border: none;
-    border-bottom: black 1px solid;
-    box-shadow: none;
-
-    &:focus {
-        outline: none!important;
-    }
-`
-
 type props = {
     name: string
     selected: firebase.firestore.DocumentSnapshot | undefined
@@ -47,33 +33,8 @@ type props = {
     onAdd: (itemName: string) => void
 }
 
-export default function FolderList({ name, selected, items, allowAdding, onSelect, onAdd }: props) {
-    const [addingItem, setAddingItem] = useState(false)
-    const [newItemName, setNewItemName] = useState("")
-
+export default function FolderList({ selected, items, onSelect }: props) {
     return <Container>
-        <Item>{name}</Item>
-        {allowAdding &&
-            addingItem ?
-            <form
-                onSubmit={event => {
-                    event.preventDefault()
-                    onAdd(newItemName)
-                    setAddingItem(false)
-                    setNewItemName("")
-                }}>
-                <NewItemInput
-                    type={"text"}
-                    autoFocus
-                    value={newItemName}
-                    onBlur={() => setAddingItem(false)}
-                    onChange={event => {
-                        setNewItemName(event.target.value)
-                    }} />
-            </form> : <Item
-                onClick={() => setAddingItem(true)}>
-                +++
-        </Item>}
         {
             items?.map(item =>
                 <Item

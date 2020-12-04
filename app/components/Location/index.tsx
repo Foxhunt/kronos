@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import { useAtom } from "jotai"
 import styled from "styled-components"
 import {
@@ -6,7 +6,6 @@ import {
 } from "../../store"
 
 import Collections from "./Collections"
-import Folders from "../Folders"
 
 const Container = styled.div`
 `
@@ -17,31 +16,23 @@ const PathAndCollections = styled.div`
     grid-template-rows: 30px;
 `
 
-const Path = styled.div<{ inverted: boolean }>`
+const Path = styled.div`
     display: flex;
     align-items: center;
 
     padding-left: 25px;
 
-    background-color: ${({ inverted }) => (inverted ? "black" : "white")};
-    color:  ${({ inverted }) => (inverted ? "white" : "black")};
+    background-color: "white";
+    color:  "black";
 `
 
 export default function Location() {
     const [path] = useAtom(pathAtom)
 
-    const [showFolders, setShowFolders] = useState(false)
-
-    return <Container
-        onPointerLeave={() => setShowFolders(false)}>
+    return <Container>
         <PathAndCollections>
-            <Path
-                inverted={showFolders}
-                onPointerEnter={() => setShowFolders(true)}>
-                {path}
-            </Path>
+            <Path>{path}</Path>
             <Collections />
         </PathAndCollections>
-        {showFolders && <Folders />}
-    </Container>
+    </Container >
 }
