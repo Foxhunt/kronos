@@ -10,18 +10,22 @@ export function useProjects(client: firebase.firestore.DocumentSnapshot | undefi
     const [userDocRef] = useAtom(userDocRefAtom)
     const [projects, setProjects] = useState<firebase.firestore.DocumentSnapshot[]>([])
     useEffect(() => {
-        if (userDocRef && client) {
-            const unsubscribe = userDocRef
-                .collection("projects")
-                .where("client", "==", client.ref)
-                .orderBy("createdAt", "desc")
-                .onSnapshot(snapshot => {
-                    setProjects(snapshot.docs)
-                })
-            return () => {
-                unsubscribe()
-                setProjects([])
-            }
+        let query = userDocRef
+            ?.collection("projects")
+            .orderBy("createdAt", "desc")
+
+        if (client) {
+            query = query?.where("client", "==", client.ref)
+        }
+
+        const unsubscribe = query
+            ?.onSnapshot(snapshot => {
+                setProjects(snapshot.docs)
+            })
+
+        return () => {
+            unsubscribe && unsubscribe()
+            setProjects([])
         }
     }, [userDocRef, client])
 
