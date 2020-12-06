@@ -29,13 +29,12 @@ const Container = styled.div`
 
 const FoldersNavigation = styled.div`
     width: 100%;
-    height: 50%;
-
+    max-height: calc(12 * 31px);
     margin-top: 34px;
-    
+
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: 50vh;
+    grid-template-columns: repeat(3,1fr);
+    grid-template-rows: calc(12 * 31px);
 `
 
 type props = {

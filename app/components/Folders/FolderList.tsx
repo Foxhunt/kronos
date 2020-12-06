@@ -1,9 +1,8 @@
 import firebase from "../../firebase/clientApp"
 import styled from "styled-components"
+import { useState } from "react"
 
 const Container = styled.div`
-    max-height: 100%;
-    overflow: auto;
     background-color: white;
 `
 
@@ -24,6 +23,25 @@ const Item = styled.div<{ selected?: boolean }>`
     }
 `
 
+const Items = styled.div`
+    max-height: calc(100% - 62px);
+    overflow: auto;
+`
+
+const NewItemInput = styled.input`
+    width: 100%;
+    height: 30px;
+    padding: unset;
+
+    border: none;
+    border-bottom: black 1px solid;
+    box-shadow: none;
+
+    &:focus {
+        outline: none!important;
+    }
+`
+
 type props = {
     name: string
     selected: firebase.firestore.DocumentSnapshot | undefined
@@ -33,10 +51,35 @@ type props = {
     onAdd: (itemName: string) => void
 }
 
-export default function FolderList({ selected, items, onSelect }: props) {
+export default function FolderList({ name, selected, items, allowAdding, onSelect, onAdd }: props) {
+    const [addingItem, setAddingItem] = useState(false)
+    const [newItemName, setNewItemName] = useState("")
+
     return <Container>
-        {
-            items?.map(item =>
+        <Item>{name}</Item>
+        {allowAdding &&
+            addingItem ?
+            <form
+                onSubmit={event => {
+                    event.preventDefault()
+                    onAdd(newItemName)
+                    setAddingItem(false)
+                    setNewItemName("")
+                }}>
+                <NewItemInput
+                    type={"text"}
+                    autoFocus
+                    value={newItemName}
+                    onBlur={() => setAddingItem(false)}
+                    onChange={event => {
+                        setNewItemName(event.target.value)
+                    }} />
+            </form> : <Item
+                onClick={() => setAddingItem(true)}>
+                +++
+        </Item>}
+        <Items>
+            {items?.map(item =>
                 <Item
                     key={item.id}
                     selected={selected?.id === item.id}
@@ -46,7 +89,7 @@ export default function FolderList({ selected, items, onSelect }: props) {
                     }}
                     onClick={() => onSelect(item)}>
                     {item.get("name")}
-                </Item>)
-        }
+                </Item>)}
+        </Items>
     </Container>
 }

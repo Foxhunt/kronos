@@ -23,14 +23,13 @@ const Container = styled.div`
 `
 
 const AddCollectionForm = styled.div`
-    width: 50%;
-    height: 300px;
-
+    width: 100%;
+    max-height: calc(12 * 31px);
     margin-top: 34px;
-    
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
+
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    grid-template-rows: calc(12 * 31px);
 
     background-color: rgb(126 126 126);
 `
