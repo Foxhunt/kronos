@@ -59,10 +59,14 @@ export default function Collection({ taskDocSnap }: props) {
             <Cell>
                 {taskDocSnap.get("createdAt")?.toDate().getDate()}
                 .
+                {taskDocSnap.get("createdAt")?.toDate().getMonth() + 1}
+                .
                 {taskDocSnap.get("createdAt")?.toDate().getFullYear()}
             </Cell>
             <Cell>
                 {taskDocSnap.get("lastUpdatedAt")?.toDate().getDate()}
+                .
+                {taskDocSnap.get("lastUpdatedAt")?.toDate().getMonth() + 1}
                 .
                 {taskDocSnap.get("lastUpdatedAt")?.toDate().getFullYear()}
             </Cell>
