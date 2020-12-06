@@ -10,20 +10,37 @@ type orderOptions = {
     orderDirection: "asc" | "desc"
 }
 
-export function useTasks({ orderBy, orderDirection }: orderOptions) {
+export function useTasks(
+    client: firebase.firestore.DocumentSnapshot | undefined,
+    project: firebase.firestore.DocumentSnapshot | undefined,
+    { orderBy, orderDirection }: orderOptions
+) {
     const [userDocRef] = useAtom(userDocRefAtom)
     const [tasks, setTasks] = useState<firebase.firestore.DocumentSnapshot[]>([])
 
     useEffect(() => {
-        const unsubscribe = userDocRef
+        let query = userDocRef
             ?.collection("tasks")
             ?.orderBy(orderBy, orderDirection)
+
+        if (client) {
+            query = query?.where("client", "==", client.ref)
+        }
+
+        if (project) {
+            query = query?.where("project", "==", project.ref)
+        }
+
+        const unsubscribe = query
             ?.onSnapshot(snapshot => {
                 setTasks(snapshot.docs)
             })
 
-        return unsubscribe
-    }, [userDocRef, orderBy, orderDirection])
+        return () => {
+            unsubscribe && unsubscribe()
+            setTasks([])
+        }
+    }, [userDocRef, client, project, orderBy, orderDirection])
 
     return tasks
 }

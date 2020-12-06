@@ -9,7 +9,7 @@ export default function TaskList() {
     const [orderBy, setOrderBy] = useState("createdAt")
     const [orderDirection, setOrderDirection] = useState<"asc" | "desc">("desc")
 
-    const tasks = useTasks({ orderBy, orderDirection })
+    const tasks = useTasks(undefined, undefined, { orderBy, orderDirection })
 
     const setOrder = (newOrderBy: string) => {
         if (orderBy === newOrderBy) {

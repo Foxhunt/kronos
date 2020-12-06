@@ -10,7 +10,7 @@ import {
     selectedTaskDocRefAtom,
 } from "../../store"
 
-import { useClickedOutside, useClients, useProjects } from "../../hooks"
+import { useClickedOutside, useClients, useProjects, useTasks } from "../../hooks"
 
 import FolderList from "./FolderList"
 
@@ -51,23 +51,7 @@ export default function Folders({ onHide }: props) {
     const projects = useProjects(client)
 
     const [task, setTask] = useAtom(selectedTaskDocRefAtom)
-    const [tasks, setTasks] = useState<firebase.firestore.DocumentSnapshot[]>([])
-    useEffect(() => {
-        if (userDocRef && client && project) {
-            const unsubscribe = userDocRef
-                .collection("tasks")
-                .where("client", "==", client.ref)
-                .where("project", "==", project.ref)
-                .orderBy("createdAt", "desc")
-                .onSnapshot(snapshot => {
-                    setTasks(snapshot.docs)
-                })
-            return () => {
-                unsubscribe()
-                setTasks([])
-            }
-        }
-    }, [userDocRef, client, project])
+    const tasks = useTasks(client, project, { orderBy: "createdAt", orderDirection: "desc" })
 
     const foldersNavigationRef = useRef<HTMLDivElement>(null)
     useClickedOutside(foldersNavigationRef, onHide)
