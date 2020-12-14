@@ -8,9 +8,6 @@ import {
 import Collections from "./Collections"
 
 const Container = styled.div`
-`
-
-const PathAndCollections = styled.div`
     display: grid;
     grid-template-columns: [location] 300px [collections] auto;
     grid-template-rows: 30px;
@@ -30,9 +27,7 @@ export default function Location() {
     const [path] = useAtom(pathAtom)
 
     return <Container>
-        <PathAndCollections>
-            <Path>{path}</Path>
-            <Collections />
-        </PathAndCollections>
+        <Path>{path}</Path>
+        <Collections />
     </Container >
 }
