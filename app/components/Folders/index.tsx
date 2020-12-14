@@ -1,5 +1,5 @@
 import firebase from "../../firebase/clientApp"
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { useAtom } from "jotai";
 import styled from "styled-components";
 
