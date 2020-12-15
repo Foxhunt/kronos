@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from "react"
 import Head from "next/head"
 import styled from "styled-components"
-import { AnimatePresence } from "framer-motion"
 import { useDropzone } from "react-dropzone"
 
 import pLimit from "p-limit"
@@ -12,14 +11,16 @@ import {
     selectedCollectionDocRefAtom,
     selectedProjectDocRefAtom,
     selectedTaskDocRefAtom,
+    showInteractionBarAtom,
     userDocRefAtom
 } from "../store"
 
 import uploadFile from "../firebase/uploadFile"
-import useFiles from "../hooks/useFiles"
+import { useFiles } from "../hooks"
 
-import FileGrid from "../components/FileGrid"
 import Location from "../components/Location"
+import InteractionBar from "../components/InteractionBar"
+import FileGrid from "../components/FileGrid"
 
 const DropTarget = styled.div.attrs<{ targetPosition: { x: number, y: number } }>
     (({ targetPosition }) => ({
@@ -92,16 +93,17 @@ export default function Archive() {
 
     const { getRootProps, isDragActive } = useDropzone({ onDrop, onDragOver })
 
+    const [showInteractionBar] = useAtom(showInteractionBarAtom)
+
     return <>
         <Head>
             <title>Archive</title>
         </Head>
         {userDocRef && <Location />}
-        <AnimatePresence>
-            <FileGrid
-                files={files}
-                getRootProps={getRootProps} />
-        </AnimatePresence>
+        {showInteractionBar && <InteractionBar />}
+        <FileGrid
+            files={files}
+            getRootProps={getRootProps} />
         {isDragActive && collection && <DropTarget targetPosition={dropTargetPosition} />}
     </>
 }

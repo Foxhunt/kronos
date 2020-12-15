@@ -9,7 +9,7 @@ import {
 } from "../../store"
 
 import FileGrid from "../FileGrid"
-import useFiles from "../../hooks/useFiles"
+import { useFiles } from "../../hooks"
 import { Cell } from "./Cell"
 
 const Container = styled.div`

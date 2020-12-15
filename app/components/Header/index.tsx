@@ -41,16 +41,16 @@ export default function Header() {
                 Index
             </Link >
             <Link href={"/archive"}>
-                <a onClick={() => setShowFolders(true)}>
+                <a onClick={() => userDocRef && setShowFolders(true)}>
                     Archive
                 </a>
             </Link >
             <Link href={"/catalogue"}>
                 Catalogue
             </Link >
-            <a onClick={() => setShowAddCollection(!showAddCollection)}>
+            {userDocRef && <a onClick={() => setShowAddCollection(!showAddCollection)}>
                 + CREATE NEW COLLECTION
-            </a >
+            </a >}
             {userDocRef ?
                 <Link href={"/login"}>
                     <a onClick={() => { firebase.auth().signOut() }}> logout</a>
@@ -60,10 +60,10 @@ export default function Header() {
                     <a>login</a>
                 </Link>}
         </Navigation>
-        {showFolders &&
+        {userDocRef && showFolders &&
             <Folders
                 onHide={() => setShowFolders(false)} />}
-        {showAddCollection &&
+        {userDocRef && showAddCollection &&
             <AddCollection
                 onHide={() => setShowAddCollection(false)} />}
     </Container>

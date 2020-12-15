@@ -14,12 +14,19 @@ const StyledImage = styled(Image)`
 
 const PDFViewer = dynamic(import("./PDFViewer"), { ssr: false })
 
-const Container = styled(motion.div)`
+const Container = styled(motion.div) <{ selected: boolean }>`
     position: relative;
-    background-color: black;
+    background-image: linear-gradient(90deg, #d4d4d4, #eeeeee);
 
     width: 300px;
     height: 300px;
+
+    /* box-sizing: border-box; */
+
+    ${({ selected }) => selected ? `
+        border: 3px solid #fb2dfb;
+        margin: -3px;
+    ` : ""}
 
     display: flex;
     justify-content: center;
@@ -36,10 +43,13 @@ const Name = styled.div`
 
 type props = {
     fileDocSnap: firebase.firestore.DocumentSnapshot
+    selected: boolean
+    interactionActive: boolean
+    onSelect?: () => void
     onDelete?: () => void
 }
 
-export default function FileComponent({ fileDocSnap, onDelete }: props) {
+export default function FileComponent({ fileDocSnap, selected, interactionActive, onSelect, onDelete }: props) {
     const [src, setSrc] = useState<string>("")
     const [showOverlay, setShowOverlay] = useState(false)
     const [metaData, setMetaData] = useState<firebase.storage.FullMetadata>()
@@ -75,13 +85,17 @@ export default function FileComponent({ fileDocSnap, onDelete }: props) {
     }
 
     return <Container
+        selected={selected}
         layout
         variants={variants}
+        onClick={() => {
+            interactionActive && onSelect && onSelect()
+        }}
         onHoverStart={() => {
-            setShowOverlay(true)
+            !interactionActive && setShowOverlay(true)
         }}
         onHoverEnd={() => {
-            setShowOverlay(false)
+            !interactionActive && setShowOverlay(false)
         }}
         onContextMenu={event => {
             event.preventDefault()
@@ -101,9 +115,23 @@ export default function FileComponent({ fileDocSnap, onDelete }: props) {
             <input
                 type="checkbox"
                 checked={fileDocSnap.get("favorite")}
+                onClick={event => {
+                    event.stopPropagation()
+                }}
                 onChange={event => {
                     fileDocSnap.ref.update({
                         favorite: event.target.checked
+                    })
+                }} />
+            <input
+                type="checkbox"
+                checked={fileDocSnap.get("marked")}
+                onClick={event => {
+                    event.stopPropagation()
+                }}
+                onChange={event => {
+                    fileDocSnap.ref.update({
+                        marked: event.target.checked
                     })
                 }} />
         </Name>

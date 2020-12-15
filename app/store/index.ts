@@ -27,3 +27,7 @@ export const pathAtom = atom<string, firebase.firestore.DocumentSnapshot[]>(
 )
 
 export const showTasksAtom = atom<boolean>(true)
+
+export const showInteractionBarAtom = atom<boolean>(false)
+
+export const selectedFilesAtom = atom<firebase.firestore.DocumentSnapshot[]>([])

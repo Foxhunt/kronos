@@ -9,7 +9,7 @@ import {
     userDocRefAtom
 } from "../store"
 
-export default function useFiles() {
+export function useFiles() {
     const [userDocRef] = useAtom(userDocRefAtom)
     const [client] = useAtom(selectedClientDocRefAtom)
     const [project] = useAtom(selectedProjectDocRefAtom)

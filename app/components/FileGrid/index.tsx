@@ -1,12 +1,15 @@
 import firebase from "../../firebase/clientApp"
+import deleteFile from "../../firebase/deleteFile"
 
 import { useMemo } from "react"
 import styled from "styled-components"
 import { AnimatePresence, motion, Variants } from "framer-motion"
+import { DropzoneRootProps } from "react-dropzone"
+
+import { useAtom } from "jotai"
+import { selectedFilesAtom, showInteractionBarAtom } from "../../store"
 
 import FileComponent from "./FileComponent"
-
-import { DropzoneRootProps } from "react-dropzone"
 
 const Container = styled(motion.div)`
     flex: 1;
@@ -31,25 +34,25 @@ type props = {
 }
 
 export default function FileGrid({ files, getRootProps }: props) {
+    const [selectedFiles, setSelectedFiles] = useAtom(selectedFilesAtom)
+    const [showInteractionBar] = useAtom(showInteractionBarAtom)
 
     const fileList = useMemo(() => files.map(
         fileDocSnap =>
             <FileComponent
                 fileDocSnap={fileDocSnap}
-                key={fileDocSnap.id}
-                onDelete={() => {
-                    fileDocSnap.ref.delete().then(() => {
-                        const storage = firebase.storage()
-                        const fileRef = storage.ref(fileDocSnap.get("fullPath"))
-                        fileRef.delete()
-
-                        firebase.analytics().logEvent("delete_file", {
-                            name: fileDocSnap.get("name"),
-                            fullPath: fileDocSnap.get("fullPath")
-                        })
-                    })
-                }} />
-    ), [files])
+                selected={selectedFiles.some(selectedFile => selectedFile.id === fileDocSnap.id)}
+                interactionActive={showInteractionBar}
+                onSelect={() => {
+                    if (!selectedFiles.some(selectedFile => selectedFile.id === fileDocSnap.id)) {
+                        setSelectedFiles([...selectedFiles, fileDocSnap])
+                    } else {
+                        setSelectedFiles(selectedFiles.filter(selectedFile => selectedFile.id !== fileDocSnap.id))
+                    }
+                }}
+                onDelete={() => deleteFile(fileDocSnap)}
+                key={fileDocSnap.id} />
+    ), [files, selectedFiles, showInteractionBar])
 
     const variants: Variants = {
         hidden: { opacity: 0 },
