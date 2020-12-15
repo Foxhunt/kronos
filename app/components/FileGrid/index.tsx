@@ -7,20 +7,21 @@ import { AnimatePresence, motion, Variants } from "framer-motion"
 import { DropzoneRootProps } from "react-dropzone"
 
 import { useAtom } from "jotai"
-import { selectedFilesAtom, showInteractionBarAtom } from "../../store"
+import { previewFileAtom, selectedFilesAtom, showInteractionBarAtom } from "../../store"
 
 import FileComponent from "./FileComponent"
+import FilePreview from "./FilePreview"
 
 const Container = styled(motion.div)`
     flex: 1;
     grid-area: files;
     outline: none;
     
-    padding: 16px;
+    padding-top: 16px;
 
     display: grid;
-    grid-template-columns: repeat(auto-fit, 300px);
-    grid-template-rows: repeat(auto-fit, 300px);
+    grid-template-columns: repeat(auto-fill, 500px);
+    grid-template-rows: repeat(auto-fill, 400px);
     gap: 16px;
 
     justify-content: center;
@@ -36,18 +37,22 @@ type props = {
 export default function FileGrid({ files, getRootProps }: props) {
     const [selectedFiles, setSelectedFiles] = useAtom(selectedFilesAtom)
     const [showInteractionBar] = useAtom(showInteractionBarAtom)
+    const [, setPreviewFile] = useAtom(previewFileAtom)
 
     const fileList = useMemo(() => files.map(
         fileDocSnap =>
             <FileComponent
                 fileDocSnap={fileDocSnap}
                 selected={selectedFiles.some(selectedFile => selectedFile.id === fileDocSnap.id)}
-                interactionActive={showInteractionBar}
                 onSelect={() => {
-                    if (!selectedFiles.some(selectedFile => selectedFile.id === fileDocSnap.id)) {
-                        setSelectedFiles([...selectedFiles, fileDocSnap])
+                    if (showInteractionBar) {
+                        if (!selectedFiles.some(selectedFile => selectedFile.id === fileDocSnap.id)) {
+                            setSelectedFiles([...selectedFiles, fileDocSnap])
+                        } else {
+                            setSelectedFiles(selectedFiles.filter(selectedFile => selectedFile.id !== fileDocSnap.id))
+                        }
                     } else {
-                        setSelectedFiles(selectedFiles.filter(selectedFile => selectedFile.id !== fileDocSnap.id))
+                        setPreviewFile(fileDocSnap)
                     }
                 }}
                 onDelete={() => deleteFile(fileDocSnap)}
@@ -65,6 +70,8 @@ export default function FileGrid({ files, getRootProps }: props) {
         }
     }
 
+    const [previewFile] = useAtom(previewFileAtom)
+
     // @ts-ignore
     return <Container
         initial="hidden"
@@ -75,5 +82,6 @@ export default function FileGrid({ files, getRootProps }: props) {
         <AnimatePresence>
             {fileList}
         </AnimatePresence>
+        {previewFile && <FilePreview />}
     </Container>
 }

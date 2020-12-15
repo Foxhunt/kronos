@@ -31,3 +31,5 @@ export const showTasksAtom = atom<boolean>(true)
 export const showInteractionBarAtom = atom<boolean>(false)
 
 export const selectedFilesAtom = atom<firebase.firestore.DocumentSnapshot[]>([])
+
+export const previewFileAtom = atom<firebase.firestore.DocumentSnapshot | undefined>(undefined)

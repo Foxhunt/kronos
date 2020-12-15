@@ -18,10 +18,8 @@ const Container = styled(motion.div) <{ selected: boolean }>`
     position: relative;
     background-image: linear-gradient(90deg, #d4d4d4, #eeeeee);
 
-    width: 300px;
-    height: 300px;
-
-    /* box-sizing: border-box; */
+    width: 500px;
+    height: 400px;
 
     ${({ selected }) => selected ? `
         border: 3px solid #fb2dfb;
@@ -30,8 +28,13 @@ const Container = styled(motion.div) <{ selected: boolean }>`
 
     display: flex;
     justify-content: center;
+    align-items: center;
     
     overflow: hidden;
+
+    & div:first-child {
+        box-shadow: -10px 10px 5px 0px #b5b5b5;
+    }
 `
 
 const Name = styled.div`
@@ -44,14 +47,12 @@ const Name = styled.div`
 type props = {
     fileDocSnap: firebase.firestore.DocumentSnapshot
     selected: boolean
-    interactionActive: boolean
     onSelect?: () => void
     onDelete?: () => void
 }
 
-export default function FileComponent({ fileDocSnap, selected, interactionActive, onSelect, onDelete }: props) {
+export default function FileComponent({ fileDocSnap, selected, onSelect, onDelete }: props) {
     const [src, setSrc] = useState<string>("")
-    const [showOverlay, setShowOverlay] = useState(false)
     const [metaData, setMetaData] = useState<firebase.storage.FullMetadata>()
     useEffect(() => {
         async function fetchFile() {
@@ -84,18 +85,14 @@ export default function FileComponent({ fileDocSnap, selected, interactionActive
         }
     }
 
+    const [showOverlay] = useState(false)
+
     return <Container
         selected={selected}
         layout
         variants={variants}
         onClick={() => {
-            interactionActive && onSelect && onSelect()
-        }}
-        onHoverStart={() => {
-            !interactionActive && setShowOverlay(true)
-        }}
-        onHoverEnd={() => {
-            !interactionActive && setShowOverlay(false)
+            onSelect && onSelect()
         }}
         onContextMenu={event => {
             event.preventDefault()
@@ -103,7 +100,9 @@ export default function FileComponent({ fileDocSnap, selected, interactionActive
         }}>
         {
             isPDF ?
-                <PDFViewer file={src} />
+                <PDFViewer
+                    file={src}
+                    height={300} />
                 :
                 src && <StyledImage
                     src={src}
@@ -111,7 +110,7 @@ export default function FileComponent({ fileDocSnap, selected, interactionActive
                     height={300} />
         }
         <Name>
-            {metaData?.name}
+            {fileDocSnap.get("name")}
             <input
                 type="checkbox"
                 checked={fileDocSnap.get("favorite")}
