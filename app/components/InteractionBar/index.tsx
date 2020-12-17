@@ -1,16 +1,17 @@
-import { useEffect, useMemo } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import deleteFile from "../../firebase/deleteFile"
 import downloadFiles from "../../firebase/downloadFiles"
-import favoriteFiles from "../../firebase/favoriteFiles"
-import markFiles from "../../firebase/markFiles"
-
-markFiles
+import favoriteFile from "../../firebase/favoriteFile"
+import markFile from "../../firebase/markFile"
+import tagFile from "../../firebase/tagFile"
 
 import styled from "styled-components"
 
 import { useAtom } from "jotai"
 import { selectedFilesAtom } from "../../store"
-import { useFiles } from "../../hooks"
+import { useClickedOutside, useFiles } from "../../hooks"
+
+import TagList from "./TagList"
 
 const Container = styled.ul`
     height: 30px;
@@ -29,10 +30,6 @@ const Item = styled.li<{ active?: boolean }>`
     background-color: ${({ active }) => active ? "#fb2dfb" : ""};
 `
 
-const Filter = styled(Item)`
-    margin-left: auto;
-`
-
 export default function InteractionBar() {
     const files = useFiles()
     const [selectedFiles, setSelectedFiles] = useAtom(selectedFilesAtom)
@@ -42,6 +39,8 @@ export default function InteractionBar() {
     }, [files, selectedFiles])
 
     useEffect(() => () => { setSelectedFiles([]) }, [])
+
+    const [showTags, setShowTags] = useState(false)
 
     return <Container>
         <Item
@@ -57,7 +56,9 @@ export default function InteractionBar() {
         </Item>
         <Item
             onClick={() => {
-                selectedFiles.forEach(file => deleteFile(file))
+                for (const file of selectedFiles) {
+                    deleteFile(file)
+                }
                 setSelectedFiles([])
             }}>
             Delete
@@ -67,14 +68,33 @@ export default function InteractionBar() {
             Download
         </Item>
         <Item
-            onClick={() => markFiles(selectedFiles)}>
+            onClick={() => {
+                for (const file of selectedFiles) {
+                    markFile(file)
+                }
+            }}>
             Mark
         </Item>
         <Item
-            onClick={() => favoriteFiles(selectedFiles)}>
+            onClick={() => {
+                for (const file of selectedFiles) {
+                    favoriteFile(file)
+                }
+            }}>
             Favotire
         </Item>
-        <Item>Tag</Item>
-        <Filter>Filter</Filter>
+        <Item
+            onClick={() => setShowTags(!showTags)}>
+            Tag
+            {showTags &&
+                <TagList
+                    onHide={() => setShowTags(false)}
+                    onSelectTag={tag => {
+                        for (const file of selectedFiles) {
+                            tagFile(file, tag)
+                        }
+                        setShowTags(false)
+                    }} />}
+        </Item>
     </Container>
 }
