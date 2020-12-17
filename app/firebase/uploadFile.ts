@@ -25,6 +25,7 @@ export default async function uploadFile(
                 resolve(await fileCollection.add({
                     name: fileRef.name,
                     favorite: false,
+                    marked: false,
                     client: client.ref,
                     project: project.ref,
                     task: task.ref,
