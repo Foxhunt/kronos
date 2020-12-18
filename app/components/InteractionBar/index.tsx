@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import deleteFile from "../../firebase/deleteFile"
 import downloadFiles from "../../firebase/downloadFiles"
 import favoriteFile from "../../firebase/favoriteFile"
@@ -9,7 +9,7 @@ import styled from "styled-components"
 
 import { useAtom } from "jotai"
 import { selectedFilesAtom } from "../../store"
-import { useClickedOutside, useFiles } from "../../hooks"
+import { useFiles } from "../../hooks"
 
 import TagList from "./TagList"
 
