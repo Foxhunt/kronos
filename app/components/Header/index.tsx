@@ -1,5 +1,5 @@
 import firebase from "../../firebase/clientApp"
-import { useState } from "react"
+import { useRef, useState } from "react"
 import Link from "next/link"
 import styled from "styled-components"
 
@@ -35,13 +35,17 @@ export default function Header() {
     const [showFolders, setShowFolders] = useState(false)
     const [showAddCollection, setShowAddCollection] = useState(false)
 
+    const archiveLinkRef = useRef<HTMLAnchorElement>(null)
+
     return <Container>
         <Navigation>
             <Link href={"/"}>
                 Index
             </Link >
             <Link href={"/archive"}>
-                <a onClick={() => userDocRef && setShowFolders(true)}>
+                <a
+                    ref={archiveLinkRef}
+                    onPointerDown={() => userDocRef && setShowFolders(!showFolders)}>
                     Archive
                 </a>
             </Link >
@@ -62,7 +66,11 @@ export default function Header() {
         </Navigation>
         {userDocRef && showFolders &&
             <Folders
-                onHide={() => setShowFolders(false)} />}
+                onHide={event => {
+                    if (event.target !== archiveLinkRef.current) {
+                        setShowFolders(false)
+                    }
+                }} />}
         {userDocRef && showAddCollection &&
             <AddCollection
                 onHide={() => setShowAddCollection(false)} />}

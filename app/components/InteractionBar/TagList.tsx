@@ -30,7 +30,7 @@ const Tag = styled.div`
 `
 
 type props = {
-    onHide: () => void
+    onHide: (event: MouseEvent) => void
     onSelectTag: (tag: firebase.firestore.DocumentSnapshot) => void
 }
 
@@ -42,7 +42,7 @@ export default function TagList({ onSelectTag, onHide }: props) {
     const [newItemName, setNewItemName] = useState("")
 
     const containerRef = useRef<HTMLDivElement>(null)
-    useClickedOutside(containerRef, () => onHide())
+    useClickedOutside(containerRef, onHide)
 
     return <Container
         ref={containerRef}>

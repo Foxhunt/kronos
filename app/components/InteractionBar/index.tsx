@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import deleteFile from "../../firebase/deleteFile"
 import downloadFiles from "../../firebase/downloadFiles"
 import favoriteFile from "../../firebase/favoriteFile"
@@ -42,6 +42,8 @@ export default function InteractionBar() {
 
     const [showTags, setShowTags] = useState(false)
 
+    const tagToggleRef = useRef<HTMLLIElement>(null)
+
     return <Container>
         <Item
             active={selectedAll}
@@ -84,11 +86,16 @@ export default function InteractionBar() {
             Favotire
         </Item>
         <Item
-            onClick={() => setShowTags(!showTags)}>
+            ref={tagToggleRef}
+            onPointerDown={() => setShowTags(!showTags)}>
             Tag
             {showTags &&
                 <TagList
-                    onHide={() => setShowTags(false)}
+                    onHide={event => {
+                        if (event.target !== tagToggleRef.current) {
+                            setShowTags(false)
+                        }
+                    }}
                     onSelectTag={tag => {
                         for (const file of selectedFiles) {
                             tagFile(file, tag)
