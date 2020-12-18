@@ -1,6 +1,6 @@
 import firebase from "../../firebase/clientApp"
 import styled from "styled-components"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 const Container = styled.div`
     background-color: white;
@@ -55,6 +55,13 @@ export default function FolderList({ name, selected, items, allowAdding, onSelec
     const [addingItem, setAddingItem] = useState(false)
     const [newItemName, setNewItemName] = useState("")
 
+    const selectedItemRef = useRef<HTMLDivElement>(null)
+    useEffect(() => {
+        if (selectedItemRef.current) {
+            selectedItemRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" })
+        }
+    }, [selectedItemRef.current])
+
     return <Container>
         <Item>{name}</Item>
         {allowAdding &&
@@ -81,6 +88,7 @@ export default function FolderList({ name, selected, items, allowAdding, onSelec
         <Items>
             {items?.map(item =>
                 <Item
+                    ref={selected?.id === item.id ? selectedItemRef : null}
                     key={item.id}
                     selected={selected?.id === item.id}
                     onContextMenu={event => {
@@ -89,7 +97,8 @@ export default function FolderList({ name, selected, items, allowAdding, onSelec
                     }}
                     onClick={() => onSelect(item)}>
                     {item.get("name")}
-                </Item>)}
+                </Item>
+            )}
         </Items>
     </Container>
 }
