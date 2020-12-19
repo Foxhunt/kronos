@@ -25,7 +25,7 @@ const Container = styled.div`
 const AddCollectionForm = styled.div`
     width: 100%;
     max-height: calc(12 * 31px);
-    margin-top: 34px;
+    margin-top: 31px;
 
     display: grid;
     grid-template-columns: repeat(4,1fr);
