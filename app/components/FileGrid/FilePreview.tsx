@@ -15,10 +15,10 @@ const PDFViewer = dynamic(import("./PDFViewer"), { ssr: false })
 
 const Container = styled.div`
     position: absolute;
-    top: 34px;
+    top: 31px;
 
     width: 100%;
-    height: calc(100% - 34px);
+    height: calc(100% - 31px);
 
     display: flex;
     justify-content: center;
@@ -26,13 +26,9 @@ const Container = styled.div`
 
     background-color: #e9e9e9;
     
-    & div:first-child {
-        box-shadow: -10px 10px 5px 0px #b5b5b5;
+    & > div:first-child {
+        filter: drop-shadow(-10px 10px 5px rgb(150, 150, 150));
     }
-`
-
-const StyledImage = styled(Image)`
-    object-fit: cover;
 `
 
 export default function FilePreview() {
@@ -62,7 +58,6 @@ export default function FilePreview() {
     })
 
     return <Container
-
         onClick={() => setPreviewfile(undefined)}>
         {
             isPDF ?
@@ -70,10 +65,12 @@ export default function FilePreview() {
                     file={src}
                     height={700} />
                 :
-                src && <StyledImage
+                src && <Image
                     src={src}
+                    height={700}
                     width={700}
-                    height={700} />
+                    layout={"intrinsic"}
+                    objectFit="contain" />
         }
     </Container>
 }
