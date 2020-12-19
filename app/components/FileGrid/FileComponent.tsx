@@ -8,10 +8,6 @@ import Image from "next/image"
 
 import Overlay from "./Overlay"
 
-const StyledImage = styled(Image)`
-    object-fit: cover;
-`
-
 const PDFViewer = dynamic(import("./PDFViewer"), { ssr: false })
 
 const Container = styled(motion.div) <{ selected: boolean }>`
