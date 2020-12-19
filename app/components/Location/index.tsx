@@ -1,5 +1,7 @@
+import { useAtom } from "jotai"
 import React from "react"
 import styled from "styled-components"
+import { selectedCollectionDocRefAtom } from "../../store"
 
 import Boards from "./Boards"
 
@@ -21,8 +23,9 @@ const UploadArea = styled.div`
 `
 
 export default function Location() {
+    const [selectedCollection] = useAtom(selectedCollectionDocRefAtom)
     return <Container>
         <Boards />
-        <UploadArea> Upload </UploadArea>
+        {selectedCollection && <UploadArea> Upload </UploadArea>}
     </Container >
 }
