@@ -31,8 +31,8 @@ const Container = styled(motion.div) <{ selected: boolean }>`
     
     overflow: hidden;
 
-    & div:first-child {
-        box-shadow: -10px 10px 5px 0px #b5b5b5;
+    & > div:first-child {
+        filter: drop-shadow(-10px 10px 5px rgb(150, 150, 150));
     }
 `
 
@@ -103,10 +103,12 @@ export default function FileComponent({ fileDocSnap, selected, onSelect, onDelet
                     file={src}
                     height={300} />
                 :
-                src && <StyledImage
+                src && <Image
                     src={src}
+                    height={300}
                     width={300}
-                    height={300} />
+                    layout={"intrinsic"}
+                    objectFit="contain" />
         }
         <Name>
             {fileDocSnap.get("name")}
