@@ -9,7 +9,7 @@ import styled from "styled-components"
 
 import { useAtom } from "jotai"
 import { selectedFilesAtom } from "../../store"
-import { useFiles } from "../../hooks"
+import { useFiles, useTags } from "../../hooks"
 
 import TagList from "./TagList"
 
@@ -21,6 +21,8 @@ const Container = styled.ul`
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    
+    border-bottom: 1px solid black;
 `
 
 const Item = styled.li<{ active?: boolean }>`
@@ -40,6 +42,7 @@ export default function InteractionBar() {
 
     useEffect(() => () => { setSelectedFiles([]) }, [])
 
+    const tags = useTags()
     const [showTags, setShowTags] = useState(false)
 
     const tagToggleRef = useRef<HTMLLIElement>(null)
@@ -91,6 +94,7 @@ export default function InteractionBar() {
             Tag
             {showTags &&
                 <TagList
+                    tags={tags}
                     onHide={event => {
                         if (event.target !== tagToggleRef.current) {
                             setShowTags(false)

@@ -1,6 +1,6 @@
 import firebase from "../../firebase/clientApp"
 import { useRef, useState } from "react"
-import { useClickedOutside, useTags } from "../../hooks"
+import { useClickedOutside } from "../../hooks"
 
 import styled from "styled-components"
 
@@ -30,13 +30,13 @@ const Tag = styled.div`
 `
 
 type props = {
+    tags: firebase.firestore.DocumentSnapshot[]
     onHide: (event: MouseEvent) => void
     onSelectTag: (tag: firebase.firestore.DocumentSnapshot) => void
 }
 
-export default function TagList({ onSelectTag, onHide }: props) {
+export default function TagList({ tags, onSelectTag, onHide }: props) {
     const [userDocRef] = useAtom(userDocRefAtom)
-    const tags = useTags()
 
     const [addingItem, setAddingItem] = useState(false)
     const [newItemName, setNewItemName] = useState("")

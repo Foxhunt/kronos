@@ -11,6 +11,8 @@ import {
 } from "../../store"
 
 const Container = styled.div`
+    height: 100%;
+
     overflow: auto;
     white-space: nowrap;
     &::-webkit-scrollbar {
@@ -63,7 +65,7 @@ const NewItemInput = styled.input`
     }
 `
 
-export default function Collections() {
+export default function Boards() {
     const [userDocRef] = useAtom(userDocRefAtom)
     const [client] = useAtom(selectedClientDocRefAtom)
     const [project] = useAtom(selectedProjectDocRefAtom)
@@ -106,7 +108,7 @@ export default function Collections() {
                         event.preventDefault()
                         collection.ref.delete()
                     }}
-                    onClick={() => {
+                    onPointerDown={() => {
                         if (collection === selectedCollection) {
                             setCollection(undefined)
                         } else {

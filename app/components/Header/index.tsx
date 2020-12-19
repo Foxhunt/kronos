@@ -4,10 +4,11 @@ import Link from "next/link"
 import styled from "styled-components"
 
 import { useAtom } from "jotai"
-import { userDocRefAtom } from "../../store"
+import { pathAtom, selectedClientDocRefAtom, selectedProjectDocRefAtom, showInteractionBarAtom, userDocRefAtom } from "../../store"
 
 import Folders from "../Folders"
 import AddCollection from "./AddCollection"
+import { useClients, useProjects, useTasks } from "../../hooks"
 
 const Container = styled.header`
 `
@@ -22,7 +23,7 @@ const Navigation = styled.nav`
     
     background-color: white;
 
-    border-bottom: 4px solid black;
+    border-bottom: 1px solid black;
 
     & a {
         text-decoration: none;
@@ -30,12 +31,32 @@ const Navigation = styled.nav`
     }
 `
 
+const FilterMenuToggle = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+`
+
 export default function Header() {
     const [userDocRef] = useAtom(userDocRefAtom)
+
+    const [client] = useAtom(selectedClientDocRefAtom)
+    const clients = useClients()
+
+    const [project] = useAtom(selectedProjectDocRefAtom)
+    const projects = useProjects(client)
+
+    const tasks = useTasks(client, project, { orderBy: "createdAt", orderDirection: "desc" })
+
     const [showFolders, setShowFolders] = useState(false)
     const [showAddCollection, setShowAddCollection] = useState(false)
 
     const archiveLinkRef = useRef<HTMLAnchorElement>(null)
+
+    const [path, setPath] = useAtom(pathAtom)
+
+    const [showInteractionBar, setShowInteractionBar] = useAtom(showInteractionBarAtom)
 
     return <Container>
         <Navigation>
@@ -46,7 +67,7 @@ export default function Header() {
                 <a
                     ref={archiveLinkRef}
                     onPointerDown={() => userDocRef && setShowFolders(!showFolders)}>
-                    Archive
+                    Archive {path}
                 </a>
             </Link >
             <Link href={"/catalogue"}>
@@ -57,15 +78,29 @@ export default function Header() {
             </a >}
             {userDocRef ?
                 <Link href={"/login"}>
-                    <a onClick={() => { firebase.auth().signOut() }}> logout</a>
+                    <a onClick={() => {
+                        setPath([])
+                        firebase.auth().signOut()
+                    }}>
+                        logout
+                    </a>
                 </Link >
                 :
                 <Link href={"/login"}>
-                    <a>login</a>
+                    <a>
+                        login
+                    </a>
                 </Link>}
+            <FilterMenuToggle
+                onClick={() => setShowInteractionBar(!showInteractionBar)}>
+                ...
+            </FilterMenuToggle>
         </Navigation>
         {userDocRef && showFolders &&
             <Folders
+                clients={clients}
+                projects={projects}
+                tasks={tasks}
                 onHide={event => {
                     if (event.target !== archiveLinkRef.current) {
                         setShowFolders(false)

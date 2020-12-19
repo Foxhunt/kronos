@@ -1,47 +1,28 @@
 import React from "react"
 import styled from "styled-components"
 
-import { useAtom } from "jotai"
-import {
-    pathAtom,
-    showInteractionBarAtom,
-} from "../../store"
-
-import Collections from "./Collections"
+import Boards from "./Boards"
 
 const Container = styled.div`
+    height: 30px;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 30px;
+    grid-template-columns: 1fr 100px;
+    
+    border-bottom: 1px solid black;
 `
 
-const Path = styled.div`
+const UploadArea = styled.div`
+    background-color: black;
+    color: white;
+
     display: flex;
-    align-items: center;
-
-    padding-left: 25px;
-
-    background-color: "white";
-    color:  "black";
-`
-
-const FilterMenuToggle = styled.div`
-    display: flex;
-    align-items: center;
     justify-content: center;
-    font-size: 30px;
+    align-items: center;
 `
 
 export default function Location() {
-    const [path] = useAtom(pathAtom)
-    const [showInteractionBar, setShowInteractionBar] = useAtom(showInteractionBarAtom)
-
     return <Container>
-        <FilterMenuToggle
-            onClick={() => setShowInteractionBar(!showInteractionBar)}>
-            ...
-        </FilterMenuToggle>
-        <Path>{path}</Path>
-        <Collections />
+        <Boards />
+        <UploadArea> Upload </UploadArea>
     </Container >
 }

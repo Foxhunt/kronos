@@ -95,7 +95,13 @@ export default function FolderList({ name, selected, items, allowAdding, onSelec
                         event.preventDefault()
                         item.ref.delete()
                     }}
-                    onClick={() => onSelect(item)}>
+                    onClick={() => {
+                        if (selected?.id === item.id) {
+                            onSelect(undefined)
+                        } else {
+                            onSelect(item)
+                        }
+                    }}>
                     {item.get("name")}
                 </Item>
             )}

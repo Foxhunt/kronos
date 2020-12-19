@@ -44,7 +44,7 @@ export default function Archive() {
     const [task] = useAtom(selectedTaskDocRefAtom)
     const [collection] = useAtom(selectedCollectionDocRefAtom)
 
-    const files = useFiles()
+    const files = useFiles(client, project, task, collection)
 
     const onDrop = useCallback(async (acceptedFiles: File[]) => {
         const PDFDocument = (await import("pdf-lib")).PDFDocument
@@ -99,7 +99,7 @@ export default function Archive() {
         <Head>
             <title>Archive</title>
         </Head>
-        {userDocRef && <Location />}
+        {userDocRef && client && project && task && <Location />}
         {showInteractionBar && <InteractionBar />}
         <FileGrid
             files={files}

@@ -18,7 +18,6 @@ const Container = styled(motion.div) <{ selected: boolean }>`
     position: relative;
     background-image: linear-gradient(90deg, #d4d4d4, #eeeeee);
 
-    width: 500px;
     height: 400px;
 
     ${({ selected }) => selected ? `

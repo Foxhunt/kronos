@@ -44,7 +44,7 @@ export default function Collection({ taskDocSnap }: props) {
         fetchData()
     }, [taskDocSnap])
 
-    const files = useFiles()
+    const files = useFiles(client, project, taskDocSnap, undefined, 3)
 
     const [, setPath] = useAtom(pathAtom)
 

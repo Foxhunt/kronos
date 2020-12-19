@@ -17,10 +17,10 @@ const Container = styled(motion.div)`
     grid-area: files;
     outline: none;
     
-    padding-top: 16px;
+    padding: 16px 0px;
 
     display: grid;
-    grid-template-columns: repeat(auto-fill, 500px);
+    grid-template-columns: repeat(auto-fit, 450px);
     grid-template-rows: repeat(auto-fill, 400px);
     gap: 16px;
 
