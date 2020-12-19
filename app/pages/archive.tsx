@@ -99,8 +99,8 @@ export default function Archive() {
         <Head>
             <title>Archive</title>
         </Head>
-        {userDocRef && client && project && task && <Location />}
         {showInteractionBar && <InteractionBar />}
+        {userDocRef && client && project && task && <Location />}
         <FileGrid
             files={files}
             getRootProps={getRootProps} />

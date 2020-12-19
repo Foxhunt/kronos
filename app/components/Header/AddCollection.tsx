@@ -55,13 +55,6 @@ export default function AddCollection({ onHide }: props) {
     return <Container>
         <AddCollectionForm
             ref={fromRef}>
-            <label>
-                Name
-                <input
-                    type="text"
-                    value={collectionName}
-                    onChange={event => setCollectionName(event.target.value)} />
-            </label>
             <FolderList
                 name={"Clients"}
                 selected={client}
@@ -98,6 +91,13 @@ export default function AddCollection({ onHide }: props) {
                         lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
                     })
                 }} />
+            <label>
+                Name
+                <input
+                    type="text"
+                    value={collectionName}
+                    onChange={event => setCollectionName(event.target.value)} />
+            </label>
             <button
                 onClick={event => {
                     event.preventDefault()
