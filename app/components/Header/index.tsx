@@ -70,12 +70,16 @@ export default function Header() {
                     Archive {path}
                 </a>
             </Link >
-            <Link href={"/catalogue"}>
-                Catalogue
-            </Link >
+            <div>
+                Filter
+            </div >
             {userDocRef && <a onClick={() => setShowAddCollection(!showAddCollection)}>
                 + CREATE NEW COLLECTION
             </a >}
+            {userDocRef && <FilterMenuToggle
+                onClick={() => setShowInteractionBar(!showInteractionBar)}>
+                ...
+            </FilterMenuToggle>}
             {userDocRef ?
                 <Link href={"/login"}>
                     <a onClick={() => {
@@ -91,10 +95,6 @@ export default function Header() {
                         login
                     </a>
                 </Link>}
-            <FilterMenuToggle
-                onClick={() => setShowInteractionBar(!showInteractionBar)}>
-                ...
-            </FilterMenuToggle>
         </Navigation>
         {userDocRef && showFolders &&
             <Folders
