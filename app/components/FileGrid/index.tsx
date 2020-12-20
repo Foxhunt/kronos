@@ -3,7 +3,7 @@ import deleteFile from "../../firebase/deleteFile"
 
 import { useMemo } from "react"
 import styled from "styled-components"
-import { AnimatePresence, motion, Variants } from "framer-motion"
+import { motion, Variants } from "framer-motion"
 import { DropzoneRootProps } from "react-dropzone"
 
 import { useAtom } from "jotai"
@@ -79,9 +79,7 @@ export default function FileGrid({ files, getRootProps }: props) {
         exit="hidden"
         variants={variants}
         {...(getRootProps ? getRootProps({}) : {})}>
-        <AnimatePresence>
-            {fileList}
-        </AnimatePresence>
+        {fileList}
         {previewFile && <FilePreview />}
     </Container>
 }

@@ -39,7 +39,8 @@ export default function FilePreview() {
     useEffect(() => {
         async function fetchFile() {
             const storage = firebase.storage()
-            const fileRef = storage.ref(previewFile?.get("fullPath"))
+            const fullPath = previewFile?.get("renderedPDF.700") || previewFile?.get("fullPath")
+            const fileRef = storage.ref(fullPath)
             const downloadURL = await fileRef.getDownloadURL()
             const metaData = await fileRef.getMetadata()
 
@@ -62,7 +63,8 @@ export default function FilePreview() {
         {
             isPDF ?
                 <PDFViewer
-                    file={src}
+                    fileDocSnap={previewFile}
+                    src={src}
                     height={700} />
                 :
                 src && <Image

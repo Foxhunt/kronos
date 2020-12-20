@@ -52,7 +52,8 @@ export default function FileComponent({ fileDocSnap, selected, onSelect, onDelet
     useEffect(() => {
         async function fetchFile() {
             const storage = firebase.storage()
-            const fileRef = storage.ref(fileDocSnap.get("fullPath"))
+            const fullPath = fileDocSnap.get("renderedPDF.300") || fileDocSnap.get("fullPath")
+            const fileRef = storage.ref(fullPath)
             const downloadURL = await fileRef.getDownloadURL()
             const metaData = await fileRef.getMetadata()
 
@@ -96,7 +97,8 @@ export default function FileComponent({ fileDocSnap, selected, onSelect, onDelet
         {
             isPDF ?
                 <PDFViewer
-                    file={src}
+                    fileDocSnap={fileDocSnap}
+                    src={src}
                     height={300} />
                 :
                 src && <Image
