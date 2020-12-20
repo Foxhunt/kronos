@@ -1,3 +1,4 @@
+import Head from "next/head"
 import styled from "styled-components"
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -17,6 +18,10 @@ export default function login() {
     const [password, setPassword] = useState("")
 
     return <Container>
+        <Head>
+            <title>Login</title>
+            <link rel="shortcut icon" href="/lock.svg" />
+        </Head>
         <form
             onSubmit={async event => {
                 event.preventDefault()

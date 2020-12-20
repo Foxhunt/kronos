@@ -98,6 +98,7 @@ export default function Archive() {
     return <>
         <Head>
             <title>Archive</title>
+            <link rel="shortcut icon" href="/grid.svg" />
         </Head>
         {showInteractionBar && <InteractionBar />}
         {userDocRef && client && project && task && <Location />}

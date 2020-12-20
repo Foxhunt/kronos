@@ -10,6 +10,7 @@ export default function files() {
     return <>
         <Head>
             <title>Index</title>
+            <link rel="shortcut icon" href="/list.svg" />
         </Head>
         {userDocRef && <TaskList />}
     </>
