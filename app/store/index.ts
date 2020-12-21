@@ -26,7 +26,11 @@ export const pathAtom = atom<string, firebase.firestore.DocumentSnapshot[]>(
     }
 )
 
-export const showTasksAtom = atom<boolean>(true)
+export const filterOrderByAtom = atom<string>("createdAt")
+export const filterFavoritesAtom = atom<boolean>(false)
+export const filterMarkedAtom = atom<string | undefined>(undefined)
+export const filterTagsAtom = atom<firebase.firestore.DocumentSnapshot[]>([])
+export const filterClientsAtom = atom<firebase.firestore.DocumentSnapshot[]>([])
 
 export const showInteractionBarAtom = atom<boolean>(false)
 
