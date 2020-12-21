@@ -11,6 +11,7 @@ import {
 } from "../../store"
 
 import Folders from "../Folders"
+import Filters from "../Filters"
 import AddCollection from "./AddCollection"
 
 const Container = styled.header`
@@ -45,9 +46,11 @@ export default function Header() {
     const [userDocRef] = useAtom(userDocRefAtom)
 
     const [showFolders, setShowFolders] = useState(false)
+    const [showFilter, setShowFilter] = useState(false)
     const [showAddCollection, setShowAddCollection] = useState(false)
 
     const archiveLinkRef = useRef<HTMLAnchorElement>(null)
+    const filterLinkRef = useRef<HTMLAnchorElement>(null)
 
     const [path, setPath] = useAtom(pathAtom)
 
@@ -65,9 +68,11 @@ export default function Header() {
                     Archive {path}
                 </a>
             </Link >
-            <div>
+            <a
+                ref={filterLinkRef}
+                onPointerDown={() => userDocRef && setShowFilter(!showFilter)}>
                 Filter
-            </div >
+            </a >
             {userDocRef && <a onClick={() => setShowAddCollection(!showAddCollection)}>
                 + CREATE NEW COLLECTION
             </a >}
@@ -96,6 +101,13 @@ export default function Header() {
                 onHide={event => {
                     if (event.target !== archiveLinkRef.current) {
                         setShowFolders(false)
+                    }
+                }} />}
+        {userDocRef && showFilter &&
+            <Filters
+                onHide={event => {
+                    if (event.target !== filterLinkRef.current) {
+                        setShowFilter(false)
                     }
                 }} />}
         {userDocRef && showAddCollection &&
