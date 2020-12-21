@@ -71,6 +71,7 @@ export default function FilePreview() {
                     src={src}
                     height={700}
                     width={700}
+                    unoptimized
                     layout={"intrinsic"}
                     objectFit="contain" />
         }

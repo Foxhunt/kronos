@@ -105,6 +105,7 @@ export default function FileComponent({ fileDocSnap, selected, onSelect, onDelet
                     src={src}
                     height={300}
                     width={300}
+                    unoptimized
                     layout={"intrinsic"}
                     objectFit="contain" />
         }
