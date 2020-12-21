@@ -28,7 +28,7 @@ export default function PDFViewer({ fileDocSnap, src, height }: props) {
                     const fileRef = storageRef.child(`${file.name}`)
 
                     const snapshot = await fileRef.put(file, {
-                        cacheControl: "private, max-age=3600"
+                        cacheControl: "private, max-age=950400"
                     })
 
                     const fullPath = await snapshot.ref.fullPath

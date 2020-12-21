@@ -12,7 +12,7 @@ export default async function uploadFile(
     const fileRef = storageRef.child(`${file.name}`)
 
     const uploadTask = fileRef.put(file, {
-        cacheControl: "private, max-age=3600"
+        cacheControl: "private, max-age=950400"
     })
 
     const docRef = await new Promise<firebase.firestore.DocumentReference>((resolve) => {
