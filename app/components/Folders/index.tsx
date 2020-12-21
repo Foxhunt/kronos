@@ -10,7 +10,7 @@ import {
     selectedTaskDocRefAtom,
 } from "../../store"
 
-import { useClickedOutside } from "../../hooks"
+import { useClickedOutside, useClients, useProjects, useTasks } from "../../hooks"
 
 import FolderList from "./FolderList"
 
@@ -27,17 +27,19 @@ const Container = styled.div`
 
 type props = {
     onHide: (event: MouseEvent) => void
-    clients: firebase.firestore.DocumentSnapshot[]
-    projects: firebase.firestore.DocumentSnapshot[]
-    tasks: firebase.firestore.DocumentSnapshot[]
 }
 
-export default function Folders({ clients, projects, tasks, onHide }: props) {
+export default function Folders({ onHide }: props) {
     const [userDocRef] = useAtom(userDocRefAtom)
 
     const [client, setClient] = useAtom(selectedClientDocRefAtom)
+    const clients = useClients()
+
     const [project, setProject] = useAtom(selectedProjectDocRefAtom)
+    const projects = useProjects(client)
+
     const [task, setTask] = useAtom(selectedTaskDocRefAtom)
+    const tasks = useTasks(client, project, { orderBy: "createdAt", orderDirection: "desc" })
 
     const containerRef = useRef<HTMLDivElement>(null)
     useClickedOutside(containerRef, onHide)

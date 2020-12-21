@@ -4,11 +4,14 @@ import Link from "next/link"
 import styled from "styled-components"
 
 import { useAtom } from "jotai"
-import { pathAtom, selectedClientDocRefAtom, selectedProjectDocRefAtom, showInteractionBarAtom, userDocRefAtom } from "../../store"
+import {
+    pathAtom,
+    showInteractionBarAtom,
+    userDocRefAtom
+} from "../../store"
 
 import Folders from "../Folders"
 import AddCollection from "./AddCollection"
-import { useClients, useProjects, useTasks } from "../../hooks"
 
 const Container = styled.header`
 `
@@ -40,14 +43,6 @@ const FilterMenuToggle = styled.div`
 
 export default function Header() {
     const [userDocRef] = useAtom(userDocRefAtom)
-
-    const [client] = useAtom(selectedClientDocRefAtom)
-    const clients = useClients()
-
-    const [project] = useAtom(selectedProjectDocRefAtom)
-    const projects = useProjects(client)
-
-    const tasks = useTasks(client, project, { orderBy: "createdAt", orderDirection: "desc" })
 
     const [showFolders, setShowFolders] = useState(false)
     const [showAddCollection, setShowAddCollection] = useState(false)
@@ -98,9 +93,6 @@ export default function Header() {
         </Navigation>
         {userDocRef && showFolders &&
             <Folders
-                clients={clients}
-                projects={projects}
-                tasks={tasks}
                 onHide={event => {
                     if (event.target !== archiveLinkRef.current) {
                         setShowFolders(false)
