@@ -2,6 +2,8 @@ import firebase from "../firebase/clientApp"
 import { useState, useEffect } from "react"
 import { useAtom } from "jotai"
 import {
+    filterFavoritesAtom,
+    filterOrderByAtom,
     userDocRefAtom
 } from "../store"
 
@@ -10,10 +12,12 @@ export function useFiles(
     project?: firebase.firestore.DocumentSnapshot,
     task?: firebase.firestore.DocumentSnapshot,
     collection?: firebase.firestore.DocumentSnapshot,
-    limit: number = Infinity,
-    favorites: boolean = false
+    limit: number = Infinity
 ) {
     const [userDocRef] = useAtom(userDocRefAtom)
+
+    const [orderBy] = useAtom(filterOrderByAtom)
+    const [favorites] = useAtom(filterFavoritesAtom)
 
     const [files, setFiles] = useState<firebase.firestore.DocumentSnapshot[]>([])
 
@@ -46,7 +50,7 @@ export function useFiles(
         }
 
         const unsubscribe = query
-            ?.orderBy("createdAt", "desc")
+            ?.orderBy(orderBy, "desc")
             .limit(limit)
             .onSnapshot(snapshot => {
                 setFiles(snapshot.docs)
