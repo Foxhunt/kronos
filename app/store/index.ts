@@ -26,9 +26,14 @@ export const pathAtom = atom<string, firebase.firestore.DocumentSnapshot[]>(
     }
 )
 
-export const filterOrderByAtom = atom<string>("createdAt")
-export const filterFavoritesAtom = atom<boolean>(false)
-export const filterMarkedAtom = atom<string | undefined>(undefined)
+export type orderOptions = {
+    orderBy: "createdAt" | "lastUpdatedAt" | "clientName" | "projectName" | "name" | "pinned",
+    orderDirection: "asc" | "desc"
+}
+
+export const filterOrderByAtom = atom<orderOptions>({ orderBy: "createdAt", orderDirection: "desc" })
+export const filterFavoriteAtom = atom<boolean>(false)
+export const filterMarkedAtom = atom<boolean>(false)
 export const filterTagsAtom = atom<firebase.firestore.DocumentSnapshot[]>([])
 export const filterClientsAtom = atom<firebase.firestore.DocumentSnapshot[]>([])
 

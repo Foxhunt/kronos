@@ -7,6 +7,9 @@ import pLimit from "p-limit"
 
 import { useAtom } from "jotai"
 import {
+    filterFavoriteAtom,
+    filterMarkedAtom,
+    filterOrderByAtom,
     selectedClientDocRefAtom,
     selectedCollectionDocRefAtom,
     selectedProjectDocRefAtom,
@@ -44,7 +47,11 @@ export default function Archive() {
     const [task] = useAtom(selectedTaskDocRefAtom)
     const [collection] = useAtom(selectedCollectionDocRefAtom)
 
-    const files = useFiles(client, project, task, collection)
+    const [orderOptions] = useAtom(filterOrderByAtom)
+    const [favorite] = useAtom(filterFavoriteAtom)
+    const [marked] = useAtom(filterMarkedAtom)
+
+    const files = useFiles(client, project, task, collection, Infinity, orderOptions, favorite, marked)
 
     const onDrop = useCallback(async (acceptedFiles: File[]) => {
         const PDFDocument = (await import("pdf-lib")).PDFDocument
