@@ -2,17 +2,15 @@ import { useAtom } from "jotai"
 import { useRef } from "react"
 import styled from "styled-components"
 
-import { useClickedOutside, useClients, useScollIntoView, useTags } from "../../hooks"
+import { useClickedOutside, useScollIntoView } from "../../hooks"
 import {
     filterOrderByAtom,
-    filterTagsAtom,
-    filterClientsAtom,
     orderOptions,
     filterFavoriteAtom,
     filterMarkedAtom
 } from "../../store"
 
-import FilterList, { Container as CustomListContainer, Item, Items } from "./FilterList"
+import { Container as CustomListContainer, Item, Items } from "./FilterList"
 
 const Container = styled.div`
     width: 100%;
@@ -101,10 +99,5 @@ export default function Filter({ onHide }: props) {
                 </Item>
             </Items>
         </CustomListContainer>
-        {/* <FilterList
-            name={"Tag"}
-            items={tags}
-            selected={tag}
-            onSelect={item => setTag(item)} /> */}
     </Container>
 }

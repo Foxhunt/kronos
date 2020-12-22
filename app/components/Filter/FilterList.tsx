@@ -1,7 +1,4 @@
-import firebase from "../../firebase/clientApp"
-import { useRef } from "react"
 import styled from "styled-components"
-import { useScollIntoView } from "../../hooks"
 
 export const Container = styled.div`
     background-color: white;
@@ -28,39 +25,3 @@ export const Items = styled.div`
     max-height: calc(100% - 31px);
     overflow: auto;
 `
-
-type props = {
-    name: string
-    selected: firebase.firestore.DocumentSnapshot | undefined
-    items: firebase.firestore.DocumentSnapshot[]
-    onSelect: (item: string | undefined) => void
-}
-
-export default function FolderList({ name, selected, items, onSelect }: props) {
-    const selectedItemRef = useRef<HTMLDivElement>(null)
-    useScollIntoView(selectedItemRef)
-
-    return <Container>
-        <Item>{name}</Item>
-        <Items>
-            {items?.map(item =>
-                <Item
-                    ref={selected === item ? selectedItemRef : null}
-                    key={item}
-                    selected={selected === item}
-                    onContextMenu={event => {
-                        event.preventDefault()
-                    }}
-                    onClick={() => {
-                        if (selected === item) {
-                            onSelect(undefined)
-                        } else {
-                            onSelect(item)
-                        }
-                    }}>
-                    {item}
-                </Item>
-            )}
-        </Items>
-    </Container>
-}
