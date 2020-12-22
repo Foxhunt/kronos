@@ -1,6 +1,6 @@
 import firebase from "../../firebase/clientApp"
 import styled from "styled-components"
-import { useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import { useScollIntoView } from "../../hooks"
 
 const Container = styled.div`

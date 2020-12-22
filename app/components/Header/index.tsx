@@ -11,7 +11,7 @@ import {
 } from "../../store"
 
 import Folders from "../Folders"
-import Filters from "../Filters"
+import Filter from "../Filter"
 import AddCollection from "./AddCollection"
 
 const Container = styled.header`
@@ -104,7 +104,7 @@ export default function Header() {
                     }
                 }} />}
         {userDocRef && showFilter &&
-            <Filters
+            <Filter
                 onHide={event => {
                     if (event.target !== filterLinkRef.current) {
                         setShowFilter(false)

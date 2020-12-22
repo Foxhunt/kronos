@@ -1,12 +1,13 @@
 import firebase from "../../firebase/clientApp"
-import { useEffect, useRef } from "react"
+import { useRef } from "react"
 import styled from "styled-components"
+import { useScollIntoView } from "../../hooks"
 
-const Container = styled.div`
+export const Container = styled.div`
     background-color: white;
 `
 
-const Item = styled.div<{ selected?: boolean }>`
+export const Item = styled.div<{ selected?: boolean }>`
     display: flex;
     align-items: center;
 
@@ -23,25 +24,21 @@ const Item = styled.div<{ selected?: boolean }>`
     }
 `
 
-const Items = styled.div`
+export const Items = styled.div`
     max-height: calc(100% - 31px);
     overflow: auto;
 `
 
 type props = {
     name: string
-    selected: string | firebase.firestore.DocumentSnapshot | undefined
-    items: string[] | firebase.firestore.DocumentSnapshot[]
+    selected: firebase.firestore.DocumentSnapshot | undefined
+    items: firebase.firestore.DocumentSnapshot[]
     onSelect: (item: string | undefined) => void
 }
 
 export default function FolderList({ name, selected, items, onSelect }: props) {
     const selectedItemRef = useRef<HTMLDivElement>(null)
-    useEffect(() => {
-        if (selectedItemRef.current) {
-            selectedItemRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" })
-        }
-    }, [selectedItemRef.current])
+    useScollIntoView(selectedItemRef)
 
     return <Container>
         <Item>{name}</Item>
