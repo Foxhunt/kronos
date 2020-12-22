@@ -1,6 +1,7 @@
 import firebase from "../../firebase/clientApp"
 import styled from "styled-components"
 import { useEffect, useRef, useState } from "react"
+import { useScollIntoView } from "../../hooks"
 
 const Container = styled.div`
     background-color: white;
@@ -56,11 +57,7 @@ export default function FolderList({ name, selected, items, allowAdding, onSelec
     const [newItemName, setNewItemName] = useState("")
 
     const selectedItemRef = useRef<HTMLDivElement>(null)
-    useEffect(() => {
-        if (selectedItemRef.current) {
-            selectedItemRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" })
-        }
-    }, [selectedItemRef.current])
+    useScollIntoView(selectedItemRef)
 
     return <Container>
         <Item>{name}</Item>
