@@ -22,7 +22,7 @@ import {
 import uploadFile from "../firebase/uploadFile"
 import { useFiles } from "../hooks"
 
-import Location from "../components/Location"
+import BoardBar from "../components/BoardBar"
 import InteractionBar from "../components/InteractionBar"
 import FileGrid from "../components/FileGrid"
 
@@ -109,11 +109,14 @@ export default function Archive() {
             <title>Archive</title>
             <link rel="shortcut icon" href="/grid.svg" />
         </Head>
-        {showInteractionBar && <InteractionBar />}
-        {userDocRef && client && project && task && <Location />}
-        <FileGrid
+        {showInteractionBar &&
+            <InteractionBar />}
+        {task &&
+            <BoardBar
+                onUpload={onDrop} />}
+        {userDocRef && <FileGrid
             files={files}
-            getRootProps={getRootProps} />
+            getRootProps={getRootProps} />}
         {isDragActive && collection && <DropTarget targetPosition={dropTargetPosition} />}
     </>
 }

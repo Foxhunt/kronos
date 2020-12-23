@@ -1,5 +1,5 @@
 import firebase from "../../firebase/clientApp"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useAtom } from "jotai"
 import styled from "styled-components"
 import {
@@ -9,6 +9,7 @@ import {
     selectedTaskDocRefAtom,
     userDocRefAtom
 } from "../../store"
+import { useBoards } from "../../hooks"
 
 const Container = styled.div`
     height: 100%;
@@ -71,26 +72,8 @@ export default function Boards() {
     const [project] = useAtom(selectedProjectDocRefAtom)
     const [task] = useAtom(selectedTaskDocRefAtom)
 
-    const [selectedCollection, setCollection] = useAtom(selectedCollectionDocRefAtom)
-    const [collections, setCollections] = useState<firebase.firestore.DocumentSnapshot[]>([])
-    useEffect(() => {
-        if (userDocRef && client && project && task) {
-            const unsubscribe = userDocRef
-                .collection("collections")
-                .where("client", "==", client.ref)
-                .where("project", "==", project.ref)
-                .where("task", "==", task.ref)
-                .orderBy("createdAt", "asc")
-                .onSnapshot(snapshot => {
-                    setCollections(snapshot.docs)
-                })
-
-            return () => {
-                unsubscribe()
-                setCollections([])
-            }
-        }
-    }, [userDocRef, client, project, task])
+    const [selectedBoard, setBoard] = useAtom(selectedCollectionDocRefAtom)
+    const boards = useBoards(client, project, task)
 
     const [addingItem, setAddingItem] = useState(false)
     const [newItemName, setNewItemName] = useState("")
@@ -99,27 +82,32 @@ export default function Boards() {
         onWheel={event => {
             event.currentTarget.scrollBy({ left: event.deltaY * 0.6 })
         }}>
-        {
-            collections?.map(collection =>
-                <Item
-                    key={collection.id}
-                    selected={selectedCollection?.id === collection.id}
-                    onContextMenu={event => {
-                        event.preventDefault()
-                        collection.ref.delete()
-                    }}
-                    onPointerDown={() => {
-                        if (collection === selectedCollection) {
-                            setCollection(undefined)
-                        } else {
-                            setCollection(collection)
-                        }
-                    }}>
-                    {collection.get("name")}
-                </Item>)
+        <Item
+            selected={!selectedBoard}
+            onPointerDown={() => {
+                setBoard(undefined)
+            }}>
+            Board
+        </Item>
+        {boards?.map(board =>
+            <Item
+                key={board.id}
+                selected={selectedBoard?.id === board.id}
+                onContextMenu={event => {
+                    event.preventDefault()
+                    board.ref.delete()
+                }}
+                onPointerDown={() => {
+                    if (board === selectedBoard) {
+                        setBoard(undefined)
+                    } else {
+                        setBoard(board)
+                    }
+                }}>
+                {board.get("name")}
+            </Item>)
         }
-        {
-            addingItem &&
+        {addingItem &&
             <NewItemForm
                 onSubmit={event => {
                     event.preventDefault()
@@ -144,11 +132,7 @@ export default function Boards() {
                     }} />
             </NewItemForm>
         }
-        {
-            client &&
-            project &&
-            task &&
-            !addingItem &&
+        {task && !addingItem &&
             <Item
                 onClick={() => setAddingItem(!addingItem)}>
                 +++
