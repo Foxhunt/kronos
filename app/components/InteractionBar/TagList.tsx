@@ -75,7 +75,7 @@ export default function TagList({ tags, onSelectTag, onHide }: props) {
         }
         {tags.map(tag =>
             <Tag
-                onClick={event => {
+                onPointerDown={event => {
                     event.stopPropagation()
                     onSelectTag(tag)
                 }}

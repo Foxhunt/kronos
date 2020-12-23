@@ -10,6 +10,7 @@ import {
     filterFavoriteAtom,
     filterMarkedAtom,
     filterOrderByAtom,
+    filterTagsAtom,
     selectedClientDocRefAtom,
     selectedCollectionDocRefAtom,
     selectedProjectDocRefAtom,
@@ -50,8 +51,9 @@ export default function Archive() {
     const [orderOptions] = useAtom(filterOrderByAtom)
     const [favorite] = useAtom(filterFavoriteAtom)
     const [marked] = useAtom(filterMarkedAtom)
+    const [tags] = useAtom(filterTagsAtom)
 
-    const files = useFiles(client, project, task, collection, Infinity, orderOptions, favorite, marked)
+    const files = useFiles(client, project, task, collection, Infinity, orderOptions, favorite, marked, tags)
 
     const onDrop = useCallback(async (acceptedFiles: File[]) => {
         const PDFDocument = (await import("pdf-lib")).PDFDocument

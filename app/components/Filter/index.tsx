@@ -2,12 +2,13 @@ import { useAtom } from "jotai"
 import { useRef } from "react"
 import styled from "styled-components"
 
-import { useClickedOutside, useScollIntoView } from "../../hooks"
+import { useClickedOutside, useScollIntoView, useTags } from "../../hooks"
 import {
     filterOrderByAtom,
     orderOptions,
     filterFavoriteAtom,
-    filterMarkedAtom
+    filterMarkedAtom,
+    filterTagsAtom
 } from "../../store"
 
 import { Container as CustomListContainer, Item, Items } from "./FilterList"
@@ -55,8 +56,8 @@ export default function Filter({ onHide }: props) {
     const [favorites, setFavorties] = useAtom(filterFavoriteAtom)
     const [marked, setMarked] = useAtom(filterMarkedAtom)
 
-    // const tags = useTags()
-    // const [tag, setTag] = useAtom(filterTagsAtom)
+    const tags = useTags()
+    const [selectedTags, setSelectedTags] = useAtom(filterTagsAtom)
 
     return <Container
         ref={containerRef}>
@@ -97,6 +98,27 @@ export default function Filter({ onHide }: props) {
                     }}>
                     marked
                 </Item>
+            </Items>
+        </CustomListContainer>
+        <CustomListContainer>
+            <Item>Marked / Favorite</Item>
+            <Items>
+                {tags.map(tag => <Item
+                    key={tag.id}
+                    selected={selectedTags.includes(tag.id)}
+                    onClick={() => {
+                        if (selectedTags.includes(tag.id)) {
+                            const newSelectedTags = [...selectedTags]
+                            newSelectedTags.splice(selectedTags.indexOf(tag.id), 1)
+                            setSelectedTags(newSelectedTags)
+                        } else {
+                            const newSelectedTags = [...selectedTags]
+                            newSelectedTags.push(tag.id)
+                            setSelectedTags(newSelectedTags)
+                        }
+                    }}>
+                    {tag.id}
+                </Item>)}
             </Items>
         </CustomListContainer>
     </Container>
