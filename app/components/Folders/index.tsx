@@ -8,18 +8,18 @@ import {
     selectedClientDocRefAtom,
     selectedProjectDocRefAtom,
     selectedTaskDocRefAtom,
+    selectedCollectionDocRefAtom,
 } from "../../store"
 
-import { useClickedOutside, useClients, useProjects, useTasks } from "../../hooks"
+import { useBoards, useClickedOutside, useClients, useProjects, useTasks } from "../../hooks"
 
 import FolderList from "./FolderList"
 
 const Container = styled.div`
     width: 100%;
-    max-height: calc(6 * 31px);
 
     display: grid;
-    grid-template-columns: repeat(3,1fr);
+    grid-template-columns: repeat(4,1fr);
     grid-template-rows: calc(6 * 31px);
     
     border-bottom: 1px solid black;
@@ -41,6 +41,9 @@ export default function Folders({ onHide }: props) {
     const [task, setTask] = useAtom(selectedTaskDocRefAtom)
     const tasks = useTasks(client, project, { orderBy: "createdAt", orderDirection: "desc" })
 
+    const [board, setBoard] = useAtom(selectedCollectionDocRefAtom)
+    const boards = useBoards(client, project, task)
+
     const containerRef = useRef<HTMLDivElement>(null)
     useClickedOutside(containerRef, onHide)
 
@@ -54,6 +57,7 @@ export default function Folders({ onHide }: props) {
                 setClient(selectedDoc)
                 setProject(undefined)
                 setTask(undefined)
+                setBoard(undefined)
             }}
             allowAdding={Boolean(userDocRef)}
             onAdd={itemName => {
@@ -71,6 +75,7 @@ export default function Folders({ onHide }: props) {
                 setClient(await selectedDoc?.get("client").get())
                 setProject(selectedDoc)
                 setTask(undefined)
+                setBoard(undefined)
             }}
             allowAdding={Boolean(client)}
             onAdd={itemName => {
@@ -86,9 +91,15 @@ export default function Folders({ onHide }: props) {
             selected={task}
             items={tasks}
             onSelect={async selectedDoc => {
-                setClient(await selectedDoc?.get("client").get())
-                setProject(await selectedDoc?.get("project").get())
+                const [client, project] =
+                    await Promise.all<firebase.firestore.DocumentSnapshot>([
+                        selectedDoc?.get("client").get(),
+                        selectedDoc?.get("project").get()
+                    ])
+                setClient(client)
+                setProject(project)
                 setTask(selectedDoc)
+                setBoard(undefined)
             }}
             allowAdding={Boolean(client && project)}
             onAdd={itemName => {
@@ -99,6 +110,33 @@ export default function Folders({ onHide }: props) {
                     clientName: client?.get("name"),
                     project: project?.ref,
                     projectName: project?.get("name"),
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                })
+            }} />}
+        {boards && <FolderList
+            name={"Boards"}
+            selected={board}
+            items={boards}
+            onSelect={async selectedDoc => {
+                const [client, project, task] =
+                    await Promise.all<firebase.firestore.DocumentSnapshot>([
+                        selectedDoc?.get("client").get(),
+                        selectedDoc?.get("project").get(),
+                        selectedDoc?.get("task").get()
+                    ])
+                setClient(client)
+                setProject(project)
+                setTask(task)
+                setBoard(selectedDoc)
+            }}
+            allowAdding={Boolean(client && project && task)}
+            onAdd={itemName => {
+                userDocRef?.collection("collections").add({
+                    name: itemName,
+                    client: client?.ref,
+                    project: project?.ref,
+                    task: task?.ref,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                     lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
                 })

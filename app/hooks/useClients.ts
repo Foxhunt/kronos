@@ -16,10 +16,7 @@ export function useClients() {
             .onSnapshot(snapshot => {
                 setClients(snapshot.docs)
             })
-        return () => {
-            unsubscribe && unsubscribe()
-            setClients([])
-        }
+        return unsubscribe
     }, [userDocRef])
 
     return clients

@@ -5,23 +5,18 @@ import {
     userDocRefAtom
 } from "../store"
 
-type orderOptions = {
-    orderBy: string,
-    orderDirection: "asc" | "desc"
-}
-
-export function useTasks(
+export function useBoards(
     client: firebase.firestore.DocumentSnapshot | undefined,
     project: firebase.firestore.DocumentSnapshot | undefined,
-    { orderBy, orderDirection }: orderOptions
+    task: firebase.firestore.DocumentSnapshot | undefined,
 ) {
     const [userDocRef] = useAtom(userDocRefAtom)
-    const [tasks, setTasks] = useState<firebase.firestore.DocumentSnapshot[]>([])
+    const [boards, setBoards] = useState<firebase.firestore.DocumentSnapshot[]>([])
 
     useEffect(() => {
         let query = userDocRef
-            ?.collection("tasks")
-            ?.orderBy(orderBy, orderDirection)
+            ?.collection("collections")
+            .orderBy("createdAt", "asc")
 
         if (client) {
             query = query?.where("client", "==", client.ref)
@@ -31,13 +26,17 @@ export function useTasks(
             query = query?.where("project", "==", project.ref)
         }
 
+        if (task) {
+            query = query?.where("task", "==", task.ref)
+        }
+
         const unsubscribe = query
             ?.onSnapshot(snapshot => {
-                setTasks(snapshot.docs)
+                setBoards(snapshot.docs)
             })
 
         return unsubscribe
-    }, [userDocRef, client, project, orderBy, orderDirection])
+    }, [userDocRef, client, project, task])
 
-    return tasks
+    return boards
 }

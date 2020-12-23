@@ -15,7 +15,6 @@ import { Container as CustomListContainer, Item, Items } from "./FilterList"
 
 const Container = styled.div`
     width: 100%;
-    max-height: calc(6 * 31px);
 
     display: grid;
     grid-template-columns: repeat(3,1fr);

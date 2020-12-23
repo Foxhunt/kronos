@@ -23,10 +23,7 @@ export function useProjects(client: firebase.firestore.DocumentSnapshot | undefi
                 setProjects(snapshot.docs)
             })
 
-        return () => {
-            unsubscribe && unsubscribe()
-            setProjects([])
-        }
+        return unsubscribe
     }, [userDocRef, client])
 
     return projects
