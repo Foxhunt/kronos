@@ -18,6 +18,8 @@ const Container = styled.ul`
     margin: 0px;
     padding: 0px;
 
+    flex-shrink: 0;
+
     display: flex;
     justify-content: flex-start;
     align-items: center;

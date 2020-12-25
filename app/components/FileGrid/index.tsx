@@ -13,11 +13,10 @@ import FileComponent from "./FileComponent"
 import FilePreview from "./FilePreview"
 
 const Container = styled(motion.div)`
-    flex: 1;
-    grid-area: files;
-    outline: none;
-    
+    position: relative;
+
     padding: 16px 0px;
+    outline: none;
 
     display: grid;
     grid-template-columns: repeat(auto-fit, 450px);

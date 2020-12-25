@@ -2,8 +2,9 @@ import styled from "styled-components"
 
 import { useTasks } from "../../hooks"
 import Collection from "./Collection"
-import { Cell } from "./Cell"
 import { useState } from "react"
+
+const Container = styled.div``
 
 export const Row = styled.div`
     display: grid;
@@ -11,6 +12,12 @@ export const Row = styled.div`
     grid-template-rows: 40px;
 
     border-bottom: 1px solid black;
+`
+
+export const Cell = styled.div`
+    display: flex;
+    justify-content: left;
+    align-items: center;
 `
 
 export default function TaskList() {
@@ -28,7 +35,7 @@ export default function TaskList() {
         }
     }
 
-    return <>
+    return <Container>
         <Row>
             <Cell onClick={() => setOrder("createdAt")}>
                 Upload {orderDirection}
@@ -60,5 +67,5 @@ export default function TaskList() {
                 key={task.id}
                 taskDocSnap={task} />
         ))}
-    </>
+    </Container>
 }

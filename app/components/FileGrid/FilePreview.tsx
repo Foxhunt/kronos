@@ -14,11 +14,11 @@ import { useClickedOutside } from "../../hooks"
 const PDFViewer = dynamic(import("./PDFViewer"), { ssr: false })
 
 const Container = styled.div`
-    position: absolute;
+    position: fixed;
     top: 31px;
 
     width: 100%;
-    height: calc(100% - 31px);
+    height: 100%;
 
     display: flex;
     justify-content: center;
