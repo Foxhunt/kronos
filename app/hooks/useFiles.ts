@@ -15,7 +15,7 @@ export function useFiles(
     { orderBy, orderDirection }: orderOptions = { orderBy: "createdAt", orderDirection: "desc" },
     favorite: boolean = false,
     marked: boolean = false,
-    tags: string[] = []
+    tags?: string[]
 ) {
     const [userDocRef] = useAtom(userDocRefAtom)
 
@@ -27,7 +27,7 @@ export function useFiles(
             ?.orderBy(orderBy, orderDirection)
             .limit(limit)
 
-        if (tags.length > 0) {
+        if (tags?.length) {
             query = query?.where("tags", "array-contains-any", tags)
         }
 
@@ -68,7 +68,7 @@ export function useFiles(
             })
 
         return unsubscribe
-    }, [userDocRef, client, project, task, collection, orderBy, orderDirection, favorite, marked, tags])
+    }, [userDocRef, client, project, task, collection, limit, orderBy, orderDirection, favorite, marked, tags])
 
     return files
 }
