@@ -46,11 +46,14 @@ export default function Header() {
     const [userDocRef] = useAtom(userDocRefAtom)
 
     const [showFolders, setShowFolders] = useState(false)
-    const [showFilter, setShowFilter] = useState(false)
-    const [showAddCollection, setShowAddCollection] = useState(false)
-
     const archiveLinkRef = useRef<HTMLAnchorElement>(null)
+
+    const [showFilter, setShowFilter] = useState(false)
     const filterLinkRef = useRef<HTMLAnchorElement>(null)
+
+    const [showAddCollection, setShowAddCollection] = useState(false)
+    const addCollectionRef = useRef<HTMLAnchorElement>(null)
+
 
     const [path, setPath] = useAtom(pathAtom)
 
@@ -58,28 +61,34 @@ export default function Header() {
 
     return <Container>
         <Navigation>
-            <Link href={"/"}>
-                Index
-            </Link >
-            <Link href={"/archive"}>
-                <a
-                    ref={archiveLinkRef}
-                    onPointerDown={() => userDocRef && setShowFolders(!showFolders)}>
-                    Archive {path}
-                </a>
-            </Link >
-            <a
-                ref={filterLinkRef}
-                onPointerDown={() => userDocRef && setShowFilter(!showFilter)}>
-                Filter
-            </a >
-            {userDocRef && <a onClick={() => setShowAddCollection(!showAddCollection)}>
-                + CREATE NEW COLLECTION
-            </a >}
-            {userDocRef && <FilterMenuToggle
-                onClick={() => setShowInteractionBar(!showInteractionBar)}>
-                ...
-            </FilterMenuToggle>}
+            {userDocRef &&
+                <>
+                    <Link href={"/"}>
+                        Index
+                    </Link >
+                    <Link href={"/archive"}>
+                        <a
+                            ref={archiveLinkRef}
+                            onPointerDown={() => setShowFolders(!showFolders)}>
+                            Archive {path}
+                        </a>
+                    </Link >
+                    <a
+                        ref={filterLinkRef}
+                        onPointerDown={() => setShowFilter(!showFilter)}>
+                        Filter
+                    </a >
+                    <a
+                        ref={addCollectionRef}
+                        onPointerDown={() => setShowAddCollection(!showAddCollection)}>
+                        + CREATE NEW COLLECTION
+                    </a >
+                    <FilterMenuToggle
+                        onClick={() => setShowInteractionBar(!showInteractionBar)}>
+                        ...
+                    </FilterMenuToggle>
+                </>
+            }
             {userDocRef ?
                 <Link href={"/login"}>
                     <a onClick={() => {
@@ -96,22 +105,30 @@ export default function Header() {
                     </a>
                 </Link>}
         </Navigation>
-        {userDocRef && showFolders &&
-            <Folders
-                onHide={event => {
-                    if (event.target !== archiveLinkRef.current) {
-                        setShowFolders(false)
-                    }
-                }} />}
-        {userDocRef && showFilter &&
-            <Filter
-                onHide={event => {
-                    if (event.target !== filterLinkRef.current) {
-                        setShowFilter(false)
-                    }
-                }} />}
-        {userDocRef && showAddCollection &&
-            <AddCollection
-                onHide={() => setShowAddCollection(false)} />}
+        {userDocRef &&
+            <>
+                {showFolders &&
+                    <Folders
+                        onHide={event => {
+                            if (event.target !== archiveLinkRef.current) {
+                                setShowFolders(false)
+                            }
+                        }} />}
+                {showFilter &&
+                    <Filter
+                        onHide={event => {
+                            if (event.target !== filterLinkRef.current) {
+                                setShowFilter(false)
+                            }
+                        }} />}
+                {showAddCollection &&
+                    <AddCollection
+                        onHide={event => {
+                            if (event.target !== addCollectionRef.current) {
+                                setShowAddCollection(false)
+                            }
+                        }} />}
+            </>
+        }
     </Container>
 }

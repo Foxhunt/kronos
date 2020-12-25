@@ -50,7 +50,7 @@ export default function Folders({ onHide }: props) {
     return <Container
         ref={containerRef}>
         <FolderList
-            name={"Clients"}
+            name={"I"}
             selected={client}
             items={clients}
             onSelect={selectedDoc => {
@@ -68,7 +68,7 @@ export default function Folders({ onHide }: props) {
                 })
             }} />
         {projects && <FolderList
-            name={"Projects"}
+            name={"II"}
             selected={project}
             items={projects}
             onSelect={async selectedDoc => {
@@ -87,7 +87,7 @@ export default function Folders({ onHide }: props) {
                 })
             }} />}
         {tasks && <FolderList
-            name={"Tasks"}
+            name={"II"}
             selected={task}
             items={tasks}
             onSelect={async selectedDoc => {
