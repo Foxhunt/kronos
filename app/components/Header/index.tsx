@@ -95,13 +95,13 @@ export default function Header() {
                         setPath([])
                         firebase.auth().signOut()
                     }}>
-                        logout
+                        Logout
                     </a>
                 </Link >
                 :
                 <Link href={"/login"}>
                     <a>
-                        login
+                        Login / Sign Up
                     </a>
                 </Link>}
         </Navigation>
