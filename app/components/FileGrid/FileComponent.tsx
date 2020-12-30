@@ -2,11 +2,10 @@ import firebase from "../../firebase/clientApp"
 
 import { useEffect, useState } from "react"
 import styled from "styled-components"
-import { AnimatePresence, motion, Variants } from "framer-motion"
+import { motion, Variants } from "framer-motion"
 import dynamic from "next/dynamic"
 import Image from "next/image"
 
-import Overlay from "./Overlay"
 
 const PDFViewer = dynamic(import("./PDFViewer"), { ssr: false })
 
@@ -81,11 +80,8 @@ export default function FileComponent({ fileDocSnap, selected, onSelect, onDelet
         }
     }
 
-    const [showOverlay] = useState(false)
-
     return <Container
         selected={selected}
-        layout
         variants={variants}
         onClick={() => {
             onSelect && onSelect()
@@ -134,10 +130,5 @@ export default function FileComponent({ fileDocSnap, selected, onSelect, onDelet
                     })
                 }} />
         </Name>
-        <AnimatePresence>
-            {showOverlay &&
-                <Overlay
-                    fileDocSnap={fileDocSnap} />}
-        </AnimatePresence>
     </Container>
 }
