@@ -92,7 +92,7 @@ export default function FileComponent({ fileDocSnap, selected, onSelect, onDelet
         }}>
         {
             isPDF ?
-                <PDFViewer
+                src && <PDFViewer
                     fileDocSnap={fileDocSnap}
                     src={src}
                     height={300} />

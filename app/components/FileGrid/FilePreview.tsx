@@ -48,7 +48,9 @@ export default function FilePreview() {
             setMetaData(metaData)
         }
 
-        fetchFile()
+        if (previewFile) {
+            fetchFile()
+        }
     }, [previewFile])
 
     const isPDF = metaData?.contentType === "application/pdf"
@@ -59,10 +61,11 @@ export default function FilePreview() {
     })
 
     return <Container
+        ref={containerRef}
         onClick={() => setPreviewfile(undefined)}>
         {
             isPDF ?
-                <PDFViewer
+                src && <PDFViewer
                     fileDocSnap={previewFile}
                     src={src}
                     height={700} />
