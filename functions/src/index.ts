@@ -4,8 +4,10 @@ admin.initializeApp()
 
 import { ImageAnnotatorClient } from "@google-cloud/vision"
 
-// // Start writing Firebase Functions
-// // https://firebase.google.com/docs/functions/typescript
+import algoliasearch from "algoliasearch"
+const ALGOLIA_ID = functions.config().algolia.app_id
+const ALGOLIA_ADMIN_KEY = functions.config().algolia.api_key
+const algoliaClient = algoliasearch(ALGOLIA_ID, ALGOLIA_ADMIN_KEY)
 
 export const createNewUser = functions.region("europe-west1").auth.user().onCreate(async user => {
     try {
@@ -38,4 +40,13 @@ export const labelImage = functions.region("europe-west1").https.onCall(async da
     } catch (error) {
         functions.logger.error(error)
     }
+})
+
+export const indexTags = functions.region("europe-west1").firestore.document("/users/{userID}/tags/{tagId}").onCreate((snap, context) => {
+    const tag = snap.data()
+
+    tag.objectID = context.params.tagId
+
+    const index = algoliaClient.initIndex(`${context.params.userID}_tags`)
+    return index.saveObject(tag)
 })
