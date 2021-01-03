@@ -1,6 +1,11 @@
 import firebase from "../../firebase/clientApp"
-import { useRef, useState } from "react"
-import { useClickedOutside } from "../../hooks"
+import { useEffect, useRef, useState } from "react"
+import { useClickedOutside, useTags } from "../../hooks"
+
+import algoliasearch from "algoliasearch"
+const algoliaClient = algoliasearch(process.env.NEXT_PUBLIC_ALGOLIA_APP_ID as string, process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_KEY as string)
+
+import { Hit } from "@algolia/client-search"
 
 import styled from "styled-components"
 
@@ -29,59 +34,91 @@ const Tag = styled.div`
 
 `
 
+type Tag = { name: string }
+
 type props = {
-    tags: firebase.firestore.DocumentSnapshot[]
     onHide: (event: MouseEvent) => void
     onSelectTag: (tag: firebase.firestore.DocumentSnapshot) => void
 }
 
-export default function TagList({ tags, onSelectTag, onHide }: props) {
+export default function TagList({ onSelectTag, onHide }: props) {
     const [userDocRef] = useAtom(userDocRefAtom)
 
-    const [addingItem, setAddingItem] = useState(false)
+    const tags = useTags()
+
+    const [searchResults, setSearchResults] = useState<Hit<Tag>[]>([])
     const [newItemName, setNewItemName] = useState("")
+
+    useEffect(() => {
+        async function searchTags() {
+            const index = algoliaClient?.initIndex(`${userDocRef?.id}_tags`)
+            const result = await index.search<Tag>(newItemName)
+            setSearchResults(result.hits)
+        }
+        if (newItemName !== "") {
+            searchTags()
+        } else {
+            setSearchResults([])
+        }
+    }, [newItemName])
 
     const containerRef = useRef<HTMLDivElement>(null)
     useClickedOutside(containerRef, onHide)
 
     return <Container
         ref={containerRef}>
-        {addingItem ?
-            <form
-                onSubmit={event => {
+        <form
+            onSubmit={event => {
+                event.preventDefault()
+                const tagRef = userDocRef?.collection("tags").doc(newItemName)
+                tagRef?.set({ name: newItemName })
+                setNewItemName("")
+            }}>
+            <NewItemInput
+                type={"text"}
+                autoFocus
+                value={newItemName}
+                onChange={event => {
+                    setNewItemName(event.target.value)
+                }} />
+        </form>
+        {
+            searchResults.length === 0 &&
+            newItemName !== "" &&
+            <Tag
+                onPointerDown={event => {
                     event.preventDefault()
                     const tagRef = userDocRef?.collection("tags").doc(newItemName)
                     tagRef?.set({ name: newItemName })
-                    setAddingItem(false)
                     setNewItemName("")
                 }}>
-                <NewItemInput
-                    type={"text"}
-                    autoFocus
-                    value={newItemName}
-                    onBlur={() => setAddingItem(false)}
-                    onChange={event => {
-                        setNewItemName(event.target.value)
-                    }} />
-            </form>
-            :
-            <Tag
-                onClick={event => {
-                    event.stopPropagation()
-                    setAddingItem(true)
-                }}>
-                +++
+                not found click to create
             </Tag>
         }
-        {tags.map(tag =>
-            <Tag
-                onPointerDown={event => {
-                    event.stopPropagation()
-                    onSelectTag(tag)
-                }}
-                key={tag.id}>
-                {tag.get("name")}
-            </Tag>
-        )}
-    </Container>
+        {
+            searchResults.length ?
+                searchResults.map(searchResult =>
+                    <Tag
+                        onPointerDown={async event => {
+                            event.stopPropagation()
+                            const tag = await userDocRef?.collection("tags").doc(searchResult.name).get()
+                            tag && onSelectTag(tag)
+                        }}
+                        key={searchResult.objectID}>
+                        {searchResult.name}
+                    </Tag>
+                )
+                :
+                newItemName === "" && tags.map(tag =>
+                    <Tag
+                        onPointerDown={event => {
+                            event.stopPropagation()
+                            onSelectTag(tag)
+                        }}
+                        key={tag.id}>
+                        {tag.get("name")}
+                    </Tag>
+                )
+        }
+    </Container >
 }

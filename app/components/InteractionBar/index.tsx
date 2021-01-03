@@ -9,7 +9,7 @@ import styled from "styled-components"
 
 import { useAtom } from "jotai"
 import { selectedFilesAtom } from "../../store"
-import { useFiles, useTags } from "../../hooks"
+import { useFiles } from "../../hooks"
 
 import TagList from "./TagList"
 
@@ -44,7 +44,6 @@ export default function InteractionBar() {
 
     useEffect(() => () => { setSelectedFiles([]) }, [])
 
-    const tags = useTags()
     const [showTags, setShowTags] = useState(false)
 
     const tagToggleRef = useRef<HTMLLIElement>(null)
@@ -92,11 +91,14 @@ export default function InteractionBar() {
         </Item>
         <Item
             ref={tagToggleRef}
-            onPointerDown={() => setShowTags(!showTags)}>
+            onPointerDown={(event) => {
+                if (event.target === tagToggleRef.current) {
+                    setShowTags(!showTags)
+                }
+            }}>
             Tag
             {showTags &&
                 <TagList
-                    tags={tags}
                     onHide={event => {
                         if (event.target !== tagToggleRef.current) {
                             setShowTags(false)
