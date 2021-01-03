@@ -5,6 +5,8 @@ import { useClickedOutside, useTags } from "../../hooks"
 import algoliasearch from "algoliasearch"
 const algoliaClient = algoliasearch(process.env.NEXT_PUBLIC_ALGOLIA_APP_ID as string, process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_KEY as string)
 
+import AlgoliaSVG from "../../assets/svg/algolia-blue-mark.svg"
+
 import { Hit } from "@algolia/client-search"
 
 import styled from "styled-components"
@@ -16,10 +18,15 @@ const Container = styled.div`
     position: absolute;
     z-index: 1;
     background-color: white;
+
+    width: 170px;
 `
 
 const NewItemInput = styled.input`
     padding: unset;
+
+    height: 25px;
+    width: calc(100% - 25px);
 
     border: none;
     border-bottom: black 1px solid;
@@ -81,6 +88,7 @@ export default function TagList({ onSelectTag, onHide }: props) {
                 onChange={event => {
                     setNewItemName(event.target.value)
                 }} />
+            <AlgoliaSVG />
         </form>
         {
             searchResults.length === 0 &&
