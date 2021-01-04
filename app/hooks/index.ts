@@ -8,3 +8,5 @@ export { useTags } from "./useTags"
 
 export { useClickedOutside } from "./useClickedOutside"
 export { useScollIntoView } from "./useScollIntoView"
+
+export { useSearch } from "./useSearch"

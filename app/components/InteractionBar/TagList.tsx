@@ -1,13 +1,8 @@
 import firebase from "../../firebase/clientApp"
-import { useEffect, useRef, useState } from "react"
-import { useClickedOutside, useTags } from "../../hooks"
-
-import algoliasearch from "algoliasearch"
-const algoliaClient = algoliasearch(process.env.NEXT_PUBLIC_ALGOLIA_APP_ID as string, process.env.NEXT_PUBLIC_ALGOLIA_SEARCH_KEY as string)
+import { useRef, useState } from "react"
+import { useClickedOutside, useSearch, useTags } from "../../hooks"
 
 import AlgoliaSVG from "../../assets/svg/algolia-blue-mark.svg"
-
-import { Hit } from "@algolia/client-search"
 
 import styled from "styled-components"
 
@@ -53,21 +48,8 @@ export default function TagList({ onSelectTag, onHide }: props) {
 
     const tags = useTags()
 
-    const [searchResults, setSearchResults] = useState<Hit<Tag>[]>([])
     const [newItemName, setNewItemName] = useState("")
-
-    useEffect(() => {
-        async function searchTags() {
-            const index = algoliaClient?.initIndex(`${userDocRef?.id}_tags`)
-            const result = await index.search<Tag>(newItemName)
-            setSearchResults(result.hits)
-        }
-        if (newItemName !== "") {
-            searchTags()
-        } else {
-            setSearchResults([])
-        }
-    }, [newItemName])
+    const searchResults = useSearch<Tag>(`${userDocRef?.id}_tags`, newItemName)
 
     const containerRef = useRef<HTMLDivElement>(null)
     useClickedOutside(containerRef, onHide)
