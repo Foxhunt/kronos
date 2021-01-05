@@ -56,6 +56,11 @@ export const indexFiles = functions.region("europe-west1").firestore.document("/
 
     file.objectID = context.params.fileId
 
+    delete file.client
+    delete file.collection
+    delete file.project
+    delete file.task
+
     const index = algoliaClient.initIndex(`${context.params.userID}_files`)
     return index.saveObject(file)
 })
