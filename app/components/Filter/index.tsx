@@ -8,16 +8,17 @@ import {
     orderOptions,
     filterFavoriteAtom,
     filterMarkedAtom,
-    filterTagsAtom
+    filterTagsAtom,
+    searchFileAtom
 } from "../../store"
 
-import { Container as CustomListContainer, Item, Items } from "./FilterList"
+import { Container as ListContainer, Item, Items } from "./FilterList"
 
 const Container = styled.div`
     width: 100%;
 
     display: grid;
-    grid-template-columns: repeat(3,1fr);
+    grid-template-columns: repeat(4,1fr);
     grid-template-rows: calc(6 * 31px);
     
     border-bottom: 1px solid black;
@@ -44,7 +45,6 @@ type props = {
 }
 
 export default function Filter({ onHide }: props) {
-
     const containerRef = useRef<HTMLDivElement>(null)
     useClickedOutside(containerRef, onHide)
 
@@ -58,9 +58,17 @@ export default function Filter({ onHide }: props) {
     const tags = useTags()
     const [selectedTags, setSelectedTags] = useAtom(filterTagsAtom)
 
+    const [searchedFile, setSearchedFile] = useAtom(searchFileAtom)
+
     return <Container
         ref={containerRef}>
-        <CustomListContainer>
+        <input
+            type="text"
+            value={searchedFile}
+            onChange={event => {
+                setSearchedFile(event.target.value)
+            }} />
+        <ListContainer>
             <Item>sort By</Item>
             <Items>
                 {sortByOptions?.map(item =>
@@ -79,8 +87,8 @@ export default function Filter({ onHide }: props) {
                     </Item>
                 )}
             </Items>
-        </CustomListContainer>
-        <CustomListContainer>
+        </ListContainer>
+        <ListContainer>
             <Item>Marked / Favorite</Item>
             <Items>
                 <Item
@@ -98,9 +106,9 @@ export default function Filter({ onHide }: props) {
                     marked
                 </Item>
             </Items>
-        </CustomListContainer>
-        <CustomListContainer>
-            <Item>Marked / Favorite</Item>
+        </ListContainer>
+        <ListContainer>
+            <Item>Tags</Item>
             <Items>
                 {tags.map(tag => <Item
                     key={tag.id}
@@ -119,6 +127,6 @@ export default function Filter({ onHide }: props) {
                     {tag.id}
                 </Item>)}
             </Items>
-        </CustomListContainer>
+        </ListContainer>
     </Container>
 }

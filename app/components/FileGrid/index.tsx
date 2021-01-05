@@ -7,10 +7,17 @@ import { motion, Variants } from "framer-motion"
 import { DropzoneRootProps } from "react-dropzone"
 
 import { useAtom } from "jotai"
-import { previewFileAtom, selectedFilesAtom, showInteractionBarAtom } from "../../store"
+import {
+    previewFileAtom,
+    searchFileAtom,
+    selectedFilesAtom,
+    showInteractionBarAtom
+} from "../../store"
 
 import FileComponent from "./FileComponent"
 import FilePreview from "./FilePreview"
+
+import Fuse from "fuse.js"
 
 const Container = styled(motion.div)`
     position: relative;
@@ -38,7 +45,34 @@ export default function FileGrid({ files, getRootProps }: props) {
     const [showInteractionBar] = useAtom(showInteractionBarAtom)
     const [, setPreviewFile] = useAtom(previewFileAtom)
 
-    const fileList = useMemo(() => files.map(
+    const [searchedFile] = useAtom(searchFileAtom)
+
+    const index = useMemo(() => {
+        const fileData = files.map(
+            file => ({
+                id: file.id,
+                name: file.data()?.name,
+                tags: file.data()?.tags
+            }))
+
+        const index = new Fuse(fileData, {
+            keys: ["name", "tags"],
+            threshold: 0.3
+        })
+
+        return index
+    }, [files])
+
+    const foundFileIDs: string[] = useMemo(() => {
+        return index.search(searchedFile).map(result => result.item.id)
+    }, [searchedFile, index])
+
+    let filteredFiles = files
+    if (foundFileIDs.length > 0) {
+        filteredFiles = filteredFiles.filter(file => foundFileIDs.includes(file.id))
+    }
+
+    const fileList = useMemo(() => filteredFiles.map(
         fileDocSnap =>
             <FileComponent
                 fileDocSnap={fileDocSnap}
@@ -56,7 +90,7 @@ export default function FileGrid({ files, getRootProps }: props) {
                 }}
                 onDelete={() => deleteFile(fileDocSnap)}
                 key={fileDocSnap.id} />
-    ), [files, selectedFiles, showInteractionBar])
+    ), [filteredFiles, selectedFiles, showInteractionBar])
 
     const variants: Variants = {
         hidden: {
