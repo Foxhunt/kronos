@@ -1,5 +1,6 @@
 import firebase from "./clientApp"
 import { useEffect } from "react"
+import { useRouter } from "next/router"
 import { useAtom } from "jotai"
 
 import {
@@ -7,6 +8,7 @@ import {
 } from "../store"
 
 export default function User() {
+    const router = useRouter()
     const [, setUserDoc] = useAtom(userDocRefAtom)
 
     useEffect(() => {
@@ -16,12 +18,12 @@ export default function User() {
                 if (user) {
                     // User is signed in.
                     // You could also look for the user doc in your Firestore (if you have one):
-                    const userDocRef = firebase.firestore().collection("users").doc(user.uid)
-                    setUserDoc(userDocRef)
+                    setUserDoc(firebase.firestore().collection("users").doc(user.uid))
                     firebase.analytics().setUserId(user.uid)
                     firebase.analytics().logEvent(firebase.analytics.EventName.LOGIN, { method: firebase.auth.EmailAuthProvider.PROVIDER_ID })
                 } else {
                     setUserDoc(undefined)
+                    router.push("/login")
                 }
             } catch (error) {
                 // Most probably a connection error. Handle appropriately.

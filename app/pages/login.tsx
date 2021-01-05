@@ -16,26 +16,25 @@ export default function login() {
     const [eMail, setEMail] = useState("")
     const [password, setPassword] = useState("")
 
-    const [methods, setMethods] = useState<string[]>([])
+    const [accountExists, setAccountExists] = useState(false)
     useEffect(() => {
         async function checkSignIn() {
             try {
                 if (eMail) {
-                    setMethods(await firebase.auth().fetchSignInMethodsForEmail(eMail))
+                    const methods = await firebase.auth().fetchSignInMethodsForEmail(eMail)
+                    setAccountExists(methods.includes("password"))
                 }
             } catch (error) {
-                setMethods([])
+                setAccountExists(false)
                 console.error(error.message)
             }
         }
         checkSignIn()
     }, [eMail])
 
-    const accountExists = methods.includes("password")
-
     return <Container>
         <Head>
-            <title>Login / Sign Up</title>
+            <title>{accountExists ? "Login" : "Sign Up"}</title>
             <link rel="shortcut icon" href="/lock.svg" />
         </Head>
         <form
@@ -84,7 +83,7 @@ export default function login() {
                 </label>
             </div>
             <button type="submit">
-                {accountExists ? "Login" : "Login / Sign Up"}
+                {accountExists ? "Login" : "Sign Up"}
             </button>
             {!accountExists && <><br />Enter your Email to login or sign up</>}
         </form>
