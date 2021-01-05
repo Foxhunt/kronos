@@ -14,8 +14,6 @@ import { useFiles } from "../../hooks"
 
 const Container = styled.div``
 
-
-
 type props = {
     taskDocSnap: firebase.firestore.DocumentSnapshot
 }

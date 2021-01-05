@@ -59,12 +59,13 @@ export default function FileGrid({ files, getRootProps }: props) {
     ), [files, selectedFiles, showInteractionBar])
 
     const variants: Variants = {
-        hidden: { opacity: 0 },
+        hidden: {
+            opacity: 0
+        },
         visible: {
             opacity: 1,
             transition: {
-                when: "beforeChildren",
-                staggerChildren: 0.1,
+                staggerChildren: 0.1
             }
         }
     }
