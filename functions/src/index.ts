@@ -50,17 +50,3 @@ export const indexTags = functions.region("europe-west1").firestore.document("/u
     const index = algoliaClient.initIndex(`${context.params.userID}_tags`)
     return index.saveObject(tag)
 })
-
-export const indexFiles = functions.region("europe-west1").firestore.document("/users/{userID}/files/{fileId}").onCreate((snap, context) => {
-    const file = snap.data()
-
-    file.objectID = context.params.fileId
-
-    delete file.client
-    delete file.collection
-    delete file.project
-    delete file.task
-
-    const index = algoliaClient.initIndex(`${context.params.userID}_files`)
-    return index.saveObject(file)
-})
