@@ -68,14 +68,14 @@ export default function Header() {
                     </Link >
                     <Link href={"/archive"}>
                         <a>
-                            Archive {path}
+                            Archive
                         </a>
                     </Link >
                     <Link href={"/archive"}>
                         <a
                             ref={archiveLinkRef}
                             onPointerDown={() => setShowFolders(!showFolders)}>
-                            Navigate
+                            {path}
                         </a>
                     </Link >
                     <a
