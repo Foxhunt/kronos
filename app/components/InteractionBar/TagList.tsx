@@ -1,6 +1,6 @@
 import firebase from "../../firebase/clientApp"
 import { useRef, useState } from "react"
-import { useClickedOutside, useSearch, useTags } from "../../hooks"
+import { useClickedOutside, useOnlineSearch, useTags } from "../../hooks"
 
 import AlgoliaSVG from "../../assets/svg/algolia-blue-mark.svg"
 
@@ -49,7 +49,7 @@ export default function TagList({ onSelectTag, onHide }: props) {
     const tags = useTags()
 
     const [newItemName, setNewItemName] = useState("")
-    const searchResults = useSearch<Tag>(`${userDocRef?.id}_tags`, newItemName)
+    const searchResults = useOnlineSearch<Tag>(`${userDocRef?.id}_tags`, newItemName)
 
     const containerRef = useRef<HTMLDivElement>(null)
     useClickedOutside(containerRef, onHide)

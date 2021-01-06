@@ -17,7 +17,7 @@ import {
 import FileComponent from "./FileComponent"
 import FilePreview from "./FilePreview"
 
-import Fuse from "fuse.js"
+import { useOfflineSearch } from "../../hooks"
 
 const Container = styled(motion.div)`
     position: relative;
@@ -34,6 +34,11 @@ const Container = styled(motion.div)`
 
     overflow-y: auto;
 `
+type reducedFile = {
+    id: string,
+    name: string,
+    tags: string[]
+}
 
 type props = {
     files: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>[]
@@ -45,27 +50,23 @@ export default function FileGrid({ files, getRootProps }: props) {
     const [showInteractionBar] = useAtom(showInteractionBarAtom)
     const [, setPreviewFile] = useAtom(previewFileAtom)
 
-    const [searchedFile] = useAtom(searchFileAtom)
+    const [searchText] = useAtom(searchFileAtom)
 
-    const index = useMemo(() => {
-        const fileData = files.map(
-            file => ({
-                id: file.id,
-                name: file.data()?.name,
-                tags: file.data()?.tags
-            }))
+    const reducedFiles: reducedFile[] = useMemo(() => files.map(file => ({
+        id: file.id,
+        name: file.data()?.name,
+        tags: file.data()?.tags
+    })), [files])
 
-        const index = new Fuse(fileData, {
-            keys: ["name", "tags"],
-            threshold: 0.3
-        })
-
-        return index
-    }, [files])
+    const searchResult = useOfflineSearch<reducedFile>({
+        searchItems: reducedFiles,
+        keys: ["name", "tags"],
+        searchText
+    })
 
     const foundFileIDs: string[] = useMemo(() => {
-        return index.search(searchedFile).map(result => result.item.id)
-    }, [searchedFile, index])
+        return searchResult.map(result => result.item.id)
+    }, [searchResult])
 
     let filteredFiles = files
     if (foundFileIDs.length > 0) {

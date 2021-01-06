@@ -6,7 +6,7 @@ const algoliaClient = algoliasearch(process.env.NEXT_PUBLIC_ALGOLIA_APP_ID as st
 import { Hit } from "@algolia/client-search"
 
 // use https://fusejs.io/ instead
-export function useSearch<T>(indexName: string, searchText: string) {
+export function useOnlineSearch<T>(indexName: string, searchText: string) {
     const [searchResults, setSearchResults] = useState<Hit<T>[]>([])
 
     useEffect(() => {
