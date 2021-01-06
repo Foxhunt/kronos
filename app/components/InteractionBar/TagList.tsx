@@ -1,8 +1,6 @@
 import firebase from "../../firebase/clientApp"
-import { useMemo, useRef, useState } from "react"
-import { useClickedOutside, useOfflineSearch, useOnlineSearch, useTags } from "../../hooks"
-
-import AlgoliaSVG from "../../assets/svg/algolia-blue-mark.svg"
+import { useRef, useState } from "react"
+import { useClickedOutside, useOfflineSearch, useTags } from "../../hooks"
 
 import styled from "styled-components"
 
@@ -21,7 +19,7 @@ const NewItemInput = styled.input`
     padding: unset;
 
     height: 25px;
-    width: calc(100% - 25px);
+    width: 100%;
 
     border: none;
     border-bottom: black 1px solid;
@@ -35,11 +33,6 @@ const NewItemInput = styled.input`
 const Tag = styled.div`
 
 `
-
-type tag = {
-    name: string
-    id: string
-}
 
 type props = {
     onHide: (event: MouseEvent) => void
@@ -78,7 +71,6 @@ export default function TagList({ onSelectTag, onHide }: props) {
                 onChange={event => {
                     setNewItemName(event.target.value)
                 }} />
-            <AlgoliaSVG />
         </form>
         {searchResult.length === 0 &&
             newItemName !== "" &&

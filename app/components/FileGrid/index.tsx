@@ -36,11 +36,6 @@ const Container = styled(motion.div)`
 
     overflow-y: auto;
 `
-type reducedFile = {
-    id: string,
-    name: string,
-    tags: string[]
-}
 
 type props = {
     files: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>[]
