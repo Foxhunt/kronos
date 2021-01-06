@@ -1,6 +1,6 @@
 import firebase from "../../firebase/clientApp"
 import styled from "styled-components"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useOfflineSearch, useScollIntoView } from "../../hooks"
 
 const Container = styled.div`
@@ -72,10 +72,20 @@ export default function FolderList({ name, selected, items, allowAdding, onSelec
         keys: ["name"]
     })
 
+    const renderItems = searchResult.length ? searchResult : items
+
     const selectedItemRef = useRef<HTMLDivElement>(null)
     useScollIntoView(selectedItemRef)
 
-    const renderItems = searchResult.length ? searchResult : items
+    const [canScrollUp, setCanScrollUp] = useState(false)
+    const [canScrollDown, setCanScrollDown] = useState(false)
+    const ItemsRef = useRef<HTMLDivElement>(null)
+    useEffect(() => {
+        if (ItemsRef.current) {
+            setCanScrollUp(ItemsRef.current.scrollTop >= 31)
+            setCanScrollDown(ItemsRef.current.scrollHeight - ItemsRef.current.scrollTop - ItemsRef.current.clientHeight >= 31)
+        }
+    }, [ItemsRef.current, renderItems])
 
     return <Container>
         <Item>{name}</Item>
@@ -95,7 +105,12 @@ export default function FolderList({ name, selected, items, allowAdding, onSelec
                     setNewItemName(event.target.value)
                 }} />
         </form>
-        <Items>
+        <Items
+            ref={ItemsRef}
+            onScroll={event => {
+                setCanScrollUp(event.currentTarget.scrollTop >= 31)
+                setCanScrollDown(event.currentTarget.scrollHeight - event.currentTarget.scrollTop - event.currentTarget.clientHeight >= 31)
+            }}>
             {newItemName !== "" &&
                 <Item
                     onClick={() => {
