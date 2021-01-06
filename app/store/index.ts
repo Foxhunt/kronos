@@ -16,7 +16,7 @@ export const pathAtom = atom<string, firebase.firestore.DocumentSnapshot[]>(
 
         const path = [clientName, projectName, taskName].filter(crumb => crumb !== undefined)
 
-        return path.length ? "> " + path.join(" > ") : ""
+        return path.length ? "> " + path.join(" > ") : ">"
     },
     (_, set, [client, project, task]) => {
         set(selectedClientDocRefAtom, client)
