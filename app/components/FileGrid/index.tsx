@@ -54,28 +54,13 @@ export default function FileGrid({ files, getRootProps }: props) {
 
     const [searchText] = useAtom(searchFileAtom)
 
-    const reducedFiles: reducedFile[] = useMemo(() => files.map(file => ({
-        id: file.id,
-        name: file.data()?.name,
-        tags: file.data()?.tags
-    })), [files])
-
-    const searchResult = useOfflineSearch<reducedFile>({
-        searchItems: reducedFiles,
+    const searchResult = useOfflineSearch({
+        searchDocuments: files,
         keys: ["name", "tags"],
         searchText
     })
 
-    const foundFileIDs: string[] = useMemo(() => {
-        return searchResult.map(result => result.item.id)
-    }, [searchResult])
-
-    let filteredFiles = files
-    if (foundFileIDs.length > 0) {
-        filteredFiles = filteredFiles.filter(file => foundFileIDs.includes(file.id))
-    }
-
-    const fileList = useMemo(() => filteredFiles.map(
+    const fileList = useMemo(() => (searchResult.length ? searchResult : files).map(
         fileDocSnap =>
             <FileComponent
                 fileDocSnap={fileDocSnap}
@@ -93,7 +78,7 @@ export default function FileGrid({ files, getRootProps }: props) {
                 }}
                 onDelete={() => deleteFile(fileDocSnap)}
                 key={fileDocSnap.id} />
-    ), [filteredFiles, selectedFiles, showInteractionBar])
+    ), [searchResult, selectedFiles, showInteractionBar])
 
     const variants: Variants = {
         hidden: {
