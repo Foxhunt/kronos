@@ -54,6 +54,21 @@ const NewItemInput = styled.input`
     }
 `
 
+const ScrollUpIndicator = styled.div`
+    position: sticky;
+
+    width: 100%;
+    text-align: center;
+    top: 0px;
+`
+const ScrollDownIndicator = styled.div`
+    position: sticky;
+
+    width: 100%;
+    text-align: center;
+    bottom: 0px;
+`
+
 type props = {
     name: string
     selected: firebase.firestore.DocumentSnapshot | undefined
@@ -111,6 +126,7 @@ export default function FolderList({ name, selected, items, allowAdding, onSelec
                 setCanScrollUp(event.currentTarget.scrollTop >= 31)
                 setCanScrollDown(event.currentTarget.scrollHeight - event.currentTarget.scrollTop - event.currentTarget.clientHeight >= 31)
             }}>
+            {canScrollUp && <ScrollUpIndicator>up</ScrollUpIndicator>}
             {newItemName !== "" &&
                 <Item
                     onClick={() => {
@@ -147,6 +163,7 @@ export default function FolderList({ name, selected, items, allowAdding, onSelec
             {new Array(renderItems.length < 4 ? 4 - renderItems.length : 0)
                 .fill("")
                 .map((_item, index) => <Item key={index} />)}
+            {canScrollDown && <ScrollDownIndicator>down</ScrollDownIndicator>}
         </Items>
     </Container>
 }
