@@ -22,6 +22,8 @@ import { useOfflineSearch } from "../../hooks"
 const Container = styled(motion.div)`
     position: relative;
 
+    flex: 1;
+
     padding: 16px 0px;
     outline: none;
 
