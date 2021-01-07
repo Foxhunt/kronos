@@ -87,10 +87,49 @@ export default function FolderList({ name, selected, items, allowAdding, onSelec
         keys: ["name"]
     })
 
-    const renderItems = searchResult.length ? searchResult : items
-
     const selectedItemRef = useRef<HTMLDivElement>(null)
     useScollIntoView(selectedItemRef)
+
+    const renderItems = []
+
+    if (newItemName !== "") {
+        renderItems.push(<Item
+            onClick={() => {
+                allowAdding && onAdd(newItemName)
+            }}>
+            {allowAdding ? "click to create" : "select previous to create"}
+        </Item>)
+    }
+
+    if (selected) {
+        renderItems.push(<Item
+            ref={selectedItemRef}
+            key={selected.id}
+            selected
+            onContextMenu={event => {
+                event.preventDefault()
+                selected.ref.delete()
+            }}
+            onClick={() => {
+                onSelect(undefined)
+            }}>
+            {selected.get("name")}
+        </Item>)
+    }
+
+    renderItems.push(...(searchResult.length ? searchResult : items).map(item =>
+        selected?.id !== item.id ? <Item
+            key={item.id}
+            onContextMenu={event => {
+                event.preventDefault()
+                item.ref.delete()
+            }}
+            onClick={() => {
+                onSelect(item)
+            }}>
+            {item.get("name")}
+        </Item> : null
+    ))
 
     const [canScrollUp, setCanScrollUp] = useState(false)
     const [canScrollDown, setCanScrollDown] = useState(false)
@@ -115,6 +154,7 @@ export default function FolderList({ name, selected, items, allowAdding, onSelec
             <NewItemInput
                 type={"text"}
                 autoFocus
+                placeholder={"search/create"}
                 value={newItemName}
                 onChange={event => {
                     setNewItemName(event.target.value)
@@ -127,39 +167,8 @@ export default function FolderList({ name, selected, items, allowAdding, onSelec
                 setCanScrollDown(event.currentTarget.scrollHeight - event.currentTarget.scrollTop - event.currentTarget.clientHeight >= 31)
             }}>
             {canScrollUp && <ScrollUpIndicator>up</ScrollUpIndicator>}
-            {newItemName !== "" &&
-                <Item
-                    onClick={() => {
-                        allowAdding && onAdd(newItemName)
-                    }}>
-                    {allowAdding ? "click to create" : "select previous to create"}
-                </Item>}
-            {selected && <Item
-                ref={selectedItemRef}
-                key={selected.id}
-                selected
-                onContextMenu={event => {
-                    event.preventDefault()
-                    selected.ref.delete()
-                }}
-                onClick={() => {
-                    onSelect(undefined)
-                }}>
-                {selected.get("name")}
-            </Item>}
-            {renderItems.map(item =>
-                selected?.id !== item.id ? <Item
-                    key={item.id}
-                    onContextMenu={event => {
-                        event.preventDefault()
-                        item.ref.delete()
-                    }}
-                    onClick={() => {
-                        onSelect(item)
-                    }}>
-                    {item.get("name")}
-                </Item> : null
-            )}
+            { }
+            {renderItems}
             {new Array(renderItems.length < 4 ? 4 - renderItems.length : 0)
                 .fill("")
                 .map((_item, index) => <Item key={index} />)}
