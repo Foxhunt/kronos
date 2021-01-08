@@ -8,7 +8,7 @@ import tagFile from "../../firebase/tagFile"
 import styled from "styled-components"
 
 import { useAtom } from "jotai"
-import { selectedFilesAtom } from "../../store"
+import { filterFavoriteAtom, filterMarkedAtom, filterOrderByAtom, filterTagsAtom, selectedClientDocRefAtom, selectedCollectionDocRefAtom, selectedFilesAtom, selectedProjectDocRefAtom, selectedTaskDocRefAtom } from "../../store"
 import { useFiles } from "../../hooks"
 
 import TagList from "./TagList"
@@ -35,7 +35,18 @@ const Item = styled.li<{ active?: boolean }>`
 `
 
 export default function InteractionBar() {
-    const files = useFiles()
+    const [client] = useAtom(selectedClientDocRefAtom)
+    const [project] = useAtom(selectedProjectDocRefAtom)
+    const [task] = useAtom(selectedTaskDocRefAtom)
+    const [collection] = useAtom(selectedCollectionDocRefAtom)
+
+    const [orderOptions] = useAtom(filterOrderByAtom)
+    const [favorite] = useAtom(filterFavoriteAtom)
+    const [marked] = useAtom(filterMarkedAtom)
+    const [tags] = useAtom(filterTagsAtom)
+
+    const files = useFiles(client, project, task, collection, Infinity, orderOptions, favorite, marked, tags)
+
     const [selectedFiles, setSelectedFiles] = useAtom(selectedFilesAtom)
 
     const selectedAll = useMemo(() => {
