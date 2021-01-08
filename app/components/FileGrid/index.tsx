@@ -51,7 +51,7 @@ export default function FileGrid({ files, getRootProps }: props) {
 
     const searchResult = useOfflineSearch({
         searchDocuments: files,
-        keys: ["name", "tags"],
+        keys: ["name", "tags", "mlLabels"],
         searchText
     })
 
