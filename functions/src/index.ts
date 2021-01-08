@@ -4,11 +4,6 @@ admin.initializeApp()
 
 import { ImageAnnotatorClient } from "@google-cloud/vision"
 
-import algoliasearch from "algoliasearch"
-const ALGOLIA_ID = functions.config().algolia.app_id
-const ALGOLIA_ADMIN_KEY = functions.config().algolia.api_key
-const algoliaClient = algoliasearch(ALGOLIA_ID, ALGOLIA_ADMIN_KEY)
-
 export const createNewUser = functions.region("europe-west1").auth.user().onCreate(async user => {
     try {
         await admin.firestore().collection("users").doc(user.uid).set({
@@ -33,20 +28,13 @@ export const labelImage = functions.region("europe-west1").https.onCall(async da
             const client = new ImageAnnotatorClient()
             const [result] = await client.labelDetection(`gs://${bucket.name}/${filePath}`)
 
+            const mlLabels = result.labelAnnotations?.map(annotation => annotation.description)
+
             await snapshot.ref.update({
-                mlLabels: result.labelAnnotations
+                mlLabels
             })
         }
     } catch (error) {
         functions.logger.error(error)
     }
-})
-
-export const indexTags = functions.region("europe-west1").firestore.document("/users/{userID}/tags/{tagId}").onCreate((snap, context) => {
-    const tag = snap.data()
-
-    tag.objectID = context.params.tagId
-
-    const index = algoliaClient.initIndex(`${context.params.userID}_tags`)
-    return index.saveObject(tag)
 })
