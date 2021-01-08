@@ -31,10 +31,12 @@ export default function PDFViewer({ fileDocSnap, src, height }: props) {
                         cacheControl: "private, max-age=950400"
                     })
 
-                    const fullPath = await snapshot.ref.fullPath
+                    const downloadURL = await snapshot.ref.getDownloadURL()
+
                     fileDocSnap?.ref.update({
-                        [`renderedPDF.${height}`]: fullPath
+                        [`renderedPDF.${height}`]: downloadURL
                     })
+
                 }, "image/png", 1)
             }} />
     </Document>

@@ -34,26 +34,24 @@ const Container = styled.div`
 export default function FilePreview() {
     const [previewFile, setPreviewfile] = useAtom(previewFileAtom)
 
-    const [src, setSrc] = useState<string>("")
-    const [metaData, setMetaData] = useState<firebase.storage.FullMetadata>()
+    const [src, setSrc] = useState("")
     useEffect(() => {
-        async function fetchFile() {
-            const storage = firebase.storage()
-            const fullPath = previewFile?.get("renderedPDF.700") || previewFile?.get("fullPath")
-            const fileRef = storage.ref(fullPath)
-            const downloadURL = await fileRef.getDownloadURL()
-            const metaData = await fileRef.getMetadata()
-
-            setSrc(downloadURL)
-            setMetaData(metaData)
-        }
-
-        if (previewFile) {
-            fetchFile()
-        }
+        setSrc(previewFile?.get("renderedPDF.700") || previewFile?.get("downloadURL"))
     }, [previewFile])
 
-    const isPDF = metaData?.contentType === "application/pdf"
+    const [contentType, setContentType] = useState("")
+    useEffect(() => {
+        async function fetchContentType() {
+            const fileRef = firebase.storage().refFromURL(src)
+            setContentType((await fileRef.getMetadata()).contentType)
+        }
+
+        if (src !== "") {
+            fetchContentType()
+        }
+    }, [src])
+
+    const isPDF = contentType === "application/pdf"
 
     const containerRef = useRef<HTMLDivElement>(null)
     useClickedOutside(containerRef, () => {

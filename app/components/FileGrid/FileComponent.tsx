@@ -46,24 +46,24 @@ type props = {
 }
 
 export default function FileComponent({ fileDocSnap, selected, onSelect, onDelete }: props) {
-    const [src, setSrc] = useState<string>("")
-    const [metaData, setMetaData] = useState<firebase.storage.FullMetadata>()
+    const [src, setSrc] = useState("")
     useEffect(() => {
-        async function fetchFile() {
-            const storage = firebase.storage()
-            const fullPath = fileDocSnap.get("renderedPDF.300") || fileDocSnap.get("fullPath")
-            const fileRef = storage.ref(fullPath)
-            const downloadURL = await fileRef.getDownloadURL()
-            const metaData = await fileRef.getMetadata()
-
-            setSrc(downloadURL)
-            setMetaData(metaData)
-        }
-
-        fetchFile()
+        setSrc(fileDocSnap.get("renderedPDF.300") || fileDocSnap.get("downloadURL"))
     }, [fileDocSnap])
 
-    const isPDF = metaData?.contentType === "application/pdf"
+    const [contentType, setContentType] = useState("")
+    useEffect(() => {
+        async function fetchContentType() {
+            const fileRef = firebase.storage().refFromURL(src)
+            setContentType((await fileRef.getMetadata()).contentType)
+        }
+
+        if (src !== "") {
+            fetchContentType()
+        }
+    }, [src])
+
+    const isPDF = contentType === "application/pdf"
 
     const variants: Variants = {
         hidden: {
