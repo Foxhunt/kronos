@@ -31,6 +31,7 @@ export default async function uploadFile(
                     task: task.ref,
                     collection: collection.ref,
                     fullPath: fileRef.fullPath,
+                    downloadURL: await fileRef.getDownloadURL(),
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                     lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
                 }))
