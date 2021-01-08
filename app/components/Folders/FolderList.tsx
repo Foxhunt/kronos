@@ -167,7 +167,6 @@ export default function FolderList({ name, selected, items, allowAdding, onSelec
                 setCanScrollDown(event.currentTarget.scrollHeight - event.currentTarget.scrollTop - event.currentTarget.clientHeight >= 31)
             }}>
             {canScrollUp && <ScrollUpIndicator>up</ScrollUpIndicator>}
-            { }
             {renderItems}
             {new Array(renderItems.length < 4 ? 4 - renderItems.length : 0)
                 .fill("")
