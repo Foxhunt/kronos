@@ -2,6 +2,7 @@ import firebase from 'firebase/app'
 import 'firebase/auth' // If you need it
 import 'firebase/firestore' // If you need it
 import 'firebase/storage' // If you need it
+import 'firebase/functions' // If you need it
 import 'firebase/analytics' // If you need it
 
 const clientCredentials = {
@@ -22,6 +23,7 @@ if (typeof window !== 'undefined' && !firebase.apps.length) {
     if (location.hostname === "localhost") {
         // firebase.auth().useEmulator("http://127.0.0.1:9099")
         // firebase.firestore().useEmulator("127.0.0.1", 8080)
+        // firebase.functions().useEmulator("127.0.0.1", 5001)
     }
 
     firebase.firestore().enablePersistence({

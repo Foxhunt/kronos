@@ -1,3 +1,5 @@
+import firebase from "../../firebase/clientApp"
+
 import { useEffect, useMemo, useRef, useState } from "react"
 import deleteFile from "../../firebase/deleteFile"
 import downloadFiles from "../../firebase/downloadFiles"
@@ -122,5 +124,15 @@ export default function InteractionBar() {
                         setShowTags(false)
                     }} />}
         </Item>
-    </Container>
+        <Item
+            onPointerDown={() => {
+                const labelImage = firebase.app().functions("europe-west1").httpsCallable("labelImage")
+
+                for (const file of selectedFiles) {
+                    labelImage({ path: file.ref.path })
+                }
+            }}>
+            Auto Tag Files
+        </Item>
+    </Container >
 }
