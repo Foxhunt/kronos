@@ -1,5 +1,5 @@
 import firebase from "./clientApp"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { useAtom } from "jotai"
 
@@ -9,34 +9,38 @@ import {
 
 export default function User() {
     const router = useRouter()
-    const [, setUserDoc] = useAtom(userDocRefAtom)
 
+    const [authUser, setAuthUser] = useState<firebase.User>()
     useEffect(() => {
-        // Listen authenticated user
         const unsubscribe = firebase.auth().onAuthStateChanged(user => {
-            try {
-                if (user) {
-                    // User is signed in.
-                    // You could also look for the user doc in your Firestore (if you have one):
-                    firebase.firestore().collection("users").doc(user.uid).onSnapshot(snapshot => {
-                        setUserDoc(snapshot)
-                    })
-
-                    firebase.analytics().setUserId(user.uid)
-                    firebase.analytics().logEvent(firebase.analytics.EventName.LOGIN, { method: firebase.auth.EmailAuthProvider.PROVIDER_ID })
-                } else {
-                    setUserDoc(undefined)
-                    router.push("/login")
-                }
-            } catch (error) {
-                // Most probably a connection error. Handle appropriately.
-            } finally {
+            if (user) {
+                setAuthUser(user)
+                firebase.analytics().setUserId(user.uid)
+                firebase.analytics().logEvent(firebase.analytics.EventName.LOGIN, { method: firebase.auth.EmailAuthProvider.PROVIDER_ID })
+            } else {
+                setAuthUser(undefined)
+                router.push("/login")
             }
         })
-
-        // Unsubscribe auth listener on unmount
         return unsubscribe
     }, [])
+
+    const [, setUserDocSnap] = useAtom(userDocRefAtom)
+    useEffect(() => {
+        let unsubscribe
+
+        if (authUser) {
+            const userDoc = firebase.firestore().collection("users").doc(authUser.uid)
+            unsubscribe = userDoc
+                .onSnapshot(snapshot => {
+                    setUserDocSnap(snapshot)
+                })
+        } else {
+            setUserDocSnap(undefined)
+        }
+
+        return unsubscribe
+    }, [authUser])
 
     return null
 }
