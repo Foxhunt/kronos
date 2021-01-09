@@ -85,6 +85,10 @@ export default function FileComponent({ fileDocSnap, selected, onSelect, onDelet
         variants={variants}
         onClick={() => {
             onSelect && onSelect()
+
+            const array = new Uint32Array(10)
+            window.crypto.getRandomValues(array)
+            fileDocSnap.ref.update({ random: array[array[0] % array.length] })
         }}
         onContextMenu={event => {
             event.preventDefault()

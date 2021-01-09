@@ -37,6 +37,9 @@ const sortByOptions: orderOptions[] = [
     }, {
         orderBy: "name",
         orderDirection: "asc"
+    }, {
+        orderBy: "random",
+        orderDirection: "asc"
     }
 ]
 

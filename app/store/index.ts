@@ -27,7 +27,7 @@ export const pathAtom = atom<string, firebase.firestore.DocumentSnapshot[]>(
 )
 
 export type orderOptions = {
-    orderBy: "createdAt" | "lastUpdatedAt" | "clientName" | "projectName" | "name" | "pinned",
+    orderBy: "createdAt" | "lastUpdatedAt" | "clientName" | "projectName" | "name" | "pinned" | "random",
     orderDirection: "asc" | "desc"
 }
 
