@@ -14,7 +14,8 @@ export const createNewUser = functions
                 email: user.email,
                 level1: "Level I",
                 level2: "Level II",
-                level3: "Level III"
+                level3: "Level III",
+                boards: "Boards"
             })
             functions.logger.info(`createrd user ${user.email}`)
         } catch (error) {
