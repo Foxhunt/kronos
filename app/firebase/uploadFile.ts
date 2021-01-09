@@ -6,7 +6,7 @@ export default async function uploadFile(
     project: firebase.firestore.DocumentSnapshot,
     task: firebase.firestore.DocumentSnapshot,
     collection: firebase.firestore.DocumentSnapshot,
-    userDocRef: firebase.firestore.DocumentReference
+    userDocRef: firebase.firestore.DocumentSnapshot
 ) {
     const storageRef = firebase.storage().ref(collection.ref.path)
     const fileRef = storageRef.child(`${file.name}`)
@@ -20,7 +20,10 @@ export default async function uploadFile(
             null,
             null,
             async () => {
-                const fileCollection = userDocRef.collection("files")
+                const fileCollection = userDocRef.ref.collection("files")
+
+                const array = new Uint32Array(1)
+                window.crypto.getRandomValues(array)
 
                 resolve(await fileCollection.add({
                     name: fileRef.name,
@@ -33,7 +36,8 @@ export default async function uploadFile(
                     fullPath: fileRef.fullPath,
                     downloadURL: await fileRef.getDownloadURL(),
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    random: array[0]
                 }))
             })
     })

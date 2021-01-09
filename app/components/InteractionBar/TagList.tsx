@@ -60,7 +60,7 @@ export default function TagList({ onSelectTag, onHide }: props) {
         <form
             onSubmit={event => {
                 event.preventDefault()
-                const tagRef = userDocRef?.collection("tags").doc(newItemName)
+                const tagRef = userDocRef?.ref.collection("tags").doc(newItemName)
                 tagRef?.set({ name: newItemName })
                 setNewItemName("")
             }}>
@@ -77,7 +77,7 @@ export default function TagList({ onSelectTag, onHide }: props) {
             <Tag
                 onPointerDown={event => {
                     event.preventDefault()
-                    const tagRef = userDocRef?.collection("tags").doc(newItemName)
+                    const tagRef = userDocRef?.ref.collection("tags").doc(newItemName)
                     tagRef?.set({ name: newItemName })
                     setNewItemName("")
                 }}>
@@ -87,7 +87,7 @@ export default function TagList({ onSelectTag, onHide }: props) {
             <Tag
                 onPointerDown={async event => {
                     event.stopPropagation()
-                    const tag = await userDocRef?.collection("tags").doc(tags.get("name")).get()
+                    const tag = await userDocRef?.ref.collection("tags").doc(tags.get("name")).get()
                     tag && onSelectTag(tag)
                 }}
                 key={tags.id}>

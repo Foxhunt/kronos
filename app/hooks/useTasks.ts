@@ -19,8 +19,8 @@ export function useTasks(
     const [tasks, setTasks] = useState<firebase.firestore.DocumentSnapshot[]>([])
 
     useEffect(() => {
-        let query = userDocRef
-            ?.collection("tasks")
+        let query = userDocRef?.ref
+            .collection("tasks")
             ?.orderBy(orderBy, orderDirection)
 
         if (client) {

@@ -13,12 +13,15 @@ export default function User() {
 
     useEffect(() => {
         // Listen authenticated user
-        const unsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
+        const unsubscribe = firebase.auth().onAuthStateChanged(user => {
             try {
                 if (user) {
                     // User is signed in.
                     // You could also look for the user doc in your Firestore (if you have one):
-                    setUserDoc(firebase.firestore().collection("users").doc(user.uid))
+                    firebase.firestore().collection("users").doc(user.uid).onSnapshot(snapshot => {
+                        setUserDoc(snapshot)
+                    })
+
                     firebase.analytics().setUserId(user.uid)
                     firebase.analytics().logEvent(firebase.analytics.EventName.LOGIN, { method: firebase.auth.EmailAuthProvider.PROVIDER_ID })
                 } else {

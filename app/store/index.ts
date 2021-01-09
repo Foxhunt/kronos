@@ -1,7 +1,7 @@
 import firebase from "../firebase/clientApp"
 import { atom } from "jotai"
 
-export const userDocRefAtom = atom<firebase.firestore.DocumentReference | undefined>(undefined)
+export const userDocRefAtom = atom<firebase.firestore.DocumentSnapshot | undefined>(undefined)
 
 export const selectedClientDocRefAtom = atom<firebase.firestore.DocumentSnapshot | undefined>(undefined)
 export const selectedProjectDocRefAtom = atom<firebase.firestore.DocumentSnapshot | undefined>(undefined)

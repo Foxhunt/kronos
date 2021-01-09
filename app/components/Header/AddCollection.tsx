@@ -53,7 +53,7 @@ export default function AddCollection({ onHide }: props) {
             }}
             allowAdding={Boolean(userDocRef)}
             onAdd={itemName => {
-                userDocRef?.collection("clients").add({
+                userDocRef?.ref.collection("clients").add({
                     name: itemName,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                     lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -70,7 +70,7 @@ export default function AddCollection({ onHide }: props) {
             }}
             allowAdding={Boolean(client)}
             onAdd={itemName => {
-                userDocRef?.collection("projects").add({
+                userDocRef?.ref.collection("projects").add({
                     name: itemName,
                     client: client?.ref,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -88,7 +88,7 @@ export default function AddCollection({ onHide }: props) {
             onClick={event => {
                 event.preventDefault()
                 if (collectionName && client && project) {
-                    userDocRef?.collection("tasks").add({
+                    userDocRef?.ref.collection("tasks").add({
                         name: collectionName,
                         pinned: false,
                         client: client?.ref,

@@ -10,8 +10,8 @@ export function useProjects(client: firebase.firestore.DocumentSnapshot | undefi
     const [userDocRef] = useAtom(userDocRefAtom)
     const [projects, setProjects] = useState<firebase.firestore.DocumentSnapshot[]>([])
     useEffect(() => {
-        let query = userDocRef
-            ?.collection("projects")
+        let query = userDocRef?.ref
+            .collection("projects")
             .orderBy("createdAt", "desc")
 
         if (client) {

@@ -10,8 +10,8 @@ export function useTags() {
     const [userDocRef] = useAtom(userDocRefAtom)
     const [tags, setTags] = useState<firebase.firestore.DocumentSnapshot[]>([])
     useEffect(() => {
-        const unsubscribe = userDocRef
-            ?.collection("tags")
+        const unsubscribe = userDocRef?.ref
+            .collection("tags")
             .onSnapshot(snapshot => {
                 setTags(snapshot.docs)
             })

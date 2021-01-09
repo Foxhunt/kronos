@@ -65,7 +65,7 @@ export default function Overlay({ fileDocSnap }: props) {
         <TagList
             items={fileDocSnap.get("tags")}
             onAdd={tagName => {
-                const tagRef = userDocRef?.collection("tags").doc(tagName)
+                const tagRef = userDocRef?.ref.collection("tags").doc(tagName)
                 tagRef?.set({ name: tagName })
                 fileDocSnap.ref.update({
                     tags: firebase.firestore.FieldValue.arrayUnion(tagName)

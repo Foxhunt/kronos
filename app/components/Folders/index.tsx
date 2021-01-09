@@ -61,7 +61,7 @@ export default function Folders({ onHide }: props) {
             }}
             allowAdding={Boolean(userDocRef)}
             onAdd={async itemName => {
-                const newItem = await (await userDocRef?.collection("clients").add({
+                const newItem = await (await userDocRef?.ref.collection("clients").add({
                     name: itemName,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                     lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -83,7 +83,7 @@ export default function Folders({ onHide }: props) {
             }}
             allowAdding={Boolean(client)}
             onAdd={async itemName => {
-                const newItem = await (await userDocRef?.collection("projects").add({
+                const newItem = await (await userDocRef?.ref.collection("projects").add({
                     name: itemName,
                     client: client?.ref,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -111,7 +111,7 @@ export default function Folders({ onHide }: props) {
             }}
             allowAdding={Boolean(client && project)}
             onAdd={async itemName => {
-                const newItem = await (await userDocRef?.collection("tasks").add({
+                const newItem = await (await userDocRef?.ref.collection("tasks").add({
                     name: itemName,
                     pinned: false,
                     client: client?.ref,
@@ -149,7 +149,7 @@ export default function Folders({ onHide }: props) {
             }}
             allowAdding={Boolean(client && project && task)}
             onAdd={async itemName => {
-                const newItem = await (await userDocRef?.collection("collections").add({
+                const newItem = await (await userDocRef?.ref.collection("collections").add({
                     name: itemName,
                     client: client?.ref,
                     project: project?.ref,

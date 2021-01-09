@@ -14,8 +14,8 @@ export function useBoards(
     const [boards, setBoards] = useState<firebase.firestore.DocumentSnapshot[]>([])
 
     useEffect(() => {
-        let query = userDocRef
-            ?.collection("collections")
+        let query = userDocRef?.ref
+            .collection("collections")
             .orderBy("createdAt", "asc")
 
         if (client) {

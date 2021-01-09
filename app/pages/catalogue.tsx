@@ -12,8 +12,8 @@ export default function Catalogue() {
 
     const [tags, setTags] = useState<firebase.firestore.DocumentSnapshot[]>([])
     useEffect(() => {
-        const cleanup = userDocRef
-            ?.collection("tags")
+        const cleanup = userDocRef?.ref
+            .collection("tags")
             .onSnapshot(snapshot => {
                 setTags(snapshot.docs)
             })
@@ -23,8 +23,8 @@ export default function Catalogue() {
     const [favorites, setFavorites] = useState(false)
     const [files, setFiles] = useState<firebase.firestore.DocumentSnapshot[]>([])
     useEffect(() => {
-        const query = userDocRef
-            ?.collection("files")
+        const query = userDocRef?.ref
+            .collection("files")
             .where("favorite", "in", [true, favorites])
 
         if (selectedTag) {

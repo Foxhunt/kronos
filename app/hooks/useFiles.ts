@@ -22,8 +22,8 @@ export function useFiles(
     const [files, setFiles] = useState<firebase.firestore.DocumentSnapshot[]>([])
 
     useEffect(() => {
-        let query = userDocRef
-            ?.collection("files")
+        let query = userDocRef?.ref
+            .collection("files")
             ?.orderBy(orderBy, orderDirection)
             .limit(limit)
 

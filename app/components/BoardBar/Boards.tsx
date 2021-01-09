@@ -111,7 +111,7 @@ export default function Boards() {
             <NewItemForm
                 onSubmit={event => {
                     event.preventDefault()
-                    userDocRef?.collection("collections").add({
+                    userDocRef?.ref.collection("collections").add({
                         name: newItemName,
                         client: client?.ref,
                         project: project?.ref,

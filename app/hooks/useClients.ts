@@ -10,8 +10,8 @@ export function useClients() {
     const [userDocRef] = useAtom(userDocRefAtom)
     const [clients, setClients] = useState<firebase.firestore.DocumentSnapshot[]>([])
     useEffect(() => {
-        const unsubscribe = userDocRef
-            ?.collection("clients")
+        const unsubscribe = userDocRef?.ref
+            .collection("clients")
             .orderBy("createdAt", "desc")
             .onSnapshot(snapshot => {
                 setClients(snapshot.docs)
