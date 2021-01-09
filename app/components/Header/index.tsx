@@ -14,6 +14,9 @@ import Folders from "../Folders"
 import Filter from "../Filter"
 import AddCollection from "./AddCollection"
 
+import Circle from "./Circle"
+import { useRouter } from "next/router"
+
 const Container = styled.header`
 `
 
@@ -43,6 +46,7 @@ const FilterMenuToggle = styled.div`
 `
 
 export default function Header() {
+    const router = useRouter()
     const [userDocRef] = useAtom(userDocRefAtom)
 
     const [showFolders, setShowFolders] = useState(false)
@@ -63,14 +67,18 @@ export default function Header() {
         <Navigation>
             {userDocRef &&
                 <>
-                    <Link href={"/"}>
-                        Index
-                    </Link >
-                    <Link href={"/archive"}>
-                        <a>
+                    <div>
+                        {router.route === "/" && <Circle />}
+                        <Link href={"/"}>
+                            Index
+                            </Link >
+                    </div>
+                    <div>
+                        {router.route === "/archive" && <Circle />}
+                        <Link href={"/archive"}>
                             Archive
-                        </a>
-                    </Link >
+                        </Link >
+                    </div>
                     <Link href={"/archive"}>
                         <a
                             ref={archiveLinkRef}
