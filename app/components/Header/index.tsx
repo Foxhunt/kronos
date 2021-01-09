@@ -137,7 +137,10 @@ export default function Header() {
             {userDocRef ?
                 <Link href={"/login"}>
                     <a onClick={() => {
-                        setPath([])
+                        setClient(undefined)
+                        setProject(undefined)
+                        setTask(undefined)
+                        setBoard(undefined)
                         firebase.auth().signOut()
                     }}>
                         Logout
