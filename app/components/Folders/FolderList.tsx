@@ -73,6 +73,7 @@ const ScrollDownIndicator = styled.div`
 
 type props = {
     name: string
+    previousName?: string
     selected: firebase.firestore.DocumentSnapshot | undefined
     items: firebase.firestore.DocumentSnapshot[]
     allowAdding: boolean
@@ -80,7 +81,7 @@ type props = {
     onAdd: (itemName: string) => void
 }
 
-export default function FolderList({ name, selected, items, allowAdding, onSelect, onAdd }: props) {
+export default function FolderList({ name, previousName, selected, items, allowAdding, onSelect, onAdd }: props) {
     const [userDocRef] = useAtom(userDocRefAtom)
 
     const [newItemName, setNewItemName] = useState("")
@@ -104,8 +105,9 @@ export default function FolderList({ name, selected, items, allowAdding, onSelec
             key={"search/create"}
             onClick={() => {
                 allowAdding && onAdd(newItemName)
+                setNewItemName("")
             }}>
-            {allowAdding ? "click to create" : "select previous to create"}
+            {allowAdding ? "click to create" : `select ${previousName && userDocRef?.get(previousName)} to create`}
         </Item>)
     }
 
@@ -129,6 +131,7 @@ export default function FolderList({ name, selected, items, allowAdding, onSelec
             selected
             onContextMenu={event => {
                 event.preventDefault()
+                onSelect(undefined)
                 selected.ref.delete()
             }}
             onClick={() => {

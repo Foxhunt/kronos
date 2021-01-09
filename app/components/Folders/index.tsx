@@ -54,7 +54,7 @@ export default function Folders({ onHide }: props) {
             selected={client}
             items={clients}
             onSelect={selectedDoc => {
-                setClient(selectedDoc)
+                !project && setClient(selectedDoc)
                 setProject(undefined)
                 setTask(undefined)
                 setBoard(undefined)
@@ -73,11 +73,12 @@ export default function Folders({ onHide }: props) {
             }} />
         {projects && <FolderList
             name={"level2"}
+            previousName={"level1"}
             selected={project}
             items={projects}
             onSelect={async selectedDoc => {
-                setClient(await selectedDoc?.get("client").get())
-                setProject(selectedDoc)
+                !client && setClient(await selectedDoc?.get("client").get())
+                !task && setProject(selectedDoc)
                 setTask(undefined)
                 setBoard(undefined)
             }}
@@ -96,17 +97,18 @@ export default function Folders({ onHide }: props) {
             }} />}
         {tasks && <FolderList
             name={"level3"}
+            previousName={"level2"}
             selected={task}
             items={tasks}
             onSelect={async selectedDoc => {
-                const [client, project] =
+                const [newClient, newProject] =
                     await Promise.all<firebase.firestore.DocumentSnapshot>([
                         selectedDoc?.get("client").get(),
                         selectedDoc?.get("project").get()
                     ])
-                setClient(client)
-                setProject(project)
-                setTask(selectedDoc)
+                !client && setClient(newClient)
+                !project && setProject(newProject)
+                !board && setTask(selectedDoc)
                 setBoard(undefined)
             }}
             allowAdding={Boolean(client && project)}
@@ -136,15 +138,15 @@ export default function Folders({ onHide }: props) {
             selected={board}
             items={boards}
             onSelect={async selectedDoc => {
-                const [client, project, task] =
+                const [newClient, newProject, newTtask] =
                     await Promise.all<firebase.firestore.DocumentSnapshot>([
                         selectedDoc?.get("client").get(),
                         selectedDoc?.get("project").get(),
                         selectedDoc?.get("task").get()
                     ])
-                setClient(client)
-                setProject(project)
-                setTask(task)
+                !client && setClient(newClient)
+                !project && setProject(newProject)
+                !task && setTask(newTtask)
                 setBoard(selectedDoc)
             }}
             allowAdding={Boolean(client && project && task)}
