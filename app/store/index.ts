@@ -8,24 +8,6 @@ export const selectedProjectDocRefAtom = atom<firebase.firestore.DocumentSnapsho
 export const selectedTaskDocRefAtom = atom<firebase.firestore.DocumentSnapshot | undefined>(undefined)
 export const selectedCollectionDocRefAtom = atom<firebase.firestore.DocumentSnapshot | undefined>(undefined)
 
-export const pathAtom = atom<string, firebase.firestore.DocumentSnapshot[]>(
-    get => {
-        const clientName = get(selectedClientDocRefAtom)?.get("name")
-        const projectName = get(selectedProjectDocRefAtom)?.get("name")
-        const taskName = get(selectedTaskDocRefAtom)?.get("name")
-
-        const path = [clientName, projectName, taskName].filter(crumb => crumb !== undefined)
-
-        return path.length ? "> " + path.join(" > ") : ">"
-    },
-    (_, set, [client, project, task]) => {
-        set(selectedClientDocRefAtom, client)
-        set(selectedProjectDocRefAtom, project)
-        set(selectedTaskDocRefAtom, task)
-        set(selectedCollectionDocRefAtom, undefined)
-    }
-)
-
 export type orderOptions = {
     orderBy: "createdAt" | "lastUpdatedAt" | "clientName" | "projectName" | "name" | "pinned" | "random",
     orderDirection: "asc" | "desc"

@@ -5,7 +5,10 @@ import styled from "styled-components"
 
 import { useAtom } from "jotai"
 import {
-    pathAtom,
+    selectedClientDocRefAtom,
+    selectedCollectionDocRefAtom,
+    selectedProjectDocRefAtom,
+    selectedTaskDocRefAtom,
     showInteractionBarAtom,
     userDocRefAtom
 } from "../../store"
@@ -18,6 +21,10 @@ import Circle from "./Circle"
 import { useRouter } from "next/router"
 
 const Container = styled.header`
+`
+
+const Crumb = styled.div`
+    display: inline;
 `
 
 const Navigation = styled.nav`
@@ -58,10 +65,12 @@ export default function Header() {
     const [showAddCollection, setShowAddCollection] = useState(false)
     const addCollectionRef = useRef<HTMLAnchorElement>(null)
 
-
-    const [path, setPath] = useAtom(pathAtom)
-
     const [showInteractionBar, setShowInteractionBar] = useAtom(showInteractionBarAtom)
+
+    const [client, setClient] = useAtom(selectedClientDocRefAtom)
+    const [project, setProject] = useAtom(selectedProjectDocRefAtom)
+    const [task, setTask] = useAtom(selectedTaskDocRefAtom)
+    const [, setBoard] = useAtom(selectedCollectionDocRefAtom)
 
     return <Container>
         <Navigation>
@@ -83,7 +92,30 @@ export default function Header() {
                         <a
                             ref={archiveLinkRef}
                             onPointerDown={() => setShowFolders(!showFolders)}>
-                            {path}
+                            {">"} {client && <Crumb
+                                onClick={() => {
+                                    setClient(client)
+                                    setProject(undefined)
+                                    setTask(undefined)
+                                    setBoard(undefined)
+                                }}>
+                                {client.get("name")}
+                            </Crumb>}
+                            {project && <Crumb
+                                onClick={() => {
+                                    setProject(project)
+                                    setTask(undefined)
+                                    setBoard(undefined)
+                                }}>
+                                {" >"} {project.get("name")}
+                            </Crumb>}
+                            {task && <Crumb
+                                onClick={() => {
+                                    setTask(task)
+                                    setBoard(undefined)
+                                }}>
+                                {" >"} {task.get("name")}
+                            </Crumb>}
                         </a>
                     </Link >
                     <a
