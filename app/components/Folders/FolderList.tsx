@@ -101,22 +101,6 @@ export default function FolderList({ name, selected, items, allowAdding, onSelec
         </Item>)
     }
 
-    if (selected) {
-        renderItems.push(<Item
-            ref={selectedItemRef}
-            key={selected.id}
-            selected
-            onContextMenu={event => {
-                event.preventDefault()
-                selected.ref.delete()
-            }}
-            onClick={() => {
-                onSelect(undefined)
-            }}>
-            {selected.get("name")}
-        </Item>)
-    }
-
     renderItems.push(...(searchResult.length ? searchResult : items).map(item =>
         selected?.id !== item.id ? <Item
             key={item.id}
@@ -128,7 +112,19 @@ export default function FolderList({ name, selected, items, allowAdding, onSelec
                 onSelect(item)
             }}>
             {item.get("name")}
-        </Item> : null
+        </Item> : <Item
+            ref={selectedItemRef}
+            key={selected.id}
+            selected
+            onContextMenu={event => {
+                event.preventDefault()
+                selected.ref.delete()
+            }}
+            onClick={() => {
+                onSelect(undefined)
+            }}>
+                {selected.get("name")}
+            </Item>
     ))
 
     const [canScrollUp, setCanScrollUp] = useState(false)
