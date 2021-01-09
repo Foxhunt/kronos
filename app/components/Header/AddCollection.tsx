@@ -42,7 +42,7 @@ export default function AddCollection({ onHide }: props) {
     return <Container
         ref={containerRef}>
         <FolderList
-            name={"I"}
+            name={userDocRef?.get("level1")}
             selected={client}
             items={clients}
             onSelect={selectedDoc => {
@@ -60,7 +60,7 @@ export default function AddCollection({ onHide }: props) {
                 })
             }} />
         <FolderList
-            name={"II"}
+            name={userDocRef?.get("level2")}
             selected={project}
             items={projects}
             onSelect={selectedDoc => {
