@@ -54,7 +54,11 @@ export default function Folders({ onHide }: props) {
             selected={client}
             items={clients}
             onSelect={selectedDoc => {
-                !project && setClient(selectedDoc)
+                if (project || selectedDoc?.id !== client?.id) {
+                    setClient(selectedDoc)
+                } else if (!project || selectedDoc?.id === client?.id) {
+                    setClient(undefined)
+                }
                 setProject(undefined)
                 setTask(undefined)
                 setBoard(undefined)
@@ -78,7 +82,11 @@ export default function Folders({ onHide }: props) {
             items={projects}
             onSelect={async selectedDoc => {
                 !client && setClient(await selectedDoc?.get("client").get())
-                !task && setProject(selectedDoc)
+                if (task || selectedDoc?.id !== project?.id) {
+                    setProject(selectedDoc)
+                } else if (!task || selectedDoc?.id === project?.id) {
+                    setProject(undefined)
+                }
                 setTask(undefined)
                 setBoard(undefined)
             }}
@@ -108,7 +116,11 @@ export default function Folders({ onHide }: props) {
                     ])
                 !client && setClient(newClient)
                 !project && setProject(newProject)
-                !board && setTask(selectedDoc)
+                if (board || selectedDoc?.id !== task?.id) {
+                    setTask(selectedDoc)
+                } else if (!board || selectedDoc?.id === task?.id) {
+                    setTask(undefined)
+                }
                 setBoard(undefined)
             }}
             allowAdding={Boolean(client && project)}
@@ -148,7 +160,11 @@ export default function Folders({ onHide }: props) {
                 !client && setClient(newClient)
                 !project && setProject(newProject)
                 !task && setTask(newTtask)
-                setBoard(selectedDoc)
+                if (selectedDoc?.id !== board?.id) {
+                    setBoard(selectedDoc)
+                } else {
+                    setBoard(undefined)
+                }
             }}
             allowAdding={Boolean(client && project && task)}
             onAdd={async itemName => {

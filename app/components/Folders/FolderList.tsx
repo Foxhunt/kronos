@@ -102,13 +102,13 @@ export default function FolderList({ name, previousName, selected, items, allowA
 
     if (newItemName !== "") {
         renderItems.push(<Item
-            key={"search/create"}
+            key={"click to create"}
             onClick={() => {
                 allowAdding && onAdd(newItemName)
                 setNewItemName("")
             }}>
             {allowAdding ? "click to create" : `select ${previousName && userDocRef?.get(previousName)} to create`}
-        </Item>)
+        </Item >)
     }
 
     const selectedItemRef = useRef<HTMLDivElement>(null)
@@ -135,7 +135,7 @@ export default function FolderList({ name, previousName, selected, items, allowA
                 selected.ref.delete()
             }}
             onClick={() => {
-                onSelect(undefined)
+                onSelect(selected)
             }}>
                 {selected.get("name")}
             </Item>
