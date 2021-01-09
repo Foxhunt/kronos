@@ -5,7 +5,10 @@ import styled from "styled-components"
 
 import { useAtom } from "jotai"
 import {
-    pathAtom,
+    selectedClientDocRefAtom,
+    selectedCollectionDocRefAtom,
+    selectedProjectDocRefAtom,
+    selectedTaskDocRefAtom,
 } from "../../store"
 
 import FileGrid from "../FileGrid"
@@ -20,8 +23,8 @@ type props = {
 
 export default function Collection({ taskDocSnap }: props) {
     const router = useRouter()
-    const [client, setClient] = useState<firebase.firestore.DocumentSnapshot>()
-    const [project, setProject] = useState<firebase.firestore.DocumentSnapshot>()
+    const [taskClient, setTaskClient] = useState<firebase.firestore.DocumentSnapshot>()
+    const [taskProject, setTaskProject] = useState<firebase.firestore.DocumentSnapshot>()
 
     useEffect(() => {
         async function fetchData() {
@@ -29,22 +32,27 @@ export default function Collection({ taskDocSnap }: props) {
                 taskDocSnap.get("client").get(),
                 taskDocSnap.get("project").get(),
             ])
-            setClient(client)
-            setProject(project)
+            setTaskClient(client)
+            setTaskProject(project)
         }
         fetchData()
     }, [taskDocSnap])
 
-    const files = useFiles(client, project, taskDocSnap, undefined, 3)
+    const [, setClient] = useAtom(selectedClientDocRefAtom)
+    const [, setProject] = useAtom(selectedProjectDocRefAtom)
+    const [, setTask] = useAtom(selectedTaskDocRefAtom)
+    const [, setBoard] = useAtom(selectedCollectionDocRefAtom)
 
-    const [, setPath] = useAtom(pathAtom)
-
+    const files = useFiles(taskClient, taskProject, taskDocSnap, undefined, 3)
     const [showFiles, setShowFiles] = useState(false)
 
-    return (client && project) ?
+    return (taskClient && taskProject) ?
         <Container
             onClick={async () => {
-                await setPath([client, project, taskDocSnap])
+                setClient(taskClient)
+                setProject(taskProject)
+                setTask(taskDocSnap)
+                setBoard(undefined)
                 router.push("archive")
             }}>
             <Row>
@@ -63,10 +71,10 @@ export default function Collection({ taskDocSnap }: props) {
                 {taskDocSnap.get("lastUpdatedAt")?.toDate().getFullYear()}
                 </Cell>
                 <Cell>
-                    {client?.get("name")}
+                    {taskDocSnap?.get("clientName")}
                 </Cell>
                 <Cell>
-                    {project?.get("name")}
+                    {taskDocSnap?.get("projectName")}
                 </Cell>
                 <Cell>
                     {taskDocSnap.get("name")}
