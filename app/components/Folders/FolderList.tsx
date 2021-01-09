@@ -1,7 +1,9 @@
 import firebase from "../../firebase/clientApp"
 import styled from "styled-components"
 import { useEffect, useRef, useState } from "react"
-import { useOfflineSearch, useScollIntoView } from "../../hooks"
+import { useClickedOutside, useOfflineSearch, useScollIntoView } from "../../hooks"
+import { useAtom } from "jotai"
+import { userDocRefAtom } from "../../store"
 
 const Container = styled.div`
     background-color: white;
@@ -38,7 +40,7 @@ const Items = styled.div`
     }
 `
 
-const NewItemInput = styled.input`
+const ItemInput = styled.input`
     width: calc(100% - 5px);
     height: 30px;
     padding: unset;
@@ -79,6 +81,8 @@ type props = {
 }
 
 export default function FolderList({ name, selected, items, allowAdding, onSelect, onAdd }: props) {
+    const [userDocRef] = useAtom(userDocRefAtom)
+
     const [newItemName, setNewItemName] = useState("")
 
     const searchResult = useOfflineSearch({
@@ -87,19 +91,26 @@ export default function FolderList({ name, selected, items, allowAdding, onSelec
         keys: ["name"]
     })
 
-    const selectedItemRef = useRef<HTMLDivElement>(null)
-    useScollIntoView(selectedItemRef)
+    const [isAdditingLevelName, setIsAdditingLevelName] = useState(false)
+    const levelNameInputRef = useRef<HTMLInputElement>(null)
+    useClickedOutside(levelNameInputRef, () => {
+        setIsAdditingLevelName(false)
+    })
 
     const renderItems = []
 
     if (newItemName !== "") {
         renderItems.push(<Item
+            key={"search/create"}
             onClick={() => {
                 allowAdding && onAdd(newItemName)
             }}>
             {allowAdding ? "click to create" : "select previous to create"}
         </Item>)
     }
+
+    const selectedItemRef = useRef<HTMLDivElement>(null)
+    useScollIntoView(selectedItemRef)
 
     renderItems.push(...(searchResult.length ? searchResult : items).map(item =>
         selected?.id !== item.id ? <Item
@@ -138,7 +149,31 @@ export default function FolderList({ name, selected, items, allowAdding, onSelec
     }, [ItemsRef.current, renderItems])
 
     return <Container>
-        <Item>{name}</Item>
+        {
+            isAdditingLevelName ?
+                <form
+                    onSubmit={event => {
+                        event.preventDefault()
+                        setIsAdditingLevelName(false)
+                    }}>
+                    <ItemInput
+                        autoFocus
+                        ref={levelNameInputRef}
+                        type={"text"}
+                        value={userDocRef?.get(name)}
+                        onChange={event => {
+                            userDocRef?.ref.update({ [name]: event.target.value })
+                        }} />
+                </form>
+                :
+                <Item
+                    onDoubleClick={event => {
+                        event.preventDefault()
+                        setIsAdditingLevelName(true)
+                    }}>
+                    {userDocRef?.get(name)}
+                </Item>
+        }
         <form
             onSubmit={event => {
                 event.preventDefault()
@@ -147,7 +182,7 @@ export default function FolderList({ name, selected, items, allowAdding, onSelec
                     setNewItemName("")
                 }
             }}>
-            <NewItemInput
+            <ItemInput
                 type={"text"}
                 autoFocus
                 placeholder={"search/create"}

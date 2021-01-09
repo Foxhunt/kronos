@@ -87,7 +87,7 @@ export default function Boards() {
             onPointerDown={() => {
                 setBoard(undefined)
             }}>
-            Board
+            {userDocRef?.get("boards")}
         </Item>
         {boards?.map(board =>
             <Item

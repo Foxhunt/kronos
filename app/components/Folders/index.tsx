@@ -50,7 +50,7 @@ export default function Folders({ onHide }: props) {
     return <Container
         ref={containerRef}>
         <FolderList
-            name={userDocRef?.get("level1")}
+            name={"level1"}
             selected={client}
             items={clients}
             onSelect={selectedDoc => {
@@ -72,7 +72,7 @@ export default function Folders({ onHide }: props) {
                 setBoard(undefined)
             }} />
         {projects && <FolderList
-            name={userDocRef?.get("level2")}
+            name={"level2"}
             selected={project}
             items={projects}
             onSelect={async selectedDoc => {
@@ -95,7 +95,7 @@ export default function Folders({ onHide }: props) {
                 setBoard(undefined)
             }} />}
         {tasks && <FolderList
-            name={userDocRef?.get("level3")}
+            name={"level3"}
             selected={task}
             items={tasks}
             onSelect={async selectedDoc => {
@@ -132,7 +132,7 @@ export default function Folders({ onHide }: props) {
                 setBoard(undefined)
             }} />}
         {boards && <FolderList
-            name={"Boards"}
+            name={"boards"}
             selected={board}
             items={boards}
             onSelect={async selectedDoc => {
