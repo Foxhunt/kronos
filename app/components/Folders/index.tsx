@@ -135,6 +135,7 @@ export default function Folders({ onHide }: props) {
             }} />}
         {boards && <FolderList
             name={"boards"}
+            previousName={"level3"}
             selected={board}
             items={boards}
             onSelect={async selectedDoc => {
