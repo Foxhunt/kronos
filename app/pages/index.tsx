@@ -1,7 +1,7 @@
 
 import Head from "next/head"
 import { useAtom } from "jotai"
-import TaskList from "../components/CollectionList"
+import CollectionList from "../components/CollectionList"
 import { userDocRefAtom } from "../store"
 
 export default function files() {
@@ -12,6 +12,6 @@ export default function files() {
             <title>Index</title>
             <link rel="shortcut icon" href="/list.svg" />
         </Head>
-        {userDocRef && <TaskList />}
+        {userDocRef && <CollectionList />}
     </>
 }
