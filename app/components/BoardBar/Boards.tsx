@@ -14,7 +14,8 @@ import { useBoards } from "../../hooks"
 const Container = styled.div`
     height: 100%;
 
-    overflow: auto;
+    overflow-x: auto;
+    overflow-y: hidden;
     white-space: nowrap;
     &::-webkit-scrollbar {
         display: none;
@@ -45,11 +46,14 @@ const Item = styled.div<{ selected?: boolean }>`
 `
 
 const NewItemForm = styled.form`
-    display: inline-block;
-    height: 100%;
-    width: 150px;
+    display: inline-flex;
+    align-items: center;
 
+    padding-left: 5px;
+    
     border-left: black solid 1px;
+    width: 150px;
+    height: 100%;
 `
 
 const NewItemInput = styled.input`
@@ -58,7 +62,7 @@ const NewItemInput = styled.input`
     width: 100%;
 
     border: none; 
-    border-width: 0; 
+    border-width: 0px; 
     box-shadow: none;
 
     &:focus {
