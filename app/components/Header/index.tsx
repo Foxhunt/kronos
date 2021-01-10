@@ -9,6 +9,7 @@ import {
     selectedCollectionDocRefAtom,
     selectedProjectDocRefAtom,
     selectedTaskDocRefAtom,
+    showAddCollectionAtom,
     showInteractionBarAtom,
     userDocRefAtom
 } from "../../store"
@@ -62,7 +63,7 @@ export default function Header() {
     const [showFilter, setShowFilter] = useState(false)
     const filterLinkRef = useRef<HTMLAnchorElement>(null)
 
-    const [showAddCollection, setShowAddCollection] = useState(false)
+    const [showAddCollection, setShowAddCollection] = useAtom(showAddCollectionAtom)
     const addCollectionRef = useRef<HTMLAnchorElement>(null)
 
     const [showInteractionBar, setShowInteractionBar] = useAtom(showInteractionBarAtom)

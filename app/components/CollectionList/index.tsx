@@ -3,8 +3,19 @@ import styled from "styled-components"
 import { useTasks } from "../../hooks"
 import Collection from "./Collection"
 import { useState } from "react"
+import { useAtom } from "jotai"
+import { showAddCollectionAtom } from "../../store"
 
-const Container = styled.div``
+const Container = styled.div`
+`
+
+const Hint = styled.div`
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`
 
 export const Row = styled.div`
     display: grid;
@@ -20,7 +31,7 @@ export const Cell = styled.div`
     align-items: center;
 `
 
-export default function TaskList() {
+export default function CollectionList() {
     const [orderBy, setOrderBy] = useState("createdAt")
     const [orderDirection, setOrderDirection] = useState<"asc" | "desc">("desc")
 
@@ -34,6 +45,8 @@ export default function TaskList() {
             setOrderDirection(["createdAt", "lastUpdatedAt", "pinned"].includes(newOrderBy) ? "desc" : "asc")
         }
     }
+
+    const [, setShowAddCollection] = useAtom(showAddCollectionAtom)
 
     return <Container>
         <Row>
@@ -62,10 +75,17 @@ export default function TaskList() {
             </Cell>
             <Cell></Cell>
         </Row>
-        {tasks.map(task => (
-            <Collection
-                key={task.id}
-                taskDocSnap={task} />
-        ))}
+        {tasks.length ?
+            tasks.map(task => (
+                <Collection
+                    key={task.id}
+                    taskDocSnap={task} />
+            ))
+            :
+            <Hint
+                onClick={() => setShowAddCollection(true)}>
+                No Collections in your Archive yet. create one!
+            </Hint>
+        }
     </Container>
 }

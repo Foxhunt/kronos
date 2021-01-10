@@ -20,6 +20,7 @@ export const filterTagsAtom = atom<string[]>([])
 export const filterClientsAtom = atom<firebase.firestore.DocumentSnapshot[]>([])
 
 export const showInteractionBarAtom = atom<boolean>(false)
+export const showAddCollectionAtom = atom<boolean>(false)
 
 export const selectedFilesAtom = atom<firebase.firestore.DocumentSnapshot[]>([])
 
