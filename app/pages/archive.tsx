@@ -115,6 +115,7 @@ export default function Archive() {
             <BoardBar
                 onUpload={onDrop} />}
         {userDocRef && <FileGrid
+            onUpload={onDrop}
             files={files}
             getRootProps={getRootProps} />}
         {isDragActive && collection && <DropTarget targetPosition={dropTargetPosition} />}

@@ -10,8 +10,10 @@ import { useAtom } from "jotai"
 import {
     previewFileAtom,
     searchFileAtom,
+    selectedCollectionDocRefAtom,
     selectedFilesAtom,
-    showInteractionBarAtom
+    showInteractionBarAtom,
+    userDocRefAtom
 } from "../../store"
 
 import FileComponent from "./FileComponent"
@@ -37,12 +39,30 @@ const Container = styled(motion.div)`
     overflow-y: auto;
 `
 
+const Hint = styled.label`
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+`
+
+const UploadInput = styled.input`
+    display: none;
+`
+
 type props = {
     files: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>[]
     getRootProps?: (props?: DropzoneRootProps) => DropzoneRootProps
+    onUpload: (acceptedFiles: File[]) => void
 }
 
-export default function FileGrid({ files, getRootProps }: props) {
+export default function FileGrid({ files, getRootProps, onUpload }: props) {
+    const [userDocRef] = useAtom(userDocRefAtom)
     const [selectedFiles, setSelectedFiles] = useAtom(selectedFilesAtom)
     const [showInteractionBar] = useAtom(showInteractionBarAtom)
     const [, setPreviewFile] = useAtom(previewFileAtom)
@@ -89,6 +109,25 @@ export default function FileGrid({ files, getRootProps }: props) {
 
     const [previewFile] = useAtom(previewFileAtom)
 
+    const [collection] = useAtom(selectedCollectionDocRefAtom)
+
+    const hintText = collection ?
+        <Hint>
+            Drag and drop or <br />
+            click to upload files
+            <UploadInput
+                multiple
+                onChange={event => {
+                    if (event.target.files) {
+                        onUpload(Array.from(event.target.files))
+                    }
+                    event.target.value = ""
+                }}
+                type={"file"} />
+        </Hint>
+        :
+        <Hint>Select a {userDocRef?.get("boards")}<br />to upload files</Hint>
+
     // @ts-ignore
     return <Container
         initial="hidden"
@@ -96,7 +135,7 @@ export default function FileGrid({ files, getRootProps }: props) {
         exit="hidden"
         variants={variants}
         {...(getRootProps ? getRootProps({}) : {})}>
-        {fileList}
+        {fileList.length ? fileList : hintText}
         {previewFile && <FilePreview />}
     </Container>
 }
