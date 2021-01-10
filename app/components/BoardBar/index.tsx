@@ -1,14 +1,14 @@
 import { useAtom } from "jotai"
 import React from "react"
 import styled from "styled-components"
-import { selectedCollectionDocRefAtom } from "../../store"
+import { selectedCollectionDocRefAtom, userDocRefAtom } from "../../store"
 
 import Boards from "./Boards"
 
 const Container = styled.div`
     height: 30px;
     display: grid;
-    grid-template-columns: 1fr 100px;
+    grid-template-columns: 1fr 200px;
     
     border-bottom: 1px solid black;
 `
@@ -31,20 +31,27 @@ type props = {
 }
 
 export default function BoardBar({ onUpload }: props) {
+    const [userDocRef] = useAtom(userDocRefAtom)
     const [selectedCollection] = useAtom(selectedCollectionDocRefAtom)
     return <Container>
         <Boards />
-        {selectedCollection && <Upload>
-            Upload
-            <UploadInput
-                multiple
-                onChange={event => {
-                    if (event.target.files) {
-                        onUpload(Array.from(event.target.files))
-                    }
-                    event.target.value = ""
-                }}
-                type={"file"} />
-        </Upload>}
+        <Upload>
+            {selectedCollection ?
+                <>
+                    Upload
+                    <UploadInput
+                        multiple
+                        type={"file"}
+                        onChange={event => {
+                            if (event.target.files) {
+                                onUpload(Array.from(event.target.files))
+                            }
+                            event.target.value = ""
+                        }} />
+                </>
+                :
+                <>Select a {userDocRef?.get("boards")} to upload files</>}
+        </Upload>
+
     </Container >
 }
