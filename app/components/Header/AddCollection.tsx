@@ -19,6 +19,23 @@ const Container = styled.div`
     border-bottom: 1px solid black;
 `
 
+const Label = styled.label`
+    padding-left: 5px;
+`
+
+const Input = styled.input`
+    padding-left: 5px;
+    padding-left: 5px;
+    height: calc(100% - 18px);
+    width: 100%;
+    padding: unset;
+    border: none;    
+    box-shadow: none;
+    &:focus {
+        outline: none!important;
+    }
+`
+
 type props = {
     onHide: (event: MouseEvent) => void
 }
@@ -77,13 +94,13 @@ export default function AddCollection({ onHide }: props) {
                     lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
                 })
             }} />
-        <label>
+        <Label>
             Name
-                <input
+                <Input
                 type="text"
                 value={collectionName}
                 onChange={event => setCollectionName(event.target.value)} />
-        </label>
+        </Label>
         <button
             onClick={event => {
                 event.preventDefault()
