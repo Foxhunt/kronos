@@ -58,7 +58,7 @@ const UploadInput = styled.input`
 type props = {
     files: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>[]
     getRootProps?: (props?: DropzoneRootProps) => DropzoneRootProps
-    onUpload: (acceptedFiles: File[]) => void
+    onUpload?: (acceptedFiles: File[]) => void
 }
 
 export default function FileGrid({ files, getRootProps, onUpload }: props) {
@@ -118,7 +118,7 @@ export default function FileGrid({ files, getRootProps, onUpload }: props) {
             <UploadInput
                 multiple
                 onChange={event => {
-                    if (event.target.files) {
+                    if (event.target.files && onUpload) {
                         onUpload(Array.from(event.target.files))
                     }
                     event.target.value = ""
