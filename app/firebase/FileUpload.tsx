@@ -79,8 +79,8 @@ export default function FileUpload() {
                 setFilesToUpload([])
             } else {
                 setShowFolders(true)
-                router.push("/archive")
             }
+            router.push("/archive")
         }
 
         if (filesToUpload.length > 0) {
