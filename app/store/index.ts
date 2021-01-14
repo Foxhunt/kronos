@@ -8,6 +8,9 @@ export const selectedProjectDocRefAtom = atom<firebase.firestore.DocumentSnapsho
 export const selectedTaskDocRefAtom = atom<firebase.firestore.DocumentSnapshot | undefined>(undefined)
 export const selectedCollectionDocRefAtom = atom<firebase.firestore.DocumentSnapshot | undefined>(undefined)
 
+export const filesWaitingForUploadAtom = atom<File[]>([])
+export const showFoldersAtom = atom<boolean>(false)
+
 export type orderOptions = {
     orderBy: "createdAt" | "lastUpdatedAt" | "clientName" | "projectName" | "name" | "pinned" | "random",
     orderDirection: "asc" | "desc"
