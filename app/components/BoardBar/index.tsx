@@ -1,7 +1,8 @@
-import { useAtom } from "jotai"
 import React from "react"
 import styled from "styled-components"
-import { selectedCollectionDocRefAtom, userDocRefAtom } from "../../store"
+
+import { useAtom } from "jotai"
+import { filesToUploadAtom } from "../../store"
 
 import Boards from "./Boards"
 
@@ -26,32 +27,23 @@ const UploadInput = styled.input`
     display: none;
 `
 
-type props = {
-    onUpload: (acceptedFiles: File[]) => void
-}
-
-export default function BoardBar({ onUpload }: props) {
-    const [userDocRef] = useAtom(userDocRefAtom)
-    const [selectedCollection] = useAtom(selectedCollectionDocRefAtom)
+export default function BoardBar() {
+    const [, setFilesToUpload] = useAtom(filesToUploadAtom)
     return <Container>
         <Boards />
         <Upload>
-            {selectedCollection ?
-                <>
-                    Upload
+            <>
+                Upload
                     <UploadInput
-                        multiple
-                        type={"file"}
-                        onChange={event => {
-                            if (event.target.files) {
-                                onUpload(Array.from(event.target.files))
-                            }
-                            event.target.value = ""
-                        }} />
-                </>
-                :
-                <>Select a {userDocRef?.get("boards")} to upload files</>}
+                    multiple
+                    type={"file"}
+                    onChange={event => {
+                        if (event.target.files) {
+                            setFilesToUpload(Array.from(event.target.files))
+                        }
+                        event.target.value = ""
+                    }} />
+            </>
         </Upload>
-
     </Container >
 }

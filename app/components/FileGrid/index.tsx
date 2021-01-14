@@ -8,12 +8,11 @@ import { DropzoneRootProps } from "react-dropzone"
 
 import { useAtom } from "jotai"
 import {
+    filesToUploadAtom,
     previewFileAtom,
     searchFileAtom,
-    selectedCollectionDocRefAtom,
     selectedFilesAtom,
     showInteractionBarAtom,
-    userDocRefAtom
 } from "../../store"
 
 import FileComponent from "./FileComponent"
@@ -58,11 +57,9 @@ const UploadInput = styled.input`
 type props = {
     files: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>[]
     getRootProps?: (props?: DropzoneRootProps) => DropzoneRootProps
-    onUpload?: (acceptedFiles: File[]) => void
 }
 
-export default function FileGrid({ files, getRootProps, onUpload }: props) {
-    const [userDocRef] = useAtom(userDocRefAtom)
+export default function FileGrid({ files, getRootProps }: props) {
     const [selectedFiles, setSelectedFiles] = useAtom(selectedFilesAtom)
     const [showInteractionBar] = useAtom(showInteractionBarAtom)
     const [, setPreviewFile] = useAtom(previewFileAtom)
@@ -109,24 +106,7 @@ export default function FileGrid({ files, getRootProps, onUpload }: props) {
 
     const [previewFile] = useAtom(previewFileAtom)
 
-    const [collection] = useAtom(selectedCollectionDocRefAtom)
-
-    const hintText = collection ?
-        <Hint>
-            Drag and drop or <br />
-            click to upload files
-            <UploadInput
-                multiple
-                onChange={event => {
-                    if (event.target.files && onUpload) {
-                        onUpload(Array.from(event.target.files))
-                    }
-                    event.target.value = ""
-                }}
-                type={"file"} />
-        </Hint>
-        :
-        <Hint>Select a {userDocRef?.get("boards")}<br />to upload files</Hint>
+    const [, setFilesToUpload] = useAtom(filesToUploadAtom)
 
     // @ts-ignore
     return <Container
@@ -135,7 +115,22 @@ export default function FileGrid({ files, getRootProps, onUpload }: props) {
         exit="hidden"
         variants={variants}
         {...(getRootProps ? getRootProps({}) : {})}>
-        {fileList.length ? fileList : hintText}
+        {fileList.length ?
+            fileList
+            :
+            <Hint>
+                Drag and drop or <br />
+                click to upload files
+            <UploadInput
+                    multiple
+                    onChange={event => {
+                        if (event.target.files) {
+                            setFilesToUpload(Array.from(event.target.files))
+                        }
+                        event.target.value = ""
+                    }}
+                    type={"file"} />
+            </Hint>}
         {previewFile && <FilePreview />}
     </Container>
 }

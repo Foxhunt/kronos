@@ -3,7 +3,7 @@ import styled from "styled-components"
 import { useEffect, useRef, useState } from "react"
 import { useClickedOutside, useOfflineSearch, useScollIntoView } from "../../hooks"
 import { useAtom } from "jotai"
-import { userDocRefAtom } from "../../store"
+import { filesToUploadAtom, userDocRefAtom } from "../../store"
 
 const Container = styled.div`
     background-color: white;
@@ -151,6 +151,8 @@ export default function FolderList({ name, previousName, selected, items, allowA
         }
     }, [ItemsRef.current, renderItems])
 
+    const [filesToUpload] = useAtom(filesToUploadAtom)
+
     return <Container>
         {
             isAdditingLevelName ?
@@ -174,7 +176,12 @@ export default function FolderList({ name, previousName, selected, items, allowA
                         event.preventDefault()
                         setIsAdditingLevelName(true)
                     }}>
-                    {userDocRef?.get(name)}
+                    {
+                        filesToUpload.length > 0 && !selected ?
+                            `Select a ${userDocRef?.get(name)} to complete upload.`
+                            :
+                            userDocRef?.get(name)
+                    }
                 </Item>
         }
         <form

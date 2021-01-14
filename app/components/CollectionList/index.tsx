@@ -3,18 +3,27 @@ import styled from "styled-components"
 import { useTasks } from "../../hooks"
 import Collection from "./Collection"
 import { useState } from "react"
+
 import { useAtom } from "jotai"
-import { showAddCollectionAtom } from "../../store"
+import { filesToUploadAtom } from "../../store"
 
 const Container = styled.div`
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 `
 
-const Hint = styled.div`
+const Hint = styled.label`
+    flex: 1;
     width: 100%;
     height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
+`
+
+const UploadInput = styled.input`
+    display: none;
 `
 
 export const Row = styled.div`
@@ -46,7 +55,7 @@ export default function CollectionList() {
         }
     }
 
-    const [, setShowAddCollection] = useAtom(showAddCollectionAtom)
+    const [, setFilesToUpload] = useAtom(filesToUploadAtom)
 
     return <Container>
         <Row>
@@ -82,9 +91,17 @@ export default function CollectionList() {
                     taskDocSnap={task} />
             ))
             :
-            <Hint
-                onClick={() => setShowAddCollection(true)}>
-                No Collections in your Archive yet. create one!
+            <Hint>
+                Click to upload files
+                <UploadInput
+                    multiple
+                    onChange={event => {
+                        if (event.target.files) {
+                            setFilesToUpload(Array.from(event.target.files))
+                        }
+                        event.target.value = ""
+                    }}
+                    type={"file"} />
             </Hint>
         }
     </Container>

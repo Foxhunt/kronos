@@ -4,8 +4,6 @@ export { useTasks } from "./useTasks"
 export { useBoards } from "./useBoards"
 export { useFiles } from "./useFiles"
 
-export { useFileUpload } from "./useFileUpload"
-
 export { useTags } from "./useTags"
 
 export { useClickedOutside } from "./useClickedOutside"

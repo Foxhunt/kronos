@@ -5,18 +5,18 @@ import styled from "styled-components"
 
 import { useAtom } from "jotai"
 import {
+    filesToUploadAtom,
     selectedClientDocRefAtom,
     selectedCollectionDocRefAtom,
     selectedProjectDocRefAtom,
     selectedTaskDocRefAtom,
-    showAddCollectionAtom,
+    showFoldersAtom,
     showInteractionBarAtom,
     userDocRefAtom
 } from "../../store"
 
 import Folders from "../Folders"
 import Filter from "../Filter"
-import AddCollection from "./AddCollection"
 
 import Circle from "./Circle"
 import { useRouter } from "next/router"
@@ -53,18 +53,19 @@ const FilterMenuToggle = styled.div`
     font-size: 30px;
 `
 
+const UploadInput = styled.input`
+    display: none;
+`
+
 export default function Header() {
     const router = useRouter()
     const [userDocRef] = useAtom(userDocRefAtom)
 
-    const [showFolders, setShowFolders] = useState(false)
+    const [showFolders, setShowFolders] = useAtom(showFoldersAtom)
     const archiveLinkRef = useRef<HTMLAnchorElement>(null)
 
     const [showFilter, setShowFilter] = useState(false)
     const filterLinkRef = useRef<HTMLAnchorElement>(null)
-
-    const [showAddCollection, setShowAddCollection] = useAtom(showAddCollectionAtom)
-    const addCollectionRef = useRef<HTMLAnchorElement>(null)
 
     const [showInteractionBar, setShowInteractionBar] = useAtom(showInteractionBarAtom)
 
@@ -72,6 +73,8 @@ export default function Header() {
     const [project, setProject] = useAtom(selectedProjectDocRefAtom)
     const [task, setTask] = useAtom(selectedTaskDocRefAtom)
     const [, setBoard] = useAtom(selectedCollectionDocRefAtom)
+
+    const [, setFilesToUpload] = useAtom(filesToUploadAtom)
 
     return <Container>
         <Navigation>
@@ -124,11 +127,18 @@ export default function Header() {
                         onPointerDown={() => setShowFilter(!showFilter)}>
                         Filter
                     </a >
-                    <a
-                        ref={addCollectionRef}
-                        onPointerDown={() => setShowAddCollection(!showAddCollection)}>
-                        + CREATE NEW COLLECTION
-                    </a >
+                    <label>
+                        Upload Files
+                        <UploadInput
+                            multiple
+                            type={"file"}
+                            onChange={event => {
+                                if (event.target.files) {
+                                    setFilesToUpload(Array.from(event.target.files))
+                                }
+                                event.target.value = ""
+                            }} />
+                    </label>
                     <FilterMenuToggle
                         onClick={() => setShowInteractionBar(!showInteractionBar)}>
                         ...
@@ -168,13 +178,6 @@ export default function Header() {
                         onHide={event => {
                             if (event.target !== filterLinkRef.current) {
                                 setShowFilter(false)
-                            }
-                        }} />}
-                {showAddCollection &&
-                    <AddCollection
-                        onHide={event => {
-                            if (event.target !== addCollectionRef.current) {
-                                setShowAddCollection(false)
                             }
                         }} />}
             </>
