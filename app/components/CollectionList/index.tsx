@@ -6,11 +6,14 @@ import { useState } from "react"
 
 import { useAtom } from "jotai"
 import { filesToUploadAtom } from "../../store"
+import { DropzoneRootProps } from "react-dropzone"
 
 const Container = styled.div`
     flex: 1;
     display: flex;
     flex-direction: column;
+    
+    outline: none;
 `
 
 const Hint = styled.label`
@@ -40,7 +43,11 @@ export const Cell = styled.div`
     align-items: center;
 `
 
-export default function CollectionList() {
+type props = {
+    getRootProps?: (props?: DropzoneRootProps) => DropzoneRootProps
+}
+
+export default function CollectionList({ getRootProps }: props) {
     const [orderBy, setOrderBy] = useState("createdAt")
     const [orderDirection, setOrderDirection] = useState<"asc" | "desc">("desc")
 
@@ -57,7 +64,8 @@ export default function CollectionList() {
 
     const [, setFilesToUpload] = useAtom(filesToUploadAtom)
 
-    return <Container>
+    return <Container
+        {...(getRootProps ? getRootProps({}) : {})}>
         <Row>
             <Cell onClick={() => setOrder("createdAt")}>
                 Upload {orderDirection}

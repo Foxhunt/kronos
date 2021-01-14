@@ -76,7 +76,11 @@ export default function Archive() {
         {userDocRef &&
             <FileGrid
                 files={files}
-                getRootProps={getRootProps} />}
-        {isDragActive && <DropTarget targetPosition={dropTargetPosition} />}
+                getRootProps={getRootProps} />
+        }
+        {isDragActive &&
+            <DropTarget
+                targetPosition={dropTargetPosition} />
+        }
     </>
 }
