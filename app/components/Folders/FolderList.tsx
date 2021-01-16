@@ -1,43 +1,13 @@
 import firebase from "../../firebase/clientApp"
 import styled from "styled-components"
-import { useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import { useClickedOutside, useOfflineSearch, useScollIntoView } from "../../hooks"
 import { useAtom } from "jotai"
 import { filesToUploadAtom, userDocRefAtom } from "../../store"
 
+import { ItemList, Item } from "../Shared/ItemList"
+
 const Container = styled.div`
-    background-color: white;
-`
-
-const Item = styled.div<{ selected?: boolean }>`
-    display: flex;
-    align-items: center;
-
-    height: 30px;
-    
-    padding-left: 5px;
-    border-bottom: black 1px solid;
-
-    ${({ selected }) => selected ?
-        `
-        background-color: black;
-        color: white;
-        ` : ""
-    }
-    
-    &:last-child {
-        border-bottom: none;
-    }
-`
-
-const Items = styled.div`
-    max-height: calc(100% - 62px);
-    overflow: auto;
-    scrollbar-width: none;
-
-    &::-webkit-scrollbar {
-        display: none;
-    }
 `
 
 const ItemInput = styled.input`
@@ -54,21 +24,6 @@ const ItemInput = styled.input`
     &:focus {
         outline: none!important;
     }
-`
-
-const ScrollUpIndicator = styled.div`
-    position: sticky;
-
-    width: 100%;
-    text-align: center;
-    top: 0px;
-`
-const ScrollDownIndicator = styled.div`
-    position: sticky;
-
-    width: 100%;
-    text-align: center;
-    bottom: 0px;
 `
 
 type props = {
@@ -141,16 +96,6 @@ export default function FolderList({ name, previousName, selected, items, allowA
             </Item>
     ))
 
-    const [canScrollUp, setCanScrollUp] = useState(false)
-    const [canScrollDown, setCanScrollDown] = useState(false)
-    const ItemsRef = useRef<HTMLDivElement>(null)
-    useEffect(() => {
-        if (ItemsRef.current) {
-            setCanScrollUp(ItemsRef.current.scrollTop >= 31)
-            setCanScrollDown(ItemsRef.current.scrollHeight - ItemsRef.current.scrollTop - ItemsRef.current.clientHeight >= 31)
-        }
-    }, [ItemsRef.current, renderItems])
-
     const [filesToUpload] = useAtom(filesToUploadAtom)
 
     return <Container>
@@ -201,18 +146,9 @@ export default function FolderList({ name, previousName, selected, items, allowA
                     setNewItemName(event.target.value)
                 }} />
         </form>
-        <Items
-            ref={ItemsRef}
-            onScroll={event => {
-                setCanScrollUp(event.currentTarget.scrollTop >= 31)
-                setCanScrollDown(event.currentTarget.scrollHeight - event.currentTarget.scrollTop - event.currentTarget.clientHeight >= 31)
-            }}>
-            {canScrollUp && <ScrollUpIndicator>up</ScrollUpIndicator>}
+        <ItemList
+            lenght={4}>
             {renderItems}
-            {new Array(renderItems.length < 4 ? 4 - renderItems.length : 0)
-                .fill("")
-                .map((_item, index) => <Item key={index} />)}
-            {canScrollDown && <ScrollDownIndicator>down</ScrollDownIndicator>}
-        </Items>
+        </ItemList>
     </Container>
 }

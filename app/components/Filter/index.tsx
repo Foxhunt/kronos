@@ -12,7 +12,8 @@ import {
     searchFileAtom
 } from "../../store"
 
-import FilterList, { Item } from "./FilterList"
+import FilterList from "./FilterList"
+import { Item } from "../Shared/ItemList"
 
 const Container = styled.div`
     width: 100%;
@@ -107,7 +108,7 @@ export default function Filter({ onHide }: props) {
             </Item>
         </FilterList>
         <FilterList
-            name={"Marked / Favorite"}>
+            name={"Tags"}>
             {tags.map(tag => <Item
                 key={tag.id}
                 selected={selectedTags.includes(tag.id)}
@@ -119,6 +120,15 @@ export default function Filter({ onHide }: props) {
                     } else {
                         const newSelectedTags = [...selectedTags]
                         newSelectedTags.push(tag.id)
+                        setSelectedTags(newSelectedTags)
+                    }
+                }}
+                onContextMenu={event => {
+                    event.preventDefault()
+                    tag.ref.delete()
+                    if (selectedTags.includes(tag.id)) {
+                        const newSelectedTags = [...selectedTags]
+                        newSelectedTags.splice(selectedTags.indexOf(tag.id), 1)
                         setSelectedTags(newSelectedTags)
                     }
                 }}>
