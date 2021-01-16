@@ -19,7 +19,6 @@ export const filterOrderByAtom = atom<orderOptions>({ orderBy: "createdAt", orde
 export const filterFavoriteAtom = atom<boolean>(false)
 export const filterMarkedAtom = atom<boolean>(false)
 export const filterTagsAtom = atom<string[]>([])
-export const filterClientsAtom = atom<firebase.firestore.DocumentSnapshot[]>([])
 
 export const showInteractionBarAtom = atom<boolean>(false)
 export const showFoldersAtom = atom<boolean>(false)
