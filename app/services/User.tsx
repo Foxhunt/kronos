@@ -1,4 +1,4 @@
-import firebase from "./clientApp"
+import firebase from "../firebase/clientApp"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { useAtom } from "jotai"
