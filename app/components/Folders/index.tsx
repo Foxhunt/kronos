@@ -154,8 +154,8 @@ export default function Folders({ onHide }: props) {
                 const [newClient, newProject, newTtask] =
                     await Promise.all<firebase.firestore.DocumentSnapshot>([
                         selectedDoc?.get("client").get(),
-                        selectedDoc?.get("project").get(),
-                        selectedDoc?.get("task").get()
+                        typeof selectedDoc?.get("project") === "string" ? undefined : selectedDoc?.get("project").get(),
+                        typeof selectedDoc?.get("task") === "string" ? undefined : selectedDoc?.get("task").get()
                     ])
                 !client && setClient(newClient)
                 !project && setProject(newProject)
@@ -166,21 +166,21 @@ export default function Folders({ onHide }: props) {
                     setBoard(undefined)
                 }
             }}
-            allowAdding={Boolean(client && project && task)}
+            allowAdding={Boolean(client || client && project || client && project && task)}
             onAdd={async itemName => {
                 const newItem = await (await userDocRef?.ref.collection("collections").add({
                     name: itemName,
-                    client: client?.ref,
-                    project: project?.ref,
-                    task: task?.ref,
+                    client: client?.ref || "",
+                    project: project?.ref || "",
+                    task: task?.ref || "",
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                     lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
                 }))?.get()
                 const [newItemClient, newItemProject, newItemTask] =
                     await Promise.all<firebase.firestore.DocumentSnapshot>([
                         newItem?.get("client").get(),
-                        newItem?.get("project").get(),
-                        newItem?.get("task").get()
+                        typeof newItem?.get("project") === "string" ? undefined : newItem?.get("project").get(),
+                        typeof newItem?.get("task") === "string" ? undefined : newItem?.get("task").get()
                     ])
                 setClient(newItemClient)
                 setProject(newItemProject)

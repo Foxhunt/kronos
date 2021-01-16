@@ -3,8 +3,8 @@ import firebase from "./clientApp"
 export default async function uploadFile(
     file: File,
     client: firebase.firestore.DocumentSnapshot,
-    project: firebase.firestore.DocumentSnapshot,
-    task: firebase.firestore.DocumentSnapshot,
+    project: firebase.firestore.DocumentSnapshot | undefined,
+    task: firebase.firestore.DocumentSnapshot | undefined,
     collection: firebase.firestore.DocumentSnapshot,
     userDocRef: firebase.firestore.DocumentSnapshot
 ) {
@@ -30,8 +30,8 @@ export default async function uploadFile(
                     favorite: false,
                     marked: false,
                     client: client.ref,
-                    project: project.ref,
-                    task: task.ref,
+                    project: project ? project.ref : "",
+                    task: task ? task.ref : "",
                     collection: collection.ref,
                     fullPath: fileRef.fullPath,
                     downloadURL: await fileRef.getDownloadURL(),
