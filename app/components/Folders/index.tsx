@@ -9,9 +9,13 @@ import {
     selectedProjectDocRefAtom,
     selectedTaskDocRefAtom,
     selectedCollectionDocRefAtom,
+    clientsAtom,
+    projectsAtom,
+    tasksAtom,
+    boardsAtom,
 } from "../../store"
 
-import { useBoards, useClickedOutside, useClients, useProjects, useTasks } from "../../hooks"
+import { useClickedOutside } from "../../hooks"
 
 import FolderList from "./FolderList"
 
@@ -33,16 +37,16 @@ export default function Folders({ onHide }: props) {
     const [userDocRef] = useAtom(userDocRefAtom)
 
     const [client, setClient] = useAtom(selectedClientDocRefAtom)
-    const clients = useClients()
+    const [clients] = useAtom(clientsAtom)
 
     const [project, setProject] = useAtom(selectedProjectDocRefAtom)
-    const projects = useProjects(client)
+    const [projects] = useAtom(projectsAtom)
 
     const [task, setTask] = useAtom(selectedTaskDocRefAtom)
-    const tasks = useTasks(client, project, { orderBy: "createdAt", orderDirection: "desc" })
+    const [tasks] = useAtom(tasksAtom)
 
     const [board, setBoard] = useAtom(selectedCollectionDocRefAtom)
-    const boards = useBoards(client, project, task)
+    const [boards] = useAtom(boardsAtom)
 
     const containerRef = useRef<HTMLDivElement>(null)
     useClickedOutside(containerRef, onHide)

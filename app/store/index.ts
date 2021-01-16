@@ -3,9 +3,16 @@ import { atom } from "jotai"
 
 export const userDocRefAtom = atom<firebase.firestore.DocumentSnapshot | undefined>(undefined)
 
+export const clientsAtom = atom<firebase.firestore.DocumentSnapshot[]>([])
 export const selectedClientDocRefAtom = atom<firebase.firestore.DocumentSnapshot | undefined>(undefined)
+
+export const projectsAtom = atom<firebase.firestore.DocumentSnapshot[]>([])
 export const selectedProjectDocRefAtom = atom<firebase.firestore.DocumentSnapshot | undefined>(undefined)
+
+export const tasksAtom = atom<firebase.firestore.DocumentSnapshot[]>([])
 export const selectedTaskDocRefAtom = atom<firebase.firestore.DocumentSnapshot | undefined>(undefined)
+
+export const boardsAtom = atom<firebase.firestore.DocumentSnapshot[]>([])
 export const selectedCollectionDocRefAtom = atom<firebase.firestore.DocumentSnapshot | undefined>(undefined)
 
 export const filesToUploadAtom = atom<File[]>([])

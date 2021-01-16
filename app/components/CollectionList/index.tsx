@@ -1,11 +1,10 @@
 import styled from "styled-components"
 
-import { useTasks } from "../../hooks"
 import Collection from "./Collection"
 import { useState } from "react"
 
 import { useAtom } from "jotai"
-import { filesToUploadAtom } from "../../store"
+import { filesToUploadAtom, tasksAtom } from "../../store"
 import { DropzoneRootProps } from "react-dropzone"
 
 const Container = styled.div`
@@ -51,7 +50,7 @@ export default function CollectionList({ getRootProps }: props) {
     const [orderBy, setOrderBy] = useState("createdAt")
     const [orderDirection, setOrderDirection] = useState<"asc" | "desc">("desc")
 
-    const tasks = useTasks(undefined, undefined, { orderBy, orderDirection })
+    const [tasks] = useAtom(tasksAtom)
 
     const setOrder = (newOrderBy: string) => {
         if (orderBy === newOrderBy) {

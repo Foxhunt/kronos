@@ -3,13 +3,13 @@ import { useState } from "react"
 import { useAtom } from "jotai"
 import styled from "styled-components"
 import {
+    boardsAtom,
     selectedClientDocRefAtom,
     selectedCollectionDocRefAtom,
     selectedProjectDocRefAtom,
     selectedTaskDocRefAtom,
     userDocRefAtom
 } from "../../store"
-import { useBoards } from "../../hooks"
 
 const Container = styled.div`
     height: 100%;
@@ -77,7 +77,7 @@ export default function Boards() {
     const [task] = useAtom(selectedTaskDocRefAtom)
 
     const [selectedBoard, setBoard] = useAtom(selectedCollectionDocRefAtom)
-    const boards = useBoards(client, project, task)
+    const [boards] = useAtom(boardsAtom)
 
     const [addingItem, setAddingItem] = useState(false)
     const [newItemName, setNewItemName] = useState("")
