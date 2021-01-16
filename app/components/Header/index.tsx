@@ -6,6 +6,11 @@ import styled from "styled-components"
 import { useAtom } from "jotai"
 import {
     filesToUploadAtom,
+    filterFavoriteAtom,
+    filterMarkedAtom,
+    filterOrderByAtom,
+    filterTagsAtom,
+    searchFileAtom,
     selectedClientDocRefAtom,
     selectedCollectionDocRefAtom,
     selectedProjectDocRefAtom,
@@ -76,6 +81,12 @@ export default function Header() {
 
     const [, setFilesToUpload] = useAtom(filesToUploadAtom)
 
+    const [, setSearchedFile] = useAtom(searchFileAtom)
+    const [, setOrderBy] = useAtom(filterOrderByAtom)
+    const [, setFavorties] = useAtom(filterFavoriteAtom)
+    const [, setMarked] = useAtom(filterMarkedAtom)
+    const [, setSelectedTags] = useAtom(filterTagsAtom)
+
     return <Container>
         <Navigation>
             {userDocRef &&
@@ -95,7 +106,14 @@ export default function Header() {
                     <Link href={"/archive"}>
                         <a
                             ref={archiveLinkRef}
-                            onPointerDown={() => setShowFolders(!showFolders)}>
+                            onPointerDown={() => setShowFolders(!showFolders)}
+                            onContextMenu={event => {
+                                event.preventDefault()
+                                setClient()
+                                setProject()
+                                setTask()
+                                setBoard()
+                            }}>
                             {">"} {client && <Crumb
                                 onClick={() => {
                                     setClient(client)
@@ -124,7 +142,15 @@ export default function Header() {
                     </Link >
                     <a
                         ref={filterLinkRef}
-                        onPointerDown={() => setShowFilter(!showFilter)}>
+                        onPointerDown={() => setShowFilter(!showFilter)}
+                        onContextMenu={event => {
+                            event.preventDefault()
+                            setSearchedFile("")
+                            setOrderBy({ orderBy: "createdAt", orderDirection: "desc" })
+                            setFavorties(false)
+                            setMarked(false)
+                            setSelectedTags([])
+                        }}>
                         Filter
                     </a >
                     <label>
