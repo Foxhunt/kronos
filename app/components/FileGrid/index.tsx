@@ -1,5 +1,5 @@
 import firebase from "../../firebase/clientApp"
-import deleteFile from "../../firebase/deleteFile"
+import deleteFiles from "../../firebase/deleteFiles"
 
 import { useMemo } from "react"
 import styled from "styled-components"
@@ -88,7 +88,7 @@ export default function FileGrid({ files, getRootProps }: props) {
                         setPreviewFile(fileDocSnap)
                     }
                 }}
-                onDelete={() => deleteFile(fileDocSnap)}
+                onDelete={() => deleteFiles([fileDocSnap])}
                 key={fileDocSnap.id} />
     ), [searchResult, selectedFiles, showInteractionBar])
 

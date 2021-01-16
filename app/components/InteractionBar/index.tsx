@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react"
-import deleteFile from "../../firebase/deleteFile"
+import deleteFiles from "../../firebase/deleteFiles"
 import downloadFiles from "../../firebase/downloadFiles"
 import favoriteFile from "../../firebase/favoriteFile"
 import markFile from "../../firebase/markFile"
@@ -53,6 +53,7 @@ export default function InteractionBar() {
         return selectedFiles.length > 0 && files.every(file => selectedFiles.some(selectedFile => selectedFile.id === file.id))
     }, [files, selectedFiles])
 
+    // clear selection
     useEffect(() => () => { setSelectedFiles([]) }, [])
 
     const [showTags, setShowTags] = useState(false)
@@ -73,9 +74,7 @@ export default function InteractionBar() {
         </Item>
         <Item
             onClick={() => {
-                for (const file of selectedFiles) {
-                    deleteFile(file)
-                }
+                deleteFiles(selectedFiles)
                 setSelectedFiles([])
             }}>
             Delete
