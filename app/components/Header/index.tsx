@@ -151,7 +151,7 @@ export default function Header() {
                     </label>
                 </>
             }
-            {userDocRef ?
+            {userDocRef &&
                 <Link href={"/login"}>
                     <a onClick={() => {
                         setClient(undefined)
@@ -162,13 +162,7 @@ export default function Header() {
                     }}>
                         Logout
                     </a>
-                </Link >
-                :
-                <Link href={"/login"}>
-                    <a>
-                        Login / Sign Up
-                    </a>
-                </Link>}
+                </Link >}
         </Navigation>
         {userDocRef &&
             <>

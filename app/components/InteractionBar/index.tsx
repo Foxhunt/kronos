@@ -8,7 +8,17 @@ import tagFile from "../../firebase/tagFile"
 import styled from "styled-components"
 
 import { useAtom } from "jotai"
-import { filterFavoriteAtom, filterMarkedAtom, filterOrderByAtom, filterTagsAtom, selectedClientDocRefAtom, selectedCollectionDocRefAtom, selectedFilesAtom, selectedProjectDocRefAtom, selectedTaskDocRefAtom } from "../../store"
+import {
+    filterFavoriteAtom,
+    filterMarkedAtom,
+    filterOrderByAtom,
+    filterTagsAtom,
+    selectedClientDocRefAtom,
+    selectedCollectionDocRefAtom,
+    selectedFilesAtom,
+    selectedProjectDocRefAtom,
+    selectedTaskDocRefAtom
+} from "../../store"
 import { useFiles } from "../../hooks"
 
 import TagList from "./TagList"
