@@ -23,39 +23,39 @@ import {
 import Folders from "../Folders"
 import Filter from "../Filter"
 
-import Circle from "./Circle"
+import Circle from "../Shared/Circle"
 import { useRouter } from "next/router"
 
 const Container = styled.header`
-`
-
-const Crumb = styled.div`
-    display: inline;
 `
 
 const Navigation = styled.nav`
     height: 30px;
     flex-shrink: 0;
 
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
+    display: grid;
+    grid-template-columns: 1fr 1fr 3fr 1fr 1fr 2fr 1fr;
+    align-items: stretch;
     
-    background-color: white;
+    background-color: black;
 
-    border-bottom: 1px solid black;
-
-    & a {
+    & * {
         text-decoration: none;
-        color: black;
-    }
-`
+        color: white;
 
-const FilterMenuToggle = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 30px;
+        padding-left: 5px;
+
+        display: flex;
+        align-items: center;
+    }
+
+    & > * {
+        border-right: 1px white solid;
+    }
+
+    & > *:last-child {
+        border-right: none;
+    }
 `
 
 const UploadInput = styled.input`
@@ -92,13 +92,13 @@ export default function Header() {
             {userDocRef &&
                 <>
                     <div>
-                        {router.route === "/" && <Circle />}
+                        {router.route === "/" && <Circle fill="white" stroke="white" />}
                         <Link href={"/"}>
                             Index
                             </Link >
                     </div>
                     <div>
-                        {router.route === "/archive" && <Circle />}
+                        {router.route === "/archive" && <Circle fill="white" stroke="white" />}
                         <Link href={"/archive"}>
                             Archive
                         </Link >
@@ -114,30 +114,10 @@ export default function Header() {
                                 setTask()
                                 setBoard()
                             }}>
-                            {">"} {client && <Crumb
-                                onClick={() => {
-                                    setClient(client)
-                                    setProject(undefined)
-                                    setTask(undefined)
-                                    setBoard(undefined)
-                                }}>
-                                {client.get("name")}
-                            </Crumb>}
-                            {project && <Crumb
-                                onClick={() => {
-                                    setProject(project)
-                                    setTask(undefined)
-                                    setBoard(undefined)
-                                }}>
-                                {" >"} {project.get("name")}
-                            </Crumb>}
-                            {task && <Crumb
-                                onClick={() => {
-                                    setTask(task)
-                                    setBoard(undefined)
-                                }}>
-                                {" >"} {task.get("name")}
-                            </Crumb>}
+                            {"> Location "}
+                            {client && `> ${client.get("name")} `}
+                            {project && `> ${project.get("name")} `}
+                            {task && `> ${task.get("name")} `}
                         </a>
                     </Link >
                     <a
@@ -153,6 +133,10 @@ export default function Header() {
                         }}>
                         Filter
                     </a >
+                    <div
+                        onClick={() => setShowInteractionBar(!showInteractionBar)}>
+                        Options
+                    </div>
                     <label>
                         Upload Files
                         <UploadInput
@@ -165,10 +149,6 @@ export default function Header() {
                                 event.target.value = ""
                             }} />
                     </label>
-                    <FilterMenuToggle
-                        onClick={() => setShowInteractionBar(!showInteractionBar)}>
-                        ...
-                    </FilterMenuToggle>
                 </>
             }
             {userDocRef ?

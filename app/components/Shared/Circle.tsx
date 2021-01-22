@@ -3,9 +3,11 @@ import { motion, SVGMotionProps } from "framer-motion"
 export default function Circle(props: SVGMotionProps<SVGElement>) {
     return <motion.svg
         {...props}
-        width="10"
-        height="10"
-        viewBox="0 0 10 10">
-        <motion.circle cx="5" cy="5" r="5" fill="black" />
+        width="12"
+        height="12"
+        viewBox="0 0 12 12"
+        strokeWidth="1"
+        shapeRendering="geometricPrecision">
+        <motion.circle cx="6" cy="6" r="5" />
     </motion.svg>
 }
