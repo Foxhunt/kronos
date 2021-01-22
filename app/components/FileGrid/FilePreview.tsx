@@ -24,10 +24,10 @@ const Container = styled.div`
     justify-content: center;
     align-items: center;
 
-    background-color: #e9e9e9;
+    background-color: #dcdce1;
     
     & > div:first-child {
-        filter: drop-shadow(-10px 10px 5px rgb(150, 150, 150));
+        /* filter: drop-shadow(-10px 10px 5px rgb(150, 150, 150)); */
     }
 `
 

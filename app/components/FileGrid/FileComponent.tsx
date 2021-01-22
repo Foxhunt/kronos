@@ -5,13 +5,13 @@ import styled from "styled-components"
 import { motion, Variants } from "framer-motion"
 import dynamic from "next/dynamic"
 import Image from "next/image"
-
+import Circle from "../Shared/Circle"
 
 const PDFViewer = dynamic(import("./PDFViewer"), { ssr: false })
 
 const Container = styled(motion.div) <{ selected: boolean }>`
     position: relative;
-    background-image: linear-gradient(90deg, #d4d4d4, #eeeeee);
+    background-color: #dcdce1;
 
     height: 400px;
 
@@ -27,15 +27,20 @@ const Container = styled(motion.div) <{ selected: boolean }>`
     overflow: hidden;
 
     & > div:first-child {
-        filter: drop-shadow(-10px 10px 5px rgb(150, 150, 150));
+        /* filter: drop-shadow(-10px 10px 5px rgb(150, 150, 150)); */
     }
 `
 
 const Name = styled.div`
     position: absolute;
-    bottom: 0px;
+    bottom: 5px;
 
-    color: red;
+    display: flex;
+    align-items: center;
+
+    & > svg {
+        margin-left: 5px;
+    }
 `
 
 type props = {
@@ -111,28 +116,26 @@ export default function FileComponent({ fileDocSnap, selected, onSelect, onDelet
         }
         <Name>
             {fileDocSnap.get("name")}
-            <input
-                type="checkbox"
-                checked={fileDocSnap.get("favorite")}
+            <Circle
+                stroke="#0501ff"
+                fill={fileDocSnap.get("favorite") ? "#0501ff" : "none"}
                 onClick={event => {
                     event.stopPropagation()
-                }}
-                onChange={event => {
                     fileDocSnap.ref.update({
-                        favorite: event.target.checked
+                        favorite: !fileDocSnap.get("favorite")
                     })
-                }} />
-            <input
-                type="checkbox"
-                checked={fileDocSnap.get("marked")}
+                }}
+            />
+            <Circle
+                stroke="#33bd27"
+                fill={fileDocSnap.get("marked") ? "#33bd27" : "none"}
                 onClick={event => {
                     event.stopPropagation()
-                }}
-                onChange={event => {
                     fileDocSnap.ref.update({
-                        marked: event.target.checked
+                        marked: !fileDocSnap.get("marked")
                     })
-                }} />
+                }}
+            />
         </Name>
     </Container>
 }
