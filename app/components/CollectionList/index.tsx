@@ -30,7 +30,7 @@ const UploadInput = styled.input`
 
 export const Row = styled.div`
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(2, 1fr) repeat(3, 2fr) repeat(2, 1fr);
     grid-template-rows: 40px;
 
     border-bottom: 1px solid black;
@@ -40,6 +40,8 @@ export const Cell = styled.div`
     display: flex;
     justify-content: left;
     align-items: center;
+
+    padding-left: 5px;
 `
 
 type props = {

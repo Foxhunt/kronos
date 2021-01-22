@@ -1,6 +1,6 @@
 import firebase from "../../firebase/clientApp"
 import { useRouter } from 'next/router'
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import styled from "styled-components"
 
 import { useAtom } from "jotai"
@@ -13,6 +13,8 @@ import {
 
 import FileGrid from "../FileGrid"
 import { Row, Cell } from "./index"
+import Circle from "../Shared/Circle"
+
 import { useFiles } from "../../hooks"
 
 const Container = styled.div``
@@ -80,14 +82,13 @@ export default function Collection({ taskDocSnap }: props) {
                     {taskDocSnap.get("name")}
                 </Cell>
                 <Cell>
-                    <input
-                        type="checkbox"
-                        checked={taskDocSnap.get("pinned")}
-                        onClick={event => event.stopPropagation()}
-                        onChange={event => {
+                    <Circle
+                        fill={taskDocSnap.get("pinned") ? "black" : "white"}
+                        stroke="black"
+                        onClick={event => {
                             event.stopPropagation()
                             taskDocSnap.ref.update({
-                                pinned: event.target.checked
+                                pinned: !taskDocSnap.get("pinned")
                             })
                         }} />
                 </Cell>
