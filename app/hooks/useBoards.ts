@@ -16,7 +16,7 @@ export function useBoards(
     useEffect(() => {
         let query = userDocRef?.ref
             .collection("collections")
-            .orderBy("createdAt", "asc")
+            .orderBy("createdAt", "desc")
 
         if (client) {
             query = query?.where("client", "==", client.ref)
