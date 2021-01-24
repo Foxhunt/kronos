@@ -42,8 +42,6 @@ const Navigation = styled.nav`
     & * {
         text-decoration: none;
         color: white;
-
-        padding-left: 5px;
     }
 
     & > * {
@@ -51,6 +49,8 @@ const Navigation = styled.nav`
 
         display: flex;
         align-items: center;
+
+        padding-left: 5px;
     }
 
     & > *:last-child {

@@ -31,16 +31,17 @@ const Container = styled(motion.div) <{ selected: boolean }>`
     }
 `
 
-const Name = styled.div`
+const Details = styled.div`
     position: absolute;
     bottom: 5px;
 
     display: flex;
     align-items: center;
+`
 
-    & > svg {
-        margin-left: 5px;
-    }
+const Name = styled.div`
+    display: inline;
+    margin-right: 5px;
 `
 
 type props = {
@@ -114,8 +115,8 @@ export default function FileComponent({ fileDocSnap, selected, onSelect, onDelet
                     layout={"intrinsic"}
                     objectFit="contain" />
         }
-        <Name>
-            {fileDocSnap.get("name")}
+        <Details>
+            <Name>{fileDocSnap.get("name")}</Name>
             <Circle
                 stroke="#0501ff"
                 fill={fileDocSnap.get("favorite") ? "#0501ff" : "none"}
@@ -136,6 +137,6 @@ export default function FileComponent({ fileDocSnap, selected, onSelect, onDelet
                     })
                 }}
             />
-        </Name>
+        </Details>
     </Container>
 }
