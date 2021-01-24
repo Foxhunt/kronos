@@ -30,11 +30,25 @@ const Container = styled.div`
     background-color: #dcdce1;
     
     & > div:first-child {
-        /* filter: drop-shadow(-10px 10px 5px rgb(150, 150, 150)); */
+        filter: drop-shadow(-10px 10px 5px rgb(150, 150, 150));
     }
 `
 
-export default function FilePreview() {
+const ArrowLeft = styled.div`
+    position: absolute;
+    left: 0px;
+`
+
+const ArrowRight = styled.div`
+    position: absolute;
+    right: 0px;
+`
+
+interface props {
+    files: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>[]
+}
+
+export default function FilePreview({ files }: props) {
     const [previewFile, setPreviewfile] = useAtom(previewFileAtom)
 
     const [src, setSrc] = useState("")
@@ -61,6 +75,26 @@ export default function FilePreview() {
         setPreviewfile(undefined)
     })
 
+    useEffect(() => {
+        function handleKeydown(event: KeyboardEvent) {
+            if (previewFile) {
+                const currentIndex = files.map(file => file.id).indexOf(previewFile.id)
+                switch (event.key) {
+                    case "ArrowLeft":
+                        setPreviewfile(files[currentIndex - 1 < 0 ? files.length - 1 : currentIndex - 1])
+                        break
+                    case "ArrowRight":
+                        setPreviewfile(files[(currentIndex + 1) % files.length])
+                        break
+                }
+            }
+        }
+
+        window.addEventListener("keydown", handleKeydown)
+
+        return () => window.removeEventListener("keydown", handleKeydown)
+    }, [previewFile, files])
+
     return <Container
         ref={containerRef}
         onClick={() => setPreviewfile(undefined)}>
@@ -69,15 +103,35 @@ export default function FilePreview() {
                 src && <PDFViewer
                     fileDocSnap={previewFile}
                     src={src}
-                    height={700} />
+                    height={800} />
                 :
                 src && <Image
                     src={src}
-                    height={700}
-                    width={700}
+                    height={800}
+                    width={800}
                     unoptimized
                     layout={"intrinsic"}
                     objectFit="contain" />
         }
+        <ArrowLeft
+            onClick={event => {
+                event.stopPropagation()
+                if (previewFile) {
+                    const currentIndex = files.map(file => file.id).indexOf(previewFile.id)
+                    setPreviewfile(files[currentIndex - 1 < 0 ? files.length - 1 : currentIndex - 1])
+                }
+            }}>
+            Prev
+        </ArrowLeft>
+        <ArrowRight
+            onClick={event => {
+                event.stopPropagation()
+                if (previewFile) {
+                    const currentIndex = files.map(file => file.id).indexOf(previewFile.id)
+                    setPreviewfile(files[(currentIndex + 1) % files.length])
+                }
+            }}>
+            Next
+            </ArrowRight>
     </Container>
 }

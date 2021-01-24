@@ -131,6 +131,6 @@ export default function FileGrid({ files, getRootProps }: props) {
                     }}
                     type={"file"} />
             </Hint>}
-        {previewFile && <FilePreview />}
+        {previewFile && <FilePreview files={files} />}
     </Container>
 }
