@@ -1,9 +1,16 @@
-import Document, { Html, Head, Main, NextScript, DocumentContext } from 'next/document'
-import { ServerStyleSheet, createGlobalStyle } from 'styled-components'
+import Document, { Html, Head, Main, NextScript, DocumentContext } from "next/document"
+import { ServerStyleSheet, createGlobalStyle } from "styled-components"
 
 const GlobalStyle = createGlobalStyle`
+  @font-face {
+    font-family: "FuturaNowHeadline-Bd";
+    src:  url("webFonts/FuturaNowHeadline-Bd/font.woff2") format("woff2"),
+          url("webFonts/FuturaNowHeadline-Bd/font.woff") format("woff");
+  }
+
    html, body {
     margin: 0px;
+    font-family: "FuturaNowHeadline-Bd"
   }
 
   #__next {

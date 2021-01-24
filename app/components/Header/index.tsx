@@ -44,13 +44,13 @@ const Navigation = styled.nav`
         color: white;
 
         padding-left: 5px;
-
-        display: flex;
-        align-items: center;
     }
 
     & > * {
         border-right: 1px white solid;
+
+        display: flex;
+        align-items: center;
     }
 
     & > *:last-child {
