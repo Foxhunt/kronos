@@ -15,6 +15,8 @@ import {
 import FilterList from "./FilterList"
 import { Item } from "../Shared/ItemList"
 
+import Circle from "../Shared/Circle"
+
 const Container = styled.div`
     width: 100%;
 
@@ -97,6 +99,9 @@ export default function Filter({ onHide }: props) {
                 onClick={() => {
                     setFavorties(!favorites)
                 }}>
+                <Circle
+                    fill={favorites ? "#0501ff" : "none"}
+                    stroke="#0501ff" />
                 favorites
             </Item>
             <Item
@@ -104,6 +109,9 @@ export default function Filter({ onHide }: props) {
                 onClick={() => {
                     setMarked(!marked)
                 }}>
+                <Circle
+                    fill={marked ? "#33bd27" : "none"}
+                    stroke="#33bd27" />
                 marked
             </Item>
         </FilterList>
