@@ -11,7 +11,7 @@ const PDFViewer = dynamic(import("./PDFViewer"), { ssr: false })
 
 const Container = styled(motion.div) <{ selected: boolean }>`
     position: relative;
-    background-image: linear-gradient(90deg, #b3b3b3, #e4e4e4);
+    background-image: linear-gradient(45deg,#b3b3b3,#e4e4e4);
     background-color: #dcdce1;
     border-radius: 10px;
 
@@ -29,7 +29,7 @@ const Container = styled(motion.div) <{ selected: boolean }>`
     overflow: hidden;
 
     & > div:first-child {
-        filter: drop-shadow(-10px 10px 5px rgb(150, 150, 150));
+        filter: drop-shadow(-3px 3px 2px rgb(150,150,150))
     }
 
     &::before {
