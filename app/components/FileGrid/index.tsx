@@ -25,15 +25,15 @@ const Container = styled(motion.div)`
 
     flex: 1;
 
-    padding: 16px 0px;
+    padding: 16px;
     outline: none;
 
     display: grid;
-    grid-template-columns: repeat(auto-fit, 450px);
-    grid-template-rows: repeat(auto-fill, 400px);
-    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(350px,1fr));
+    grid-template-rows: 1fr;
+    grid-gap: 16px;
 
-    justify-content: center;
+    /* justify-content: center; */
 
     overflow-y: auto;
 `

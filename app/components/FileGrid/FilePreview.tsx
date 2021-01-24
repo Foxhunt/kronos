@@ -15,7 +15,10 @@ const PDFViewer = dynamic(import("./PDFViewer"), { ssr: false })
 
 const Container = styled.div`
     position: fixed;
-    top: 31px;
+    background-image: linear-gradient(70deg,#b3b3b3,#e4e4e4);
+    background-color: #dcdce1;
+    top: 30px;
+    left: 0px;
 
     width: 100%;
     height: 100%;
