@@ -6,6 +6,9 @@ const GlobalStyle = createGlobalStyle`
     font-family: "FuturaNowHeadline-Bd";
     src:  url("webFonts/FuturaNowHeadline-Bd/font.woff2") format("woff2"),
           url("webFonts/FuturaNowHeadline-Bd/font.woff") format("woff");
+          
+    font-display: fallback;
+    -webkit-font-smoothing: antialiased;
   }
 
    html, body {
