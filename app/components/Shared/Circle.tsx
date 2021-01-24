@@ -5,7 +5,7 @@ const Container = styled.div`
     margin-right: 5px;
 `
 
-export default function Circle(props: SVGMotionProps<SVGElement>) {
+export default function Circle({ fill, stroke, ...props }: SVGMotionProps<SVGElement>) {
     return <Container>
         <motion.svg
             {...props}
@@ -14,7 +14,21 @@ export default function Circle(props: SVGMotionProps<SVGElement>) {
             viewBox="0 0 12 12"
             strokeWidth="1"
             shapeRendering="geometricPrecision">
-            <motion.circle cx="6" cy="6" r="5" />
+            <motion.circle
+                initial={{
+                    fill,
+                    stroke
+                }}
+                animate={{
+                    fill,
+                    stroke
+                }}
+                transition={{
+                    duration: .3
+                }}
+                cx="6"
+                cy="6"
+                r="5" />
         </motion.svg>
     </Container>
 }

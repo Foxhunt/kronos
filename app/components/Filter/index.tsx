@@ -100,7 +100,7 @@ export default function Filter({ onHide }: props) {
                     setFavorties(!favorites)
                 }}>
                 <Circle
-                    fill={favorites ? "#0501ff" : "none"}
+                    fill={favorites ? "#0501ff" : "#00000000"}
                     stroke="#0501ff" />
                 favorites
             </Item>
@@ -110,7 +110,7 @@ export default function Filter({ onHide }: props) {
                     setMarked(!marked)
                 }}>
                 <Circle
-                    fill={marked ? "#33bd27" : "none"}
+                    fill={marked ? "#33bd27" : "#00000000"}
                     stroke="#33bd27" />
                 marked
             </Item>

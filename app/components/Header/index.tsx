@@ -91,18 +91,22 @@ export default function Header() {
         <Navigation>
             {userDocRef &&
                 <>
-                    <div>
-                        {router.route === "/" && <Circle fill="white" stroke="white" />}
-                        <Link href={"/"}>
+                    <Link href={"/"}>
+                        <div>
+                            <Circle
+                                fill={router.route === "/" ? "#ffffff" : "#00000000"}
+                                stroke={router.route === "/" ? "#ffffff" : "#00000000"} />
                             Index
-                            </Link >
-                    </div>
-                    <div>
-                        {router.route === "/archive" && <Circle fill="white" stroke="white" />}
-                        <Link href={"/archive"}>
+                        </div>
+                    </Link >
+                    <Link href={"/archive"}>
+                        <div>
+                            <Circle
+                                fill={router.route === "/archive" ? "#ffffff" : "#00000000"}
+                                stroke={router.route === "/archive" ? "#ffffff" : "#00000000"} />
                             Archive
-                        </Link >
-                    </div>
+                        </div>
+                    </Link >
                     <Link href={"/archive"}>
                         <a
                             ref={archiveLinkRef}
@@ -164,7 +168,8 @@ export default function Header() {
                     </a>
                 </Link >}
         </Navigation>
-        {userDocRef &&
+        {
+            userDocRef &&
             <>
                 {showFolders &&
                     <Folders
@@ -182,5 +187,5 @@ export default function Header() {
                         }} />}
             </>
         }
-    </Container>
+    </Container >
 }

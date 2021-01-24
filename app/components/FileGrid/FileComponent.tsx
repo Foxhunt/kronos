@@ -119,7 +119,7 @@ export default function FileComponent({ fileDocSnap, selected, onSelect, onDelet
             <Name>{fileDocSnap.get("name")}</Name>
             <Circle
                 stroke="#0501ff"
-                fill={fileDocSnap.get("favorite") ? "#0501ff" : "none"}
+                fill={fileDocSnap.get("favorite") ? "#0501ff" : "#00000000"}
                 onClick={event => {
                     event.stopPropagation()
                     fileDocSnap.ref.update({
@@ -129,7 +129,7 @@ export default function FileComponent({ fileDocSnap, selected, onSelect, onDelet
             />
             <Circle
                 stroke="#33bd27"
-                fill={fileDocSnap.get("marked") ? "#33bd27" : "none"}
+                fill={fileDocSnap.get("marked") ? "#33bd27" : "#00000000"}
                 onClick={event => {
                     event.stopPropagation()
                     fileDocSnap.ref.update({
