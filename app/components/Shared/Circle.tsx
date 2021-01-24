@@ -9,23 +9,23 @@ export default function Circle({ fill, stroke, ...props }: SVGMotionProps<SVGEle
     return <Container>
         <motion.svg
             {...props}
+            initial={{
+                fill: fill as string,
+                stroke: stroke as string
+            }}
+            animate={{
+                fill: fill as string,
+                stroke: stroke as string
+            }}
+            transition={{
+                duration: .3
+            }}
             width="12"
             height="12"
             viewBox="0 0 12 12"
             strokeWidth="1"
             shapeRendering="geometricPrecision">
             <motion.circle
-                initial={{
-                    fill,
-                    stroke
-                }}
-                animate={{
-                    fill,
-                    stroke
-                }}
-                transition={{
-                    duration: .3
-                }}
                 cx="6"
                 cy="6"
                 r="5" />
