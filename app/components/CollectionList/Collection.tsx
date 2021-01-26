@@ -83,8 +83,8 @@ export default function Collection({ taskDocSnap }: props) {
                 </Cell>
                 <Cell>
                     <Circle
-                        fill={taskDocSnap.get("pinned") ? "black" : "white"}
-                        stroke="black"
+                        fill={taskDocSnap.get("pinned") ? "#000000" : "#ffffff"}
+                        stroke="#000000"
                         onClick={event => {
                             event.stopPropagation()
                             taskDocSnap.ref.update({

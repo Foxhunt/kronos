@@ -25,6 +25,11 @@ const Hint = styled.label`
     justify-content: center;
 `
 
+const Overflow = styled.div`
+    max-height: calc(100vh - 41px - 30px);
+    overflow-y: auto;
+`
+
 const UploadInput = styled.input`
     display: none;
 `
@@ -95,11 +100,13 @@ export default function CollectionList({ getRootProps }: props) {
             <Cell></Cell>
         </Row>
         {tasks.length ?
-            tasks.map(task => (
-                <Collection
-                    key={task.id}
-                    taskDocSnap={task} />
-            ))
+            <Overflow>
+                {tasks.map(task => (
+                    <Collection
+                        key={task.id}
+                        taskDocSnap={task} />
+                ))}
+            </Overflow>
             :
             <Hint>
                 Click to upload files
