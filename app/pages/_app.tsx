@@ -10,6 +10,8 @@ import FirbaseSubscriptions from "../services/FirestoreSubscriptions"
 
 import Header from "../components/Header"
 
+import "../styles.css"
+
 type Props = {
   Component: ComponentType<any>
   pageProps: AppProps

@@ -1,0 +1,8 @@
+@font-face {
+    font-family: "FuturaNowHeadline-Bd";
+    src:  url("assets/webFonts/FuturaNowHeadline-Bd/font.woff2") format("woff2"),
+            url("assets/webFonts/FuturaNowHeadline-Bd/font.woff") format("woff");
+            
+    font-display: fallback;
+    -webkit-font-smoothing: antialiased;
+}
