@@ -35,8 +35,8 @@ const Container = styled(motion.div) <{ selected: boolean }>`
     &::before {
       content: "";
       display: block;
-      height: 0;
-      width: 0;
+      height: 0px;
+      width: 0px;
       padding-bottom: calc(9 / 16 * 100%);
     }
 `

@@ -53,7 +53,7 @@ export default function FilePreview({ files }: props) {
 
     const [src, setSrc] = useState("")
     useEffect(() => {
-        setSrc(previewFile?.get("renderedPDF.700") || previewFile?.get("downloadURL"))
+        setSrc(previewFile?.get("renderedPDF.800") || previewFile?.get("downloadURL"))
     }, [previewFile])
 
     const [contentType, setContentType] = useState("")
