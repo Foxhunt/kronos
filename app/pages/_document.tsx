@@ -4,7 +4,9 @@ import { ServerStyleSheet, createGlobalStyle } from "styled-components"
 const GlobalStyle = createGlobalStyle`
    html, body {
     margin: 0px;
-    font-family: "FuturaNowHeadline-Bd"
+    font-family: "FuturaNowHeadline-Bd";
+
+    user-select: none;
   }
 
   #__next {
