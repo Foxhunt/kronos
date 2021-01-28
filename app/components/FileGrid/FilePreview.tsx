@@ -119,9 +119,11 @@ export default function FilePreview({ files }: props) {
                 const currentIndex = files.map(file => file.id).indexOf(previewFile.id)
                 switch (event.key) {
                     case "ArrowLeft":
+                        setDirection(-1)
                         setPreviewfile(files[currentIndex - 1 < 0 ? files.length - 1 : currentIndex - 1])
                         break
                     case "ArrowRight":
+                        setDirection(1)
                         setPreviewfile(files[(currentIndex + 1) % files.length])
                         break
                 }
