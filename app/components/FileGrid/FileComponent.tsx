@@ -6,14 +6,14 @@ import { motion, Variants } from "framer-motion"
 import dynamic from "next/dynamic"
 import Image from "next/image"
 import Circle from "../Shared/Circle"
+import { useAtom } from "jotai"
+import { showInteractionBarAtom } from "../../store"
 
 const PDFViewer = dynamic(import("./PDFViewer"), { ssr: false })
 
 const Container = styled(motion.div) <{ selected: boolean }>`
     position: relative;
-    background-image: linear-gradient(45deg,#b3b3b3,#e4e4e4);
     background-color: #dcdce1;
-    border-radius: 10px;
 
     height: 400px;
 
@@ -27,21 +27,9 @@ const Container = styled(motion.div) <{ selected: boolean }>`
     align-items: center;
     
     overflow: hidden;
-
-    & > div:first-child {
-        filter: drop-shadow(-3px 3px 2px rgb(150,150,150))
-    }
-
-    &::before {
-      content: "";
-      display: block;
-      height: 0px;
-      width: 0px;
-      padding-bottom: calc(9 / 16 * 100%);
-    }
 `
 
-const Details = styled.div`
+const Details = styled(motion.div)`
     position: absolute;
     bottom: 5px;
 
@@ -96,9 +84,14 @@ export default function FileComponent({ fileDocSnap, selected, onSelect, onDelet
         }
     }
 
+    const [isHovered, setHovered] = useState(false)
+    const [showInteractionBar] = useAtom(showInteractionBarAtom)
+
     return <Container
         selected={selected}
         variants={variants}
+        onHoverStart={() => setHovered(true)}
+        onHoverEnd={() => setHovered(false)}
         onClick={() => {
             onSelect && onSelect()
 
@@ -125,7 +118,10 @@ export default function FileComponent({ fileDocSnap, selected, onSelect, onDelet
                     layout={"intrinsic"}
                     objectFit="contain" />
         }
-        <Details>
+        <Details
+            initial="hidden"
+            animate={(isHovered || showInteractionBar) ? "visible" : "hidden"}
+            variants={variants}>
             <Name>{fileDocSnap.get("name")}</Name>
             <Circle
                 stroke="#0501ff"

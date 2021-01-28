@@ -15,7 +15,6 @@ const PDFViewer = dynamic(import("./PDFViewer"), { ssr: false })
 
 const Container = styled.div`
     position: fixed;
-    background-image: linear-gradient(45deg,#b3b3b3,#e4e4e4);
     background-color: #dcdce1;
     top: 30px;
     left: 0px;
@@ -26,12 +25,6 @@ const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-
-    background-color: #dcdce1;
-    
-    & > div:first-child {
-        filter: drop-shadow(-10px 10px 5px rgb(150, 150, 150));
-    }
 `
 
 const ArrowLeft = styled.div`

@@ -23,8 +23,6 @@ import { useOfflineSearch } from "../../hooks"
 const Container = styled(motion.div)`
     position: relative;
 
-    flex: 1;
-
     padding: 16px;
     outline: none;
 
@@ -33,15 +31,12 @@ const Container = styled(motion.div)`
     grid-template-rows: 1fr;
     grid-gap: 16px;
 
-    /* justify-content: center; */
-
     overflow-y: auto;
 `
 
 const Hint = styled.label`
-    position: absolute;
     width: 100%;
-    height: 100%;
+    height: calc(100vh - 93px);
 
     display: flex;
     align-items: center;
