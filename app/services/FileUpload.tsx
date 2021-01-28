@@ -45,7 +45,7 @@ export default function FileUpload() {
 
             const limit = pLimit(5)
 
-            if (userDocRef && client && collection) {
+            if (userDocRef && client && project && task && collection) {
                 acceptedFiles
                     .filter(newFile => !files.some(existingFile => existingFile.get("name") === newFile.name))
                     .map(newFile => limit(async () => {

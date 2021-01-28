@@ -170,7 +170,7 @@ export default function Folders({ onHide }: props) {
                     setBoard(undefined)
                 }
             }}
-            allowAdding={Boolean(client || client && project || client && project && task)}
+            allowAdding={Boolean(client && project && task)}
             onAdd={async itemName => {
                 const newItem = await (await userDocRef?.ref.collection("collections").add({
                     name: itemName,

@@ -59,8 +59,10 @@ export default function FolderList({ name, previousName, selected, items, allowA
         renderItems.push(<Item
             key={"click to create"}
             onClick={() => {
-                allowAdding && onAdd(newItemName)
-                setNewItemName("")
+                if (allowAdding) {
+                    onAdd(newItemName)
+                    setNewItemName("")
+                }
             }}>
             {allowAdding ? "click to create" : `select ${previousName && userDocRef?.get(previousName)} to create`}
         </Item >)
