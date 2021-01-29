@@ -28,9 +28,12 @@ import IconVectorSVG from "../../assets/svg/Icons/ICON_VECTOR.svg"
 import IconSelectedAktiveSVG from "../../assets/svg/Icons/ICON_SELECTED_AKTIVE.svg"
 import IconSelectedInaktiveSVG from "../../assets/svg/Icons/ICON_SELECTED_INAKTIVE.svg"
 import IconUploadSVG from "../../assets/svg/Icons/ICON_UPLOAD.svg"
+import IconResetSVG from "../../assets/svg/Icons/ICON_RESET.svg"
 
 import Circle from "../Shared/Circle"
 import { useRouter } from "next/router"
+
+import { sortByOptions } from "../Filter"
 
 const Container = styled.header`
 `
@@ -64,6 +67,10 @@ const Navigation = styled.nav`
     }
 `
 
+const Reset = styled.div`
+    color: #00cce2;
+`
+
 const UploadInput = styled.input`
     display: none;
 `
@@ -87,11 +94,11 @@ export default function Header() {
 
     const [, setFilesToUpload] = useAtom(filesToUploadAtom)
 
-    const [, setSearchedFile] = useAtom(searchFileAtom)
-    const [, setOrderBy] = useAtom(filterOrderByAtom)
-    const [, setFavorties] = useAtom(filterFavoriteAtom)
-    const [, setMarked] = useAtom(filterMarkedAtom)
-    const [, setSelectedTags] = useAtom(filterTagsAtom)
+    const [searchField, setSearchedFile] = useAtom(searchFileAtom)
+    const [orderBy, setOrderBy] = useAtom(filterOrderByAtom)
+    const [favorites, setFavorties] = useAtom(filterFavoriteAtom)
+    const [marked, setMarked] = useAtom(filterMarkedAtom)
+    const [selectedTags, setSelectedTags] = useAtom(filterTagsAtom)
 
     return <Container>
         <Navigation>
@@ -132,17 +139,27 @@ export default function Header() {
                     </Link >
                     <a
                         ref={filterLinkRef}
-                        onPointerDown={() => setShowFilter(!showFilter)}
-                        onContextMenu={event => {
-                            event.preventDefault()
-                            setSearchedFile("")
-                            setOrderBy({ orderBy: "createdAt", orderDirection: "desc" })
-                            setFavorties(false)
-                            setMarked(false)
-                            setSelectedTags([])
-                        }}>
+                        onPointerDown={() => setShowFilter(!showFilter)}>
                         {showFilter ? <IconSelectedInaktiveSVG /> : <IconSelectedAktiveSVG />}
                         Filter
+                        {
+                            (searchField !== "" ||
+                                orderBy !== sortByOptions[0] ||
+                                favorites ||
+                                marked ||
+                                selectedTags.length > 0) &&
+                            <Reset
+                                onPointerDown={event => event.stopPropagation()}
+                                onClick={() => {
+                                    setSearchedFile("")
+                                    setOrderBy(sortByOptions[0])
+                                    setFavorties(false)
+                                    setMarked(false)
+                                    setSelectedTags([])
+                                }}>
+                                {" "}<IconResetSVG /> RESET
+                            </Reset>
+                        }
                     </a >
                     <div
                         onClick={() => setShowInteractionBar(!showInteractionBar)}>

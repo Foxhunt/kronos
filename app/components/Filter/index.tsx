@@ -54,7 +54,7 @@ const Selectibles = styled.div`
     overflow: hidden;
 `
 
-const sortByOptions: orderOptions[] = [
+export const sortByOptions: orderOptions[] = [
     {
         orderBy: "createdAt",
         orderDirection: "desc"
@@ -112,7 +112,7 @@ export default function Filter({ onHide }: props) {
                         selected={false}
                         onClick={() => {
                             if (orderBy === item) {
-                                setOrderBy({ orderBy: "createdAt", orderDirection: "desc" })
+                                setOrderBy(sortByOptions[0])
                             } else {
                                 setOrderBy(item)
                             }

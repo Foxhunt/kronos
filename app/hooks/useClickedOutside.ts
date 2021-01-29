@@ -8,9 +8,9 @@ export function useClickedOutside(ref: any, callback: Function) {
             }
         }
 
-        document.addEventListener("mousedown", detectClickedOutside)
+        document.addEventListener("pointerdown", detectClickedOutside)
         return () => {
-            document.removeEventListener("mousedown", detectClickedOutside)
+            document.removeEventListener("pointerdown", detectClickedOutside)
         }
     }, [ref, callback])
 }

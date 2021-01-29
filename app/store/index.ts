@@ -1,6 +1,8 @@
 import firebase from "../firebase/clientApp"
 import { atom } from "jotai"
 
+import { sortByOptions } from "../components/Filter"
+
 export const userDocRefAtom = atom<firebase.firestore.DocumentSnapshot | undefined>(undefined)
 
 export const clientsAtom = atom<firebase.firestore.DocumentSnapshot[]>([])
@@ -22,7 +24,7 @@ export type orderOptions = {
     orderDirection: "asc" | "desc"
 }
 
-export const filterOrderByAtom = atom<orderOptions>({ orderBy: "createdAt", orderDirection: "desc" })
+export const filterOrderByAtom = atom<orderOptions>(sortByOptions[0])
 export const filterFavoriteAtom = atom<boolean>(false)
 export const filterMarkedAtom = atom<boolean>(false)
 export const filterTagsAtom = atom<string[]>([])
