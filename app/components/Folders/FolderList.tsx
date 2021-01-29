@@ -10,15 +10,18 @@ import { ItemList, Item } from "../Shared/ItemList"
 const Container = styled.div`
 `
 
+const ItemForm = styled.form`
+    height: 30px;
+    border-bottom: black 1px solid;
+`
+
 const ItemInput = styled.input`
     width: calc(100% - 5px);
-    height: 30px;
     padding: unset;
 
     padding-left: 5px;
 
     border: none;
-    border-bottom: black 1px solid;
     box-shadow: none;
 
     &:focus {
@@ -103,7 +106,7 @@ export default function FolderList({ name, previousName, selected, items, allowA
     return <Container>
         {
             isAdditingLevelName ?
-                <form
+                <ItemForm
                     onSubmit={event => {
                         event.preventDefault()
                         setIsAdditingLevelName(false)
@@ -116,7 +119,7 @@ export default function FolderList({ name, previousName, selected, items, allowA
                         onChange={event => {
                             userDocRef?.ref.update({ [name]: event.target.value })
                         }} />
-                </form>
+                </ItemForm>
                 :
                 <Item
                     onDoubleClick={event => {
@@ -131,7 +134,7 @@ export default function FolderList({ name, previousName, selected, items, allowA
                     }
                 </Item>
         }
-        <form
+        <ItemForm
             onSubmit={event => {
                 event.preventDefault()
                 if (allowAdding) {
@@ -147,7 +150,7 @@ export default function FolderList({ name, previousName, selected, items, allowA
                 onChange={event => {
                     setNewItemName(event.target.value)
                 }} />
-        </form>
+        </ItemForm>
         <ItemList
             lenght={4}>
             {renderItems}

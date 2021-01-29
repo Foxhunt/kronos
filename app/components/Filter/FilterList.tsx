@@ -14,7 +14,7 @@ export default function FilterList({ name, children }: props) {
     return <Container>
         <Item>{name}</Item>
         <ItemList
-            lenght={5}>
+            lenght={4}>
             {children}
         </ItemList>
     </Container>

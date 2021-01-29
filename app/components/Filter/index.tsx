@@ -50,6 +50,8 @@ const Selectibles = styled.div`
     grid-template-rows: calc(5 * 31px - 1px);
 
     border-bottom: 1px solid black;
+
+    overflow: hidden;
 `
 
 const sortByOptions: orderOptions[] = [

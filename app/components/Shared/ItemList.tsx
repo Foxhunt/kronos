@@ -1,6 +1,9 @@
 import { Children, ComponentProps, useEffect, useRef, useState } from "react"
 import styled from "styled-components"
 
+import IconUpSVG from "../../assets/svg/icons/ICON_UP.svg"
+import IconDownSVG from "../../assets/svg/icons/ICON_DOWN.svg"
+
 export const Item = styled.div<{ selected?: boolean }>`
     display: flex;
     align-items: center;
@@ -16,14 +19,10 @@ export const Item = styled.div<{ selected?: boolean }>`
         color: white;
         ` : ""
     }
-
-    &:last-child {
-        border-bottom: none;
-    }
 `
 
 const Items = styled.div<{ lenght: number }>`
-    max-height: calc(100% - ${({ lenght }) => (6 - lenght) * 31}px);
+    max-height: calc(${({ lenght }) => lenght} * 31px);
     overflow: auto;
 
     &::-webkit-scrollbar {
@@ -37,6 +36,8 @@ const ScrollUpIndicator = styled.div`
     width: 100%;
     text-align: center;
     top: 0px;
+
+    pointer-events: none;
 `
 
 const ScrollDownIndicator = styled.div`
@@ -45,6 +46,8 @@ const ScrollDownIndicator = styled.div`
     width: 100%;
     text-align: center;
     bottom: 0px;
+
+    pointer-events: none;
 `
 
 interface props extends ComponentProps<"div"> {
@@ -69,11 +72,11 @@ export function ItemList({ children, lenght }: props) {
             setCanScrollUp(event.currentTarget.scrollTop >= 31)
             setCanScrollDown(event.currentTarget.scrollHeight - event.currentTarget.scrollTop - event.currentTarget.clientHeight >= 31)
         }}>
-        {canScrollUp && <ScrollUpIndicator>up</ScrollUpIndicator>}
+        {canScrollUp && <ScrollUpIndicator><IconUpSVG /></ScrollUpIndicator>}
         {children}
         {new Array(Children.toArray(children).length < lenght ? lenght - Children.toArray(children).length : 0)
             .fill("")
             .map((_item, index) => <Item key={index} />)}
-        {canScrollDown && <ScrollDownIndicator>down</ScrollDownIndicator>}
+        {canScrollDown && <ScrollDownIndicator><IconDownSVG /></ScrollDownIndicator>}
     </Items>
 }
