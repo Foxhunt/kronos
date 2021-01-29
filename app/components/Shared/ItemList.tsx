@@ -1,8 +1,8 @@
 import { Children, ComponentProps, useEffect, useRef, useState } from "react"
 import styled from "styled-components"
 
-import IconUpSVG from "../../assets/svg/icons/ICON_UP.svg"
-import IconDownSVG from "../../assets/svg/icons/ICON_DOWN.svg"
+import IconUpSVG from "../../assets/svg/Icons/ICON_UP.svg"
+import IconDownSVG from "../../assets/svg/Icons/ICON_DOWN.svg"
 
 export const Item = styled.div<{ selected?: boolean }>`
     display: flex;
