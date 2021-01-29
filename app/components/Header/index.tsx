@@ -23,6 +23,12 @@ import {
 import Folders from "../Folders"
 import Filter from "../Filter"
 
+import IconRightSVG from "../../assets/svg/Icons/ICON_RIGHT.svg"
+import IconVectorSVG from "../../assets/svg/Icons/ICON_VECTOR.svg"
+import IconSelectedAktiveSVG from "../../assets/svg/Icons/ICON_SELECTED_AKTIVE.svg"
+import IconSelectedInaktiveSVG from "../../assets/svg/Icons/ICON_SELECTED_INAKTIVE.svg"
+import IconUploadSVG from "../../assets/svg/Icons/ICON_UPLOAD.svg"
+
 import Circle from "../Shared/Circle"
 import { useRouter } from "next/router"
 
@@ -118,10 +124,10 @@ export default function Header() {
                                 setTask()
                                 setBoard()
                             }}>
-                            {"> Location "}
-                            {client && `> ${client.get("name")} `}
-                            {project && `> ${project.get("name")} `}
-                            {task && `> ${task.get("name")} `}
+                            <IconRightSVG /> Location
+                            {client && <><IconVectorSVG /> {client.get("name")}</>}
+                            {project && <><IconVectorSVG /> {project.get("name")}</>}
+                            {task && <><IconVectorSVG /> {task.get("name")}</>}
                         </a>
                     </Link >
                     <a
@@ -135,13 +141,16 @@ export default function Header() {
                             setMarked(false)
                             setSelectedTags([])
                         }}>
+                        {showFilter ? <IconSelectedInaktiveSVG /> : <IconSelectedAktiveSVG />}
                         Filter
                     </a >
                     <div
                         onClick={() => setShowInteractionBar(!showInteractionBar)}>
+                        {showInteractionBar ? <IconSelectedInaktiveSVG /> : <IconSelectedAktiveSVG />}
                         Options
                     </div>
                     <label>
+                        <IconUploadSVG />
                         Upload Files
                         <UploadInput
                             multiple
