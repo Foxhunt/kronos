@@ -19,6 +19,10 @@ export const Item = styled.div<{ selected?: boolean }>`
         color: white;
         ` : ""
     }
+
+    &:last-child {
+        border-bottom: white 1px solid;
+    }
 `
 
 const Items = styled.div<{ lenght: number }>`

@@ -30,6 +30,8 @@ const Selectibles = styled.div`
     grid-template-rows: calc(6 * 31px - 1px);
 
     border-bottom: 1px solid black;
+
+    overflow: hidden;
 `
 
 type props = {
