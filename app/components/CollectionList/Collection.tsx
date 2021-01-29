@@ -13,6 +13,10 @@ import {
 
 import FileGrid from "../FileGrid"
 import { Row, Cell } from "./index"
+
+import IconAddSVG from "../../assets/svg/Icons/ICON_ADD.svg"
+import IconCancelSVG from "../../assets/svg/Icons/ICON_CANCEL.svg"
+
 import Circle from "../Shared/Circle"
 
 import { useFiles } from "../../hooks"
@@ -97,7 +101,7 @@ export default function Collection({ taskDocSnap }: props) {
                         event.stopPropagation()
                         setShowFiles(!showFiles)
                     }}>
-                    {showFiles ? "-" : "+"}
+                    {showFiles ? <IconCancelSVG /> : <IconAddSVG />}
                 </Cell>
             </Row>
             {showFiles && <FileGrid files={files} />}
