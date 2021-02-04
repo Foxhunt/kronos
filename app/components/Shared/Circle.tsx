@@ -20,8 +20,8 @@ export default function Circle({ fill, stroke, ...props }: SVGMotionProps<SVGEle
             transition={{
                 duration: .3
             }}
-            width="10"
-            height="10"
+            width="12"
+            height="12"
             viewBox="0 0 12 12"
             strokeWidth="1"
             shapeRendering="geometricPrecision">

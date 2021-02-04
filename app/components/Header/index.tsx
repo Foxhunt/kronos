@@ -23,6 +23,7 @@ import {
 import Folders from "../Folders"
 import Filter from "../Filter"
 
+import Circle from "../Shared/Circle"
 import IconLocationSVG from "../../assets/svg/Icons/ICON_LOCATION.svg"
 import IconVectorSVG from "../../assets/svg/Icons/ICON_VECTOR.svg"
 import IconSelectedAktiveSVG from "../../assets/svg/Icons/ICON_SELECTED_AKTIVE.svg"
@@ -107,13 +108,17 @@ export default function Header() {
                 <>
                     <Link href={"/"}>
                         <div>
-                            {router.route === "/" ? <IconSelectedInaktiveSVG /> : <IconSelectedAktiveSVG />}
+                            <Circle
+                                fill={router.route === "/" ? "#ffffff" : "#00000000"}
+                                stroke="#ffffff" />
                             Index
                         </div>
                     </Link >
                     <Link href={"/archive"}>
                         <div>
-                            {router.route === "/archive" ? <IconSelectedInaktiveSVG /> : <IconSelectedAktiveSVG />}
+                            <Circle
+                                fill={router.route === "/archive" ? "#ffffff" : "#00000000"}
+                                stroke="#ffffff" />
                             Archive
                         </div>
                     </Link >
