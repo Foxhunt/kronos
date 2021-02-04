@@ -23,6 +23,14 @@ import { useFiles } from "../../hooks"
 
 import TagList from "./TagList"
 
+import IconDeleteSVG from "../../assets/svg/Icons/ICON_DELETE.svg"
+import IconDownloadSVG from "../../assets/svg/Icons/ICON_DOWNLOAD.svg"
+import IconSelectedFineInaktiveSVG from "../../assets/svg/Icons/ICON_SELECTED__FINE_INAKTIVE.svg"
+import IconAddFineSVG from "../../assets/svg/Icons/ICON_ADD_FINE.svg"
+import IconMarkFineInaktiveSVG from "../../assets/svg/Icons/ICON_MARK_FINE_INAKTIVE.svg"
+
+
+
 const Container = styled.ul`
     height: 30px;
     margin: 0px;
@@ -38,8 +46,13 @@ const Container = styled.ul`
 `
 
 const Item = styled.li<{ active?: boolean }>`
+    position: relative;
+    
     list-style-type: none;
     margin: 0px 20px;
+
+    display: flex;
+    align-items: center;
 
     background-color: ${({ active }) => active ? "#fb2dfb" : ""};
 `
@@ -80,6 +93,7 @@ export default function InteractionBar() {
                     setSelectedFiles(files)
                 }
             }}>
+            <IconMarkFineInaktiveSVG />
             Select All
         </Item>
         <Item
@@ -87,10 +101,12 @@ export default function InteractionBar() {
                 deleteFiles(selectedFiles)
                 setSelectedFiles([])
             }}>
+            <IconDeleteSVG />
             Delete
         </Item>
         <Item
             onClick={() => selectedFiles.length > 0 && downloadFiles(selectedFiles)}>
+            <IconDownloadSVG />
             Download
         </Item>
         <Item
@@ -99,6 +115,7 @@ export default function InteractionBar() {
                     markFile(file)
                 }
             }}>
+            <IconSelectedFineInaktiveSVG />
             Mark
         </Item>
         <Item
@@ -107,6 +124,7 @@ export default function InteractionBar() {
                     favoriteFile(file)
                 }
             }}>
+            <IconSelectedFineInaktiveSVG />
             Favotire
         </Item>
         <Item
@@ -116,6 +134,7 @@ export default function InteractionBar() {
                     setShowTags(!showTags)
                 }
             }}>
+            <IconAddFineSVG />
             Tag
             {showTags &&
                 <TagList

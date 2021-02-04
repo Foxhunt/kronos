@@ -9,6 +9,8 @@ import { userDocRefAtom } from "../../store"
 
 const Container = styled.div`
     position: absolute;
+    top: -2px;
+    
     z-index: 1;
     background-color: white;
 
