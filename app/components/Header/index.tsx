@@ -142,7 +142,7 @@ export default function Header() {
                     <a
                         ref={filterLinkRef}
                         onPointerDown={() => setShowFilter(!showFilter)}>
-                        {showFilter ? <IconSelectedInaktiveSVG /> : <IconSelectedAktiveSVG />}
+                        {showFilter ? <IconSelectedAktiveSVG /> : <IconSelectedInaktiveSVG />}
                         Filter
                         {
                             (searchField !== "" ||
@@ -165,7 +165,7 @@ export default function Header() {
                     </a >
                     <div
                         onClick={() => setShowInteractionBar(!showInteractionBar)}>
-                        {showInteractionBar ? <IconSelectedInaktiveSVG /> : <IconSelectedAktiveSVG />}
+                        {showInteractionBar ? <IconSelectedAktiveSVG /> : <IconSelectedInaktiveSVG />}
                         Options
                     </div>
                     <label>
