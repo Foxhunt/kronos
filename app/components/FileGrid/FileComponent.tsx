@@ -79,7 +79,7 @@ export default function FileComponent({ fileDocSnap, selected, onSelect, onDelet
         visible: {
             opacity: 1,
             transition: {
-                duration: 0.5
+                duration: 0.2
             }
         }
     }

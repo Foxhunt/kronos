@@ -21,6 +21,9 @@ const Container = styled.div`
 
     align-items: center;
     
+    gap: 16px;
+    padding: 0px 16px;
+    
     overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
@@ -39,7 +42,6 @@ const Item = styled.div<{ selected?: boolean }>`
     min-width: 150px;
     height: 30px;
 
-    margin: 0px 2px;
     padding: 0px 5px;
     border: black solid 1px;
     border-radius: 20px;
@@ -75,7 +77,6 @@ const NewItemForm = styled.form`
     min-width: 150px;
     height: 30px;
         
-    margin: 0px 2px;
     padding: 0px 5px;
     border: black solid 1px;
     border-radius: 20px;
@@ -123,7 +124,7 @@ export default function Boards() {
                 setBoard(undefined)
             }}>
             <div>
-                {userDocRef?.get("boards")}
+                SHOW ALL
             </div>
         </Item>
         {boards?.map(board =>
@@ -175,7 +176,7 @@ export default function Boards() {
             <Item
                 onClick={() => setAddingItem(!addingItem)}>
                 <div>
-                    + Create new Board
+                    + CREATE NEW BOARD
                 </div>
             </Item>
         }

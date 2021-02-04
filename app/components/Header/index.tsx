@@ -56,7 +56,7 @@ const Navigation = styled.nav`
     }
 
     & > * {
-        border-right: 1px white solid;
+        border-right: 2px white solid;
 
         display: flex;
         align-items: center;
@@ -71,6 +71,7 @@ const Navigation = styled.nav`
 
 const Reset = styled.div`
     color: #00cce2;
+    display: flex;
 `
 
 const UploadInput = styled.input`
