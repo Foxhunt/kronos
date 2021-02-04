@@ -17,12 +17,20 @@ const ItemForm = styled.form`
 
 const ItemInput = styled.input`
     width: calc(100% - 5px);
+    height: 100%;
     padding: unset;
 
     padding-left: 5px;
 
     border: none;
     box-shadow: none;
+
+    font-family: "FuturaNowHeadline-Bd";
+
+    &::placeholder {
+        color: #dfdfe4;
+        line-height: 1;
+    }
 
     &:focus {
         outline: none!important;
