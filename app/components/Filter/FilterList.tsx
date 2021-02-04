@@ -8,13 +8,14 @@ export const Container = styled.div`
 
 interface props extends ComponentProps<"div"> {
     name: string
+    lenght?: number
 }
 
-export default function FilterList({ name, children }: props) {
+export default function FilterList({ name, children, lenght = 4 }: props) {
     return <Container>
         <Item>{name}</Item>
         <ItemList
-            lenght={4}>
+            lenght={lenght}>
             {children}
         </ItemList>
     </Container>

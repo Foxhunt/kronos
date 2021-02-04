@@ -35,6 +35,7 @@ const TextSearch = styled.input`
 
     &::placeholder {
         color: #dfdfe4;
+        text-transform: uppercase;
     }
 
     &:focus {
@@ -104,6 +105,7 @@ export default function Filter({ onHide }: props) {
             }} />
         <Selectibles>
             <FilterList
+                lenght={4}
                 name={"sort By"}>
                 {sortByOptions?.map(item =>
                     <Item
@@ -125,6 +127,7 @@ export default function Filter({ onHide }: props) {
                 )}
             </FilterList >
             <FilterList
+                lenght={4}
                 name={"Marked / Favorite"}>
                 <Item
                     selected={false}
@@ -148,6 +151,7 @@ export default function Filter({ onHide }: props) {
             </Item>
             </FilterList>
             <FilterList
+                lenght={4}
                 name={"Tags"}>
                 {tags.map(tag => <Item
                     key={tag.id}
