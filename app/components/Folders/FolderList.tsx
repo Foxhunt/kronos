@@ -8,6 +8,7 @@ import { filesToUploadAtom, userDocRefAtom } from "../../store"
 import { ItemList, Item } from "../Shared/ItemList"
 
 const Container = styled.div`
+    min-width: 0px;
 `
 
 const ItemForm = styled.form`
@@ -30,6 +31,7 @@ const ItemInput = styled.input`
     &::placeholder {
         color: #dfdfe4;
         line-height: 1;
+        text-transform: uppercase;
     }
 
     &:focus {
@@ -92,7 +94,9 @@ export default function FolderList({ name, previousName, selected, items, allowA
             onClick={() => {
                 onSelect(item)
             }}>
-            {item.get("name")}
+            <div>
+                {item.get("name")}
+            </div>
         </Item> : <Item
             ref={selectedItemRef}
             key={selected.id}
@@ -105,7 +109,9 @@ export default function FolderList({ name, previousName, selected, items, allowA
             onClick={() => {
                 onSelect(selected)
             }}>
-                {selected.get("name")}
+                <div>
+                    {selected.get("name")}
+                </div>
             </Item>
     ))
 

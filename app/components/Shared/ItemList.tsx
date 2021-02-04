@@ -19,6 +19,13 @@ export const Item = styled.div<{ selected?: boolean }>`
         color: white;
         ` : ""
     }
+
+    & > div {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        line-height: initial;
+    }
 `
 
 const Items = styled.div<{ lenght: number }>`
