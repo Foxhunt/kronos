@@ -4,7 +4,12 @@ import { ServerStyleSheet, createGlobalStyle } from "styled-components"
 const GlobalStyle = createGlobalStyle`
    html, body {
     margin: 0px;
+    
     font-family: "FuturaNowHeadline-Bd";
+    -webkit-font-smoothing: antialiased;
+
+    font-size: 14px;
+    line-height: 1;
 
     user-select: none;
   }
