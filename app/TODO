@@ -1,0 +1,23 @@
+–Options unabhänig von Filter/Location bestehen lassen: wenn man Options aktiv hat und den Filter auswählt bleiben die Options bestehen. <–Top! Klickt man dann jedoch den Filter weg, verschwinden auch die Option.
+–Benennung der Filter eindeutigter: können wir evtl gemeinsam besprechen.
+–Up/DOWN Pfeil in der Liste zentriert
+–Left/Right Pfeile in der Vollansicht einfügen
+–Logout braucht noch ein Icon (überlege noch welches)
+–Icons und Schrift auf die gleiche Grundline setzen
+–Lade-Sequenz beim Upload: man weiß immer noch nicht ob der Upload klappt
+
+Finetuning: machen wir evtl besser zusammen. Das wir eher son Trial/Error Ding
+bzw. ich schau mal ob ich schon etwas rumprobieren kann und paar gute Größen finde.
+Notiere mir hier nur schon was
+–Abstände der Kacheln enger 
+–Bilder innerhalb der Kacheln weniger Rand 
+–Board Buttons oben/unten gleicher Abstand
+
+nicht so wichtig
+–„Show infos“ icon in der Optionsleiste
+–Options lässt sich im Navileiste anklicken, obwohl nichts passiert.
+–Filter lässt ich ausklappen obwohl man im Index ist
+–Location Dreieck dreht sich beim Auswählen mit der Spitze nach unten
+–Location Reset Option wäre praktisch, muss aber nicht
+–Close Icon in der Vollbildansicht
+–Tags auswählen: listen sich hinter, statt unter einander? Fällt so noch aus dem Design raus. ist aber ok.
