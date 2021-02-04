@@ -7,6 +7,11 @@ import { filesToUploadAtom, userDocRefAtom } from "../../store"
 
 import { ItemList, Item } from "../Shared/ItemList"
 
+const FolderCaption = styled(Item) <{ blue?: boolean }>`
+    ${({ blue }) => blue ? "color: #0000ff;" : ""}
+    
+`
+
 const Container = styled.div`
     min-width: 0px;
 `
@@ -135,18 +140,19 @@ export default function FolderList({ name, previousName, selected, items, allowA
                         }} />
                 </ItemForm>
                 :
-                <Item
+                <FolderCaption
+                    blue={filesToUpload.length > 0 && !selected}
                     onDoubleClick={event => {
                         event.preventDefault()
                         setIsAdditingLevelName(true)
                     }}>
                     {
                         filesToUpload.length > 0 && !selected ?
-                            `Select a ${userDocRef?.get(name)} to complete upload.`
+                            `Select a ${userDocRef?.get(name)}`
                             :
                             userDocRef?.get(name)
                     }
-                </Item>
+                </FolderCaption>
         }
         <ItemForm
             onSubmit={event => {
