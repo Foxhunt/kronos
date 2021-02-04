@@ -14,6 +14,12 @@ import {
 const Container = styled.div`
     height: 100%;
 
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+
+    align-items: center;
+    
     overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
@@ -23,14 +29,19 @@ const Container = styled.div`
 `
 
 const Item = styled.div<{ selected?: boolean }>`
-    display: inline-flex;
-    align-items: center;
+    flex: 1;
 
-    padding-left: 5px;
-    
-    border-left: black solid 1px;
-    width: 150px;
-    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 150px;
+    height: 30px;
+
+    margin: 0px 2px;
+    padding: 0px 5px;
+    border: black solid 1px;
+    border-radius: 20px;
 
     ${({ selected }) => selected ?
         `
@@ -43,23 +54,34 @@ const Item = styled.div<{ selected?: boolean }>`
         background-color: black;
         color: white;
     }
+
+    & > div {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
 `
 
 const NewItemForm = styled.form`
+    flex-grow: 1;
+    flex-basis: 0;
+
     display: inline-flex;
     align-items: center;
 
-    padding-left: 5px;
+    min-width: 150px;
+    height: 30px;
+        
+    margin: 0px 2px;
+    padding: 0px 5px;
+    border: black solid 1px;
+    border-radius: 20px;
     
-    border-left: black solid 1px;
-    width: 150px;
-    height: 100%;
+    overflow: hidden;
 `
 
 const NewItemInput = styled.input`
     padding: unset;
-    height: 100%;
-    width: 100%;
 
     border: none; 
     border-width: 0px; 
@@ -91,7 +113,9 @@ export default function Boards() {
             onPointerDown={() => {
                 setBoard(undefined)
             }}>
-            {userDocRef?.get("boards")}
+            <div>
+                {userDocRef?.get("boards")}
+            </div>
         </Item>
         {boards?.map(board =>
             <Item
@@ -108,7 +132,9 @@ export default function Boards() {
                         setBoard(board)
                     }
                 }}>
-                {board.get("name")}
+                <div>
+                    {board.get("name")}
+                </div>
             </Item>)
         }
         {addingItem &&
@@ -139,7 +165,9 @@ export default function Boards() {
         {task && !addingItem &&
             <Item
                 onClick={() => setAddingItem(!addingItem)}>
-                +++
+                <div>
+                    + Create new Board
+                </div>
             </Item>
         }
     </Container >
