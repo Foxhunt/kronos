@@ -4,9 +4,12 @@ import Collection from "./Collection"
 import { useState } from "react"
 
 import { useAtom } from "jotai"
-import { filesToUploadAtom } from "../../store"
+import { filesToUploadAtom, userDocRefAtom } from "../../store"
 import { DropzoneRootProps } from "react-dropzone"
 import { useTasks } from "../../hooks"
+
+import IconUpSVG from "../../assets/svg/Icons/ICON_UP.svg"
+import IconDownSVG from "../../assets/svg/Icons/ICON_DOWN.svg"
 
 const Container = styled.div`
     flex: 1;
@@ -55,6 +58,7 @@ export const Cell = styled.div`
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+        line-height: initial;
     }
 `
 
@@ -63,6 +67,7 @@ type props = {
 }
 
 export default function CollectionList({ getRootProps }: props) {
+    const [userDocRef] = useAtom(userDocRefAtom)
     const [orderBy, setOrderBy] = useState("createdAt")
     const [orderDirection, setOrderDirection] = useState<"asc" | "desc">("desc")
 
@@ -83,39 +88,30 @@ export default function CollectionList({ getRootProps }: props) {
         {...(getRootProps ? getRootProps({}) : {})}>
         <Row>
             <Cell onClick={() => setOrder("createdAt")}>
-                <div>
-                    Upload {orderDirection}
-                </div>
+                UPLOAD {orderBy === "createdAt" && <> {orderDirection === "desc" ? <IconDownSVG /> : <IconUpSVG />} </>}
             </Cell>
             <Cell
                 onClick={() => setOrder("lastUpdatedAt")}>
-                <div>
-                    Change {orderDirection}
-                </div>
+                CHANGED {orderBy === "lastUpdatedAt" && <> {orderDirection === "desc" ? <IconDownSVG /> : <IconUpSVG />} </>}
             </Cell>
             <Cell
                 onClick={() => setOrder("clientName")}>
-                <div>
-                    Client {orderDirection}
-                </div>
+                {userDocRef?.get("level1")}
+                {orderBy === "clientName" && <>{orderDirection === "desc" ? <IconDownSVG /> : <IconUpSVG />}</>}
             </Cell>
             <Cell
                 onClick={() => setOrder("projectName")}>
-                <div>
-                    Project {orderDirection}
-                </div>
+                {userDocRef?.get("level2")}
+                {orderBy === "projectName" && <>{orderDirection === "desc" ? <IconDownSVG /> : <IconUpSVG />}</>}
             </Cell>
             <Cell
                 onClick={() => setOrder("name")}>
-                <div>
-                    Task {orderDirection}
-                </div>
+                {userDocRef?.get("level3")}
+                {orderBy === "name" && <>{orderDirection === "desc" ? <IconDownSVG /> : <IconUpSVG />}</>}
             </Cell>
             <Cell
                 onClick={() => setOrder("pinned")}>
-                <div>
-                    Pin {orderDirection}
-                </div>
+                PIN {orderBy === "pinned" && <>{orderDirection === "desc" ? <IconDownSVG /> : <IconUpSVG />}</>}
             </Cell>
             <Cell></Cell>
         </Row>
