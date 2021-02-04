@@ -23,14 +23,13 @@ import {
 import Folders from "../Folders"
 import Filter from "../Filter"
 
-import IconRightSVG from "../../assets/svg/Icons/ICON_RIGHT.svg"
+import IconLocationSVG from "../../assets/svg/Icons/ICON_LOCATION.svg"
 import IconVectorSVG from "../../assets/svg/Icons/ICON_VECTOR.svg"
 import IconSelectedAktiveSVG from "../../assets/svg/Icons/ICON_SELECTED_AKTIVE.svg"
 import IconSelectedInaktiveSVG from "../../assets/svg/Icons/ICON_SELECTED_INAKTIVE.svg"
 import IconUploadSVG from "../../assets/svg/Icons/ICON_UPLOAD.svg"
 import IconResetSVG from "../../assets/svg/Icons/ICON_RESET.svg"
 
-import Circle from "../Shared/Circle"
 import { useRouter } from "next/router"
 
 import { sortByOptions } from "../Filter"
@@ -47,6 +46,8 @@ const Navigation = styled.nav`
     align-items: stretch;
     
     background-color: black;
+
+    text-transform: uppercase;
 
     & * {
         text-decoration: none;
@@ -106,17 +107,13 @@ export default function Header() {
                 <>
                     <Link href={"/"}>
                         <div>
-                            <Circle
-                                fill={router.route === "/" ? "#ffffff" : "#00000000"}
-                                stroke={router.route === "/" ? "#ffffff" : "#00000000"} />
+                            {router.route === "/" ? <IconSelectedInaktiveSVG /> : <IconSelectedAktiveSVG />}
                             Index
                         </div>
                     </Link >
                     <Link href={"/archive"}>
                         <div>
-                            <Circle
-                                fill={router.route === "/archive" ? "#ffffff" : "#00000000"}
-                                stroke={router.route === "/archive" ? "#ffffff" : "#00000000"} />
+                            {router.route === "/archive" ? <IconSelectedInaktiveSVG /> : <IconSelectedAktiveSVG />}
                             Archive
                         </div>
                     </Link >
@@ -131,7 +128,7 @@ export default function Header() {
                                 setTask()
                                 setBoard()
                             }}>
-                            <IconRightSVG /> Location
+                            <IconLocationSVG /> Location
                             {client && <><IconVectorSVG /> {client.get("name")}</>}
                             {project && <><IconVectorSVG /> {project.get("name")}</>}
                             {task && <><IconVectorSVG /> {task.get("name")}</>}
