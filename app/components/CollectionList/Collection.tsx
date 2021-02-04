@@ -63,27 +63,37 @@ export default function Collection({ taskDocSnap }: props) {
             }}>
             <Row>
                 <Cell>
-                    {taskDocSnap.get("createdAt")?.toDate().getDate()}
+                    <div>
+                        {taskDocSnap.get("createdAt")?.toDate().getDate()}
                 .
                 {taskDocSnap.get("createdAt")?.toDate().getMonth() + 1}
                 .
                 {taskDocSnap.get("createdAt")?.toDate().getFullYear()}
+                    </div>
                 </Cell>
                 <Cell>
-                    {taskDocSnap.get("lastUpdatedAt")?.toDate().getDate()}
+                    <div>
+                        {taskDocSnap.get("lastUpdatedAt")?.toDate().getDate()}
                 .
                 {taskDocSnap.get("lastUpdatedAt")?.toDate().getMonth() + 1}
                 .
                 {taskDocSnap.get("lastUpdatedAt")?.toDate().getFullYear()}
+                    </div>
                 </Cell>
                 <Cell>
-                    {taskDocSnap?.get("clientName")}
+                    <div>
+                        {taskDocSnap?.get("clientName")}
+                    </div>
                 </Cell>
                 <Cell>
-                    {taskDocSnap?.get("projectName")}
+                    <div>
+                        {taskDocSnap?.get("projectName")}
+                    </div>
                 </Cell>
                 <Cell>
-                    {taskDocSnap.get("name")}
+                    <div>
+                        {taskDocSnap.get("name")}
+                    </div>
                 </Cell>
                 <Cell>
                     <Circle

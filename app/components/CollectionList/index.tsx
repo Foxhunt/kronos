@@ -43,11 +43,19 @@ export const Row = styled.div`
 `
 
 export const Cell = styled.div`
+    min-width: 0px;
+
     display: flex;
     justify-content: left;
     align-items: center;
 
     padding-left: 5px;
+
+    & > div {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
 `
 
 type props = {
@@ -75,27 +83,39 @@ export default function CollectionList({ getRootProps }: props) {
         {...(getRootProps ? getRootProps({}) : {})}>
         <Row>
             <Cell onClick={() => setOrder("createdAt")}>
-                Upload {orderDirection}
+                <div>
+                    Upload {orderDirection}
+                </div>
             </Cell>
             <Cell
                 onClick={() => setOrder("lastUpdatedAt")}>
-                Change {orderDirection}
+                <div>
+                    Change {orderDirection}
+                </div>
             </Cell>
             <Cell
                 onClick={() => setOrder("clientName")}>
-                Client {orderDirection}
+                <div>
+                    Client {orderDirection}
+                </div>
             </Cell>
             <Cell
                 onClick={() => setOrder("projectName")}>
-                Project {orderDirection}
+                <div>
+                    Project {orderDirection}
+                </div>
             </Cell>
             <Cell
                 onClick={() => setOrder("name")}>
-                Task {orderDirection}
+                <div>
+                    Task {orderDirection}
+                </div>
             </Cell>
             <Cell
                 onClick={() => setOrder("pinned")}>
-                Pin {orderDirection}
+                <div>
+                    Pin {orderDirection}
+                </div>
             </Cell>
             <Cell></Cell>
         </Row>
