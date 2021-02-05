@@ -1,9 +1,10 @@
-import firebase from 'firebase/app'
-import 'firebase/auth' // If you need it
-import 'firebase/firestore' // If you need it
-import 'firebase/storage' // If you need it
-import 'firebase/functions' // If you need it
-import 'firebase/analytics' // If you need it
+import firebase from "firebase/app"
+import "firebase/auth"
+import "firebase/firestore"
+import "firebase/storage"
+import "firebase/functions"
+import "firebase/analytics"
+import "firebase/performance"
 
 const clientCredentials = {
     apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -19,6 +20,7 @@ const clientCredentials = {
 // Check that `window` is in scope for the analytics module!
 if (typeof window !== 'undefined' && !firebase.apps.length) {
     firebase.initializeApp(clientCredentials)
+    firebase.performance()
 
     if (location.hostname === "localhost") {
         // firebase.auth().useEmulator("http://127.0.0.1:9099")
