@@ -1,10 +1,21 @@
 –Options unabhänig von Filter/Location bestehen lassen: wenn man Options aktiv hat und den Filter auswählt bleiben die Options bestehen. <–Top! Klickt man dann jedoch den Filter weg, verschwinden auch die Option.
+    - Filter nicht bei outside click ausblenden
+    
 –Benennung der Filter eindeutigter: können wir evtl gemeinsam besprechen.
+    - aus index übernehmen
+
 –Up/DOWN Pfeil in der Liste zentriert
+    - y Achse
+
+
 –Left/Right Pfeile in der Vollansicht einfügen
-–Logout braucht noch ein Icon (überlege noch welches)
+– Logout braucht noch ein Icon (überlege noch welches)
+
 –Icons und Schrift auf die gleiche Grundline setzen
+ - neue icons benutzen
+
 –Lade-Sequenz beim Upload: man weiß immer noch nicht ob der Upload klappt
+ - upload indicator magenta unten
 
 Finetuning: machen wir evtl besser zusammen. Das wir eher son Trial/Error Ding
 bzw. ich schau mal ob ich schon etwas rumprobieren kann und paar gute Größen finde.
