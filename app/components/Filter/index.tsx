@@ -57,18 +57,23 @@ const Selectibles = styled.div`
 
 export const sortByOptions: orderOptions[] = [
     {
+        displayName: "CREATED LATEST",
         orderBy: "createdAt",
         orderDirection: "desc"
     }, {
+        displayName: "CREATED LAST",
         orderBy: "createdAt",
         orderDirection: "asc"
     }, {
+        displayName: "NAME Z TO A",
         orderBy: "name",
         orderDirection: "desc"
     }, {
+        displayName: "NAME A TO Z",
         orderBy: "name",
         orderDirection: "asc"
     }, {
+        displayName: "RANDOM",
         orderBy: "random",
         orderDirection: "asc"
     }
@@ -106,7 +111,7 @@ export default function Filter({ onHide }: props) {
         <Selectibles>
             <FilterList
                 lenght={4}
-                name={"sort By"}>
+                name={"SORT BY"}>
                 {sortByOptions?.map(item =>
                     <Item
                         ref={orderBy === item ? selectedSortByItemRef : null}
@@ -122,13 +127,13 @@ export default function Filter({ onHide }: props) {
                         <Circle
                             fill={orderBy === item ? "#000000" : "#ffffff"}
                             stroke="#000000" />
-                        {item.orderBy}
+                        {item.displayName}
                     </Item>
                 )}
             </FilterList >
             <FilterList
                 lenght={4}
-                name={"Marked / Favorite"}>
+                name={"MARKED AS"}>
                 <Item
                     selected={false}
                     onClick={() => {
@@ -137,8 +142,8 @@ export default function Filter({ onHide }: props) {
                     <Circle
                         fill={favorites ? "#0501ff" : "#00000000"}
                         stroke="#0501ff" />
-                favorites
-            </Item>
+                FAVORITES
+                </Item>
                 <Item
                     selected={false}
                     onClick={() => {
@@ -147,12 +152,12 @@ export default function Filter({ onHide }: props) {
                     <Circle
                         fill={marked ? "#33bd27" : "#00000000"}
                         stroke="#33bd27" />
-                marked
+                MARKED
             </Item>
             </FilterList>
             <FilterList
                 lenght={4}
-                name={"Tags"}>
+                name={"TAGS"}>
                 {tags.map(tag => <Item
                     key={tag.id}
                     selected={false}

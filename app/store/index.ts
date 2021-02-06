@@ -20,6 +20,7 @@ export const selectedCollectionDocRefAtom = atom<firebase.firestore.DocumentSnap
 export const filesToUploadAtom = atom<File[]>([])
 
 export type orderOptions = {
+    displayName: string
     orderBy: "createdAt" | "lastUpdatedAt" | "clientName" | "projectName" | "name" | "pinned" | "random",
     orderDirection: "asc" | "desc"
 }
