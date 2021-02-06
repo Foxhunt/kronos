@@ -1,5 +1,5 @@
 import firebase from "../../firebase/clientApp"
-import { useRef, useState } from "react"
+import { useRef } from "react"
 import Link from "next/link"
 import styled from "styled-components"
 

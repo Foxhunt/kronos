@@ -6,13 +6,15 @@ import {
     userDocRefAtom
 } from "../store"
 
+import { sortByOptions } from "../components/Filter"
+
 export function useFiles(
     client?: firebase.firestore.DocumentSnapshot,
     project?: firebase.firestore.DocumentSnapshot,
     task?: firebase.firestore.DocumentSnapshot,
     collection?: firebase.firestore.DocumentSnapshot,
     limit: number = Infinity,
-    { orderBy, orderDirection }: orderOptions = { orderBy: "createdAt", orderDirection: "desc" },
+    { orderBy, orderDirection }: orderOptions = sortByOptions[0],
     favorite: boolean = false,
     marked: boolean = false,
     tags?: string[]
