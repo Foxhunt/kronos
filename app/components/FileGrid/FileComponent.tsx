@@ -17,9 +17,10 @@ const Container = styled(motion.div) <{ selected: boolean }>`
 
     height: 400px;
 
+    box-sizing: border-box;
+
     ${({ selected }) => selected ? `
         border: 3px solid #fb2dfb;
-        margin: -3px;
     ` : ""}
 
     display: flex;
@@ -29,9 +30,9 @@ const Container = styled(motion.div) <{ selected: boolean }>`
     overflow: hidden;
 `
 
-const Details = styled(motion.div)`
+const Details = styled(motion.div) <{ selected: boolean }>`
     position: absolute;
-    bottom: 5px;
+    bottom: ${({ selected }) => selected ? 2 : 5}px;
 
     width: 75%;
 
@@ -62,7 +63,7 @@ type props = {
 export default function FileComponent({ fileDocSnap, selected, onSelect, onDelete }: props) {
     const [src, setSrc] = useState("")
     useEffect(() => {
-        setSrc(fileDocSnap.get("renderedPDF.300") || fileDocSnap.get("downloadURL"))
+        setSrc(fileDocSnap.get("renderedPDF.350") || fileDocSnap.get("downloadURL"))
     }, [fileDocSnap])
 
     const [contentType, setContentType] = useState("")
@@ -118,6 +119,7 @@ export default function FileComponent({ fileDocSnap, selected, onSelect, onDelet
                 src && <PDFViewer
                     fileDocSnap={fileDocSnap}
                     src={src}
+                    width={350}
                     height={350} />
                 :
                 src && <Image
@@ -131,7 +133,8 @@ export default function FileComponent({ fileDocSnap, selected, onSelect, onDelet
         <Details
             initial="hidden"
             animate={(isHovered || showInteractionBar) ? "visible" : "hidden"}
-            variants={variants}>
+            variants={variants}
+            selected={selected}>
             <Name>{fileDocSnap.get("name")}</Name>
             <Circle
                 stroke="#0501ff"

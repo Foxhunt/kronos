@@ -6,14 +6,16 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 type props = {
     fileDocSnap: firebase.firestore.DocumentSnapshot | undefined
     src: string
+    width: number
     height: number
 }
 
-export default function PDFViewer({ fileDocSnap, src, height }: props) {
+export default function PDFViewer({ fileDocSnap, src, width, height }: props) {
     const pageDivRef = useRef<HTMLDivElement>(null)
     return <Document file={src}>
         <Page
             inputRef={pageDivRef}
+            width={width}
             height={height}
             pageNumber={1}
             renderAnnotationLayer={false}

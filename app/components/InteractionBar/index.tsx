@@ -25,11 +25,19 @@ import { useFiles } from "../../hooks"
 
 import TagList from "./TagList"
 
-import IconSelectedFineInaktiveSVG from "../../assets/svg/Icons/CIRCLE-OUTLINE_FINE.svg"
+import IconMarkFineInaktiveSVG from "../../assets/svg/Icons/SQUARE-OUTLINE-FINE.svg"
 import IconDeleteSVG from "../../assets/svg/Icons/DELETE.svg"
 import IconDownloadSVG from "../../assets/svg/Icons/DOWNLOAD.svg"
-import IconMarkFineInaktiveSVG from "../../assets/svg/Icons/SQUARE-OUTLINE-FINE.svg"
+import IconSelectedFineInaktiveSVG from "../../assets/svg/Icons/CIRCLE.svg"
 import IconAddFineSVG from "../../assets/svg/Icons/PLUS-FINE.svg"
+
+const StyledIconSelectedFineInaktiveSVGBlue = styled(IconSelectedFineInaktiveSVG)`
+    fill: #0501ff;
+`
+
+const StyledIconSelectedFineInaktiveSVGGreen = styled(IconSelectedFineInaktiveSVG)`
+    fill: #33bd27;
+`
 
 const Container = styled.ul<{ top: number }>`
     position: sticky;
@@ -55,12 +63,19 @@ const Item = styled.li<{ active?: boolean }>`
     position: relative;
     
     list-style-type: none;
-    margin: 0px 20px;
+    margin-left: 8px;
+    margin-right: 20px;
 
     display: flex;
     align-items: center;
 
     background-color: ${({ active }) => active ? "#fb2dfb" : ""};
+`
+
+
+const PaddingLeft = styled.div`
+    padding-left: 5px;
+    padding-bottom: 2px;
 `
 
 export default function InteractionBar() {
@@ -110,7 +125,9 @@ export default function InteractionBar() {
                 }
             }}>
             <IconMarkFineInaktiveSVG />
-            Select All
+            <PaddingLeft>
+                Select All
+            </PaddingLeft>
         </Item>
         <Item
             onClick={() => {
@@ -118,21 +135,16 @@ export default function InteractionBar() {
                 setSelectedFiles([])
             }}>
             <IconDeleteSVG />
-            Delete
+            <PaddingLeft>
+                Delete
+            </PaddingLeft>
         </Item>
         <Item
             onClick={() => selectedFiles.length > 0 && downloadFiles(selectedFiles)}>
             <IconDownloadSVG />
-            Download
-        </Item>
-        <Item
-            onClick={() => {
-                for (const file of selectedFiles) {
-                    markFile(file)
-                }
-            }}>
-            <IconSelectedFineInaktiveSVG />
-            Mark
+            <PaddingLeft>
+                Download
+            </PaddingLeft>
         </Item>
         <Item
             onClick={() => {
@@ -140,8 +152,21 @@ export default function InteractionBar() {
                     favoriteFile(file)
                 }
             }}>
-            <IconSelectedFineInaktiveSVG />
-            Favotire
+            <StyledIconSelectedFineInaktiveSVGBlue />
+            <PaddingLeft>
+                Favorite
+            </PaddingLeft>
+        </Item>
+        <Item
+            onClick={() => {
+                for (const file of selectedFiles) {
+                    markFile(file)
+                }
+            }}>
+            <StyledIconSelectedFineInaktiveSVGGreen />
+            <PaddingLeft>
+                Mark
+            </PaddingLeft>
         </Item>
         <Item
             ref={tagToggleRef}
@@ -151,7 +176,9 @@ export default function InteractionBar() {
                 }
             }}>
             <IconAddFineSVG />
-            Tag
+            <PaddingLeft>
+                Tag
+            </PaddingLeft>
             {showTags &&
                 <TagList
                     onHide={event => {

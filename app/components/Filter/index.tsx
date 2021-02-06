@@ -25,7 +25,7 @@ const TextSearch = styled.input`
     height: 29px;
     padding: unset;
 
-    padding-left: 5px;
+    padding-left: 8px;
 
     border: none;
     border-bottom: black 2px solid;
