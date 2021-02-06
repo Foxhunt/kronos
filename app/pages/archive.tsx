@@ -10,6 +10,7 @@ import {
     filterMarkedAtom,
     filterOrderByAtom,
     filterTagsAtom,
+    previewFileAtom,
     selectedClientDocRefAtom,
     selectedCollectionDocRefAtom,
     selectedProjectDocRefAtom,
@@ -64,13 +65,15 @@ export default function Archive() {
 
     const [showInteractionBar] = useAtom(showInteractionBarAtom)
 
+    const [previewFile] = useAtom(previewFileAtom)
+
     return <>
         <Head>
             <title>Archive</title>
             <link rel="shortcut icon" href="/grid.svg" />
         </Head>
         {showInteractionBar && <InteractionBar />}
-        {task &&
+        {task && !previewFile &&
             <BoardBar />
         }
         {userDocRef &&
