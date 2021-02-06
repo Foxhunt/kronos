@@ -39,20 +39,28 @@ const Items = styled.div<{ lenght: number }>`
 
 const ScrollUpIndicator = styled.div`
     position: sticky;
+    top: 0px;
 
     width: 100%;
-    text-align: center;
-    top: 0px;
+    height: 31px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     pointer-events: none;
 `
 
 const ScrollDownIndicator = styled.div`
     position: sticky;
+    bottom: 0px;
 
     width: 100%;
-    text-align: center;
-    bottom: 0px;
+    height: 31px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     pointer-events: none;
 `
