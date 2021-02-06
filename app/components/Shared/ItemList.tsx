@@ -10,7 +10,7 @@ export const Item = styled.div<{ selected?: boolean }>`
 
     height: 30px;
 
-    padding-left: 5px;
+    padding-left: 8px;
     border-bottom: black 1px solid;
 
     background-color: white;

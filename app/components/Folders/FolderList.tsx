@@ -8,7 +8,12 @@ import { filesToUploadAtom, userDocRefAtom } from "../../store"
 import { ItemList, Item } from "../Shared/ItemList"
 
 const FolderCaption = styled(Item) <{ blue?: boolean }>`
-    ${({ blue }) => blue ? "color: #0000ff;" : ""}
+    color: ${({ blue }) => blue ? "#ffffff" : ""};
+    background-color: ${({ blue }) => blue ? "#0000ff" : ""};
+`
+
+const CreateHint = styled(Item)`
+    color: #0000ff;
     background-color: white;
 `
 
@@ -26,7 +31,7 @@ const ItemInput = styled.input`
     height: 100%;
     padding: unset;
 
-    padding-left: 5px;
+    padding-left: 8px;
 
     border: none;
     box-shadow: none;
@@ -74,7 +79,7 @@ export default function FolderList({ name, previousName, selected, items, allowA
     const renderItems = []
 
     if (newItemName !== "") {
-        renderItems.push(<Item
+        renderItems.push(<CreateHint
             key={"click to create"}
             onClick={() => {
                 if (allowAdding) {
@@ -83,7 +88,7 @@ export default function FolderList({ name, previousName, selected, items, allowA
                 }
             }}>
             {allowAdding ? "click to create" : `select ${previousName && userDocRef?.get(previousName)} to create`}
-        </Item >)
+        </CreateHint >)
     }
 
     const selectedItemRef = useRef<HTMLDivElement>(null)
