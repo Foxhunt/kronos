@@ -12,6 +12,9 @@ import {
 } from "../../store"
 import { useClickedOutside } from "../../hooks"
 
+import IconLeftSVG from "../../assets/svg/Icons/LEFT.svg"
+import IconRightSVG from "../../assets/svg/Icons/RIGHT.svg"
+
 const PDFViewer = dynamic(import("./PDFViewer"), { ssr: false })
 
 const Container = styled.div`
@@ -200,7 +203,7 @@ export default function FilePreview({ files }: props) {
                     setDirection(-1)
                 }
             }}>
-            Prev
+            <IconLeftSVG />
         </ArrowLeft>
         <ArrowRight
             onClick={event => {
@@ -211,7 +214,7 @@ export default function FilePreview({ files }: props) {
                     setDirection(+1)
                 }
             }}>
-            Next
+            <IconRightSVG />
         </ArrowRight>
     </Container>
 }

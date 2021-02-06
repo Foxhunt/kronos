@@ -23,13 +23,11 @@ import { useFiles } from "../../hooks"
 
 import TagList from "./TagList"
 
-import IconDeleteSVG from "../../assets/svg/Icons/ICON_DELETE.svg"
-import IconDownloadSVG from "../../assets/svg/Icons/ICON_DOWNLOAD.svg"
-import IconSelectedFineInaktiveSVG from "../../assets/svg/Icons/ICON_SELECTED__FINE_INAKTIVE.svg"
-import IconAddFineSVG from "../../assets/svg/Icons/ICON_ADD_FINE.svg"
-import IconMarkFineInaktiveSVG from "../../assets/svg/Icons/ICON_MARK_FINE_INAKTIVE.svg"
-
-
+import IconSelectedFineInaktiveSVG from "../../assets/svg/Icons/CIRCLE-OUTLINE_FINE.svg"
+import IconDeleteSVG from "../../assets/svg/Icons/DELETE.svg"
+import IconDownloadSVG from "../../assets/svg/Icons/DOWNLOAD.svg"
+import IconMarkFineInaktiveSVG from "../../assets/svg/Icons/SQUARE-OUTLINE-FINE.svg"
+import IconAddFineSVG from "../../assets/svg/Icons/PLUS-FINE.svg"
 
 const Container = styled.ul`
     height: 30px;

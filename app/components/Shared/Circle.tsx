@@ -23,7 +23,7 @@ export default function Circle({ fill, stroke, ...props }: SVGMotionProps<SVGEle
             width="12"
             height="12"
             viewBox="0 0 12 12"
-            strokeWidth="1"
+            strokeWidth="2"
             shapeRendering="geometricPrecision">
             <motion.circle
                 cx="6"

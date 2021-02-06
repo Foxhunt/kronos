@@ -14,8 +14,8 @@ import {
 import FileGrid from "../FileGrid"
 import { Row, Cell } from "./index"
 
-import IconAddSVG from "../../assets/svg/Icons/ICON_ADD.svg"
-import IconCancelSVG from "../../assets/svg/Icons/ICON_CANCEL.svg"
+import IconAddSVG from "../../assets/svg/Icons/PLUS.svg"
+import IconCancelSVG from "../../assets/svg/Icons/X.svg"
 
 import Circle from "../Shared/Circle"
 

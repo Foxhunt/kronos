@@ -24,18 +24,23 @@ import Folders from "../Folders"
 import Filter from "../Filter"
 
 import Circle from "../Shared/Circle"
-import IconLocationSVG from "../../assets/svg/Icons/ICON_LOCATION.svg"
-import IconVectorSVG from "../../assets/svg/Icons/ICON_VECTOR.svg"
-import IconSelectedAktiveSVG from "../../assets/svg/Icons/ICON_SELECTED_AKTIVE.svg"
-import IconSelectedInaktiveSVG from "../../assets/svg/Icons/ICON_SELECTED_INAKTIVE.svg"
-import IconUploadSVG from "../../assets/svg/Icons/ICON_UPLOAD.svg"
-import IconResetSVG from "../../assets/svg/Icons/ICON_RESET.svg"
+import IconLocationSVG from "../../assets/svg/Icons/LOCATION.svg"
+import IconVectorSVG from "../../assets/svg/Icons/VECTOR.svg"
+import IconSelectedAktiveSVG from "../../assets/svg/Icons/SQUARE.svg"
+import IconSelectedInaktiveSVG from "../../assets/svg/Icons/SQUARE-OUTLINE.svg"
+import IconUploadSVG from "../../assets/svg/Icons/UPLOAD.svg"
+import IconResetSVG from "../../assets/svg/Icons/RESET.svg"
 
 import { useRouter } from "next/router"
 
 import { sortByOptions } from "../Filter"
 
 const Container = styled.header`
+`
+
+const PaddingRight = styled.div`
+    padding-right: 5px;
+    padding-bottom: 2px;
 `
 
 const Navigation = styled.nav`
@@ -61,7 +66,7 @@ const Navigation = styled.nav`
         display: flex;
         align-items: center;
 
-        padding-left: 5px;
+        padding-left: 8px;
     }
 
     & > *:last-child {
@@ -134,23 +139,28 @@ export default function Header() {
                                 setTask()
                                 setBoard()
                             }}>
-                            <IconLocationSVG /> Location
-                            {client && <><IconVectorSVG /> {client.get("name")}</>}
-                            {project && <><IconVectorSVG /> {project.get("name")}</>}
-                            {task && <><IconVectorSVG /> {task.get("name")}</>}
+                            <PaddingRight><IconLocationSVG /></PaddingRight>
+                            <PaddingRight>Location</PaddingRight>
+                            {client && <PaddingRight><IconVectorSVG />{client.get("name")}</PaddingRight>}
+                            {project && <PaddingRight><IconVectorSVG /> {project.get("name")}</PaddingRight>}
+                            {task && <PaddingRight><IconVectorSVG /> {task.get("name")}</PaddingRight>}
                         </a>
                     </Link >
                     <a
                         ref={filterLinkRef}
                         onPointerDown={() => setShowFilter(!showFilter)}>
-                        {showFilter ? <IconSelectedAktiveSVG /> : <IconSelectedInaktiveSVG />}
-                        Filter
+                        <PaddingRight>
+                            {showFilter ? <IconSelectedAktiveSVG /> : <IconSelectedInaktiveSVG />}
+                        </PaddingRight>
+                        <PaddingRight>Filter</PaddingRight>
+
                         {
                             (searchField !== "" ||
                                 orderBy !== sortByOptions[0] ||
                                 favorites ||
                                 marked ||
                                 selectedTags.length > 0) &&
+
                             <Reset
                                 onPointerDown={event => event.stopPropagation()}
                                 onClick={() => {
@@ -160,18 +170,27 @@ export default function Header() {
                                     setMarked(false)
                                     setSelectedTags([])
                                 }}>
-                                {" "}<IconResetSVG /> RESET
+                                <PaddingRight><IconResetSVG /></PaddingRight>
+                                <PaddingRight>RESET</PaddingRight>
                             </Reset>
                         }
                     </a >
                     <div
                         onClick={() => setShowInteractionBar(!showInteractionBar)}>
-                        {showInteractionBar ? <IconSelectedAktiveSVG /> : <IconSelectedInaktiveSVG />}
-                        Options
+                        <PaddingRight>
+                            {showInteractionBar ? <IconSelectedAktiveSVG /> : <IconSelectedInaktiveSVG />}
+                        </PaddingRight>
+                        <PaddingRight>
+                            Options
+                        </PaddingRight>
                     </div>
                     <label>
-                        <IconUploadSVG />
-                        Upload Files
+                        <PaddingRight>
+                            <IconUploadSVG />
+                        </PaddingRight>
+                        <PaddingRight>
+                            Upload Files
+                        </PaddingRight>
                         <UploadInput
                             multiple
                             type={"file"}
@@ -184,7 +203,8 @@ export default function Header() {
                     </label>
                 </>
             }
-            {userDocRef &&
+            {
+                userDocRef &&
                 <Link href={"/login"}>
                     <a onClick={() => {
                         setClient(undefined)
@@ -193,10 +213,13 @@ export default function Header() {
                         setBoard(undefined)
                         firebase.auth().signOut()
                     }}>
-                        Logout
+                        <PaddingRight>
+                            Logout
+                        </PaddingRight>
                     </a>
-                </Link >}
-        </Navigation>
+                </Link >
+            }
+        </Navigation >
         {
             userDocRef &&
             <>
