@@ -182,6 +182,7 @@ export default function FilePreview({ files }: props) {
                         src && <PDFViewer
                             fileDocSnap={previewFile}
                             src={src}
+                            width={800}
                             height={800} />
                         :
                         src && <Image
