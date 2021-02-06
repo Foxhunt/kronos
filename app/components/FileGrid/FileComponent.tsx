@@ -33,13 +33,23 @@ const Details = styled(motion.div)`
     position: absolute;
     bottom: 5px;
 
+    width: 75%;
+
+    font-size: 11px;
+
     display: flex;
     align-items: center;
+    justify-content: center;
 `
 
 const Name = styled.div`
     display: inline;
     margin-right: 5px;
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    line-height: initial;
 `
 
 type props = {
@@ -108,12 +118,12 @@ export default function FileComponent({ fileDocSnap, selected, onSelect, onDelet
                 src && <PDFViewer
                     fileDocSnap={fileDocSnap}
                     src={src}
-                    height={300} />
+                    height={350} />
                 :
                 src && <Image
                     src={src}
-                    height={300}
-                    width={300}
+                    height={350}
+                    width={350}
                     unoptimized
                     layout={"intrinsic"}
                     objectFit="contain" />

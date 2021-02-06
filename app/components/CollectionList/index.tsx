@@ -60,7 +60,7 @@ export const Cell = styled.div`
     justify-content: left;
     align-items: center;
 
-    padding-left: 5px;
+    padding-left: 8px;
 
     & > div {
         overflow: hidden;

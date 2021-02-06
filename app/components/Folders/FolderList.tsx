@@ -9,7 +9,7 @@ import { ItemList, Item } from "../Shared/ItemList"
 
 const FolderCaption = styled(Item) <{ blue?: boolean }>`
     ${({ blue }) => blue ? "color: #0000ff;" : ""}
-    
+    background-color: white;
 `
 
 const Container = styled.div`

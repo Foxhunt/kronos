@@ -23,13 +23,12 @@ import { useOfflineSearch } from "../../hooks"
 const Container = styled(motion.div)`
     position: relative;
 
-    padding: 16px;
     outline: none;
 
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px,1fr));
+    grid-template-columns: repeat(auto-fit, minmax(370px,1fr));
     grid-template-rows: 1fr;
-    grid-gap: 16px;
+    grid-gap: 8px;
 
     overflow-y: auto;
 `
@@ -43,6 +42,7 @@ const Hint = styled.label`
     justify-content: center;
 
     text-align: center;
+    line-height: 1.5;
 `
 
 const UploadInput = styled.input`

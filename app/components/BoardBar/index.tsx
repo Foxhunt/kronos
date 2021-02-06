@@ -8,11 +8,20 @@ import {
     selectedCollectionDocRefAtom,
     selectedProjectDocRefAtom,
     selectedTaskDocRefAtom,
+    showFilterAtom,
+    showFoldersAtom,
+    showInteractionBarAtom,
     userDocRefAtom
 } from "../../store"
 
-const Container = styled.div`
-    height: 40px;
+import PlusSVG from "../../assets/svg/Icons/PLUS.svg"
+
+const Container = styled.div<{ top: number }>`
+    position: sticky;
+    top: ${({ top }) => top}px;
+    z-index: 1;
+
+    height: 48px;
     flex-shrink: 0;
 
     display: flex;
@@ -21,8 +30,8 @@ const Container = styled.div`
 
     align-items: center;
     
-    gap: 16px;
-    padding: 0px 16px;
+    gap: 8px;
+    padding: 0px 7px;
     
     overflow-x: auto;
     overflow-y: hidden;
@@ -40,11 +49,13 @@ const Item = styled.div<{ selected?: boolean }>`
     justify-content: center;
 
     min-width: 150px;
-    height: 30px;
+    height: 26px;
 
     padding: 0px 5px;
     border: black solid 1px;
     border-radius: 20px;
+
+    background-color: white;
 
     ${({ selected }) => selected ?
         `
@@ -65,6 +76,14 @@ const Item = styled.div<{ selected?: boolean }>`
         white-space: nowrap;
         text-overflow: ellipsis;
     }
+`
+
+const ItemText = styled.div`
+    padding-bottom: 2px;
+    
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 `
 
 const NewItemForm = styled.form`
@@ -114,7 +133,22 @@ export default function Boards() {
     const [addingItem, setAddingItem] = useState(false)
     const [newItemName, setNewItemName] = useState("")
 
+    const [showFolders] = useAtom(showFoldersAtom)
+    const [showFilter] = useAtom(showFilterAtom)
+    const [showInteractionBar] = useAtom(showInteractionBarAtom)
+
+    let top = 30
+
+    if (showFolders || showFilter) {
+        top += 186
+    }
+
+    if (showInteractionBar) {
+        top += 31
+    }
+
     return <Container
+        top={top}
         onWheel={event => {
             event.currentTarget.scrollBy({ left: event.deltaY * 0.6 })
         }}>
@@ -123,9 +157,9 @@ export default function Boards() {
             onPointerDown={() => {
                 setBoard(undefined)
             }}>
-            <div>
+            <ItemText>
                 SHOW ALL
-            </div>
+            </ItemText>
         </Item>
         {boards?.map(board =>
             <Item
@@ -142,9 +176,9 @@ export default function Boards() {
                         setBoard(board)
                     }
                 }}>
-                <div>
+                <ItemText>
                     {board.get("name")}
-                </div>
+                </ItemText>
             </Item>)
         }
         {addingItem &&
@@ -175,9 +209,9 @@ export default function Boards() {
         {task && !addingItem &&
             <Item
                 onClick={() => setAddingItem(!addingItem)}>
-                <div>
-                    + CREATE NEW BOARD
-                </div>
+                <ItemText>
+                    <PlusSVG /> CREATE NEW BOARD
+                </ItemText>
             </Item>
         }
     </Container >

@@ -32,6 +32,7 @@ export const filterTagsAtom = atom<string[]>([])
 
 export const showInteractionBarAtom = atom<boolean>(false)
 export const showFoldersAtom = atom<boolean>(false)
+export const showFilterAtom = atom<boolean>(false)
 
 export const selectedFilesAtom = atom<firebase.firestore.DocumentSnapshot[]>([])
 

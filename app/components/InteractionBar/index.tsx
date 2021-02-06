@@ -17,7 +17,9 @@ import {
     selectedCollectionDocRefAtom,
     selectedFilesAtom,
     selectedProjectDocRefAtom,
-    selectedTaskDocRefAtom
+    selectedTaskDocRefAtom,
+    showFilterAtom,
+    showFoldersAtom
 } from "../../store"
 import { useFiles } from "../../hooks"
 
@@ -29,7 +31,13 @@ import IconDownloadSVG from "../../assets/svg/Icons/DOWNLOAD.svg"
 import IconMarkFineInaktiveSVG from "../../assets/svg/Icons/SQUARE-OUTLINE-FINE.svg"
 import IconAddFineSVG from "../../assets/svg/Icons/PLUS-FINE.svg"
 
-const Container = styled.ul`
+const Container = styled.ul<{ top: number }>`
+    position: sticky;
+    top: ${({ top }) => top}px;
+    z-index: 1;
+
+    background-color: white;
+
     height: 30px;
     margin: 0px;
     padding: 0px;
@@ -81,7 +89,17 @@ export default function InteractionBar() {
 
     const tagToggleRef = useRef<HTMLLIElement>(null)
 
-    return <Container>
+    const [showFolders] = useAtom(showFoldersAtom)
+    const [showFilter] = useAtom(showFilterAtom)
+
+    let top = 30
+
+    if (showFolders || showFilter) {
+        top += 186
+    }
+
+    return <Container
+        top={top}>
         <Item
             active={selectedAll}
             onClick={() => {

@@ -15,6 +15,7 @@ import {
     selectedCollectionDocRefAtom,
     selectedProjectDocRefAtom,
     selectedTaskDocRefAtom,
+    showFilterAtom,
     showFoldersAtom,
     showInteractionBarAtom,
     userDocRefAtom
@@ -36,6 +37,9 @@ import { useRouter } from "next/router"
 import { sortByOptions } from "../Filter"
 
 const Container = styled.header`
+    position: sticky;
+    top: 0px;
+    z-index: 1;
 `
 
 const PaddingRight = styled.div`
@@ -55,12 +59,13 @@ const Navigation = styled.nav`
 
     text-transform: uppercase;
 
-    & * {
+    & > a {
         text-decoration: none;
         color: white;
     }
 
     & > * {
+        color: white;
         border-right: 2px white solid;
 
         display: flex;
@@ -90,7 +95,7 @@ export default function Header() {
     const [showFolders, setShowFolders] = useAtom(showFoldersAtom)
     const archiveLinkRef = useRef<HTMLAnchorElement>(null)
 
-    const [showFilter, setShowFilter] = useState(false)
+    const [showFilter, setShowFilter] = useAtom(showFilterAtom)
     const filterLinkRef = useRef<HTMLAnchorElement>(null)
 
     const [showInteractionBar, setShowInteractionBar] = useAtom(showInteractionBarAtom)
