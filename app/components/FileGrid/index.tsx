@@ -12,6 +12,9 @@ import {
     previewFileAtom,
     searchFileAtom,
     selectedFilesAtom,
+    selectedTaskDocRefAtom,
+    showFilterAtom,
+    showFoldersAtom,
     showInteractionBarAtom,
 } from "../../store"
 
@@ -29,13 +32,13 @@ const Container = styled(motion.div)`
     grid-template-columns: repeat(auto-fit, minmax(300px,0.5fr));
     grid-template-rows: 1fr;
     grid-gap: 8px;
-
-    overflow-y: auto;
 `
 
-const Hint = styled.label`
+const Hint = styled.label<{ top: number }>`
+    position: absolute;
+
     width: 100%;
-    height: calc(100vh - 93px);
+    height: calc(100vh - ${({ top }) => top}px);
 
     display: flex;
     align-items: center;
@@ -56,7 +59,13 @@ type props = {
 
 export default function FileGrid({ files, getRootProps }: props) {
     const [selectedFiles, setSelectedFiles] = useAtom(selectedFilesAtom)
+
     const [showInteractionBar] = useAtom(showInteractionBarAtom)
+    const [showFolders] = useAtom(showFoldersAtom)
+    const [showFilter] = useAtom(showFilterAtom)
+
+    const [task] = useAtom(selectedTaskDocRefAtom)
+
     const [, setPreviewFile] = useAtom(previewFileAtom)
 
     const [searchText] = useAtom(searchFileAtom)
@@ -103,6 +112,20 @@ export default function FileGrid({ files, getRootProps }: props) {
 
     const [, setFilesToUpload] = useAtom(filesToUploadAtom)
 
+    let top = 30
+
+    if (showFolders || showFilter) {
+        top += 186
+    }
+
+    if (showInteractionBar) {
+        top += 31
+    }
+
+    if (task) {
+        top += 48
+    }
+
     // @ts-ignore
     return <Container
         initial="hidden"
@@ -113,7 +136,8 @@ export default function FileGrid({ files, getRootProps }: props) {
         {fileList.length ?
             fileList
             :
-            <Hint>
+            <Hint
+                top={top}>
                 Drag and drop or <br />
                 click to upload files
             <UploadInput
