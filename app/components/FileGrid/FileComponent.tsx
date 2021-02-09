@@ -119,13 +119,13 @@ export default function FileComponent({ fileDocSnap, selected, onSelect, onDelet
                 src && <PDFViewer
                     fileDocSnap={fileDocSnap}
                     src={src}
-                    width={350}
-                    height={350} />
+                    width={280}
+                    height={280} />
                 :
                 src && <Image
                     src={src}
-                    height={350}
-                    width={350}
+                    height={280}
+                    width={280}
                     unoptimized
                     layout={"intrinsic"}
                     objectFit="contain" />

@@ -26,7 +26,7 @@ const Container = styled(motion.div)`
     outline: none;
 
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(370px,1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px,0.5fr));
     grid-template-rows: 1fr;
     grid-gap: 8px;
 
