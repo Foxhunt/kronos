@@ -185,16 +185,18 @@ export default function Boards() {
         }
         {addingItem &&
             <NewItemForm
-                onSubmit={event => {
+                onSubmit={async event => {
                     event.preventDefault()
-                    userDocRef?.ref.collection("collections").add({
+                    const newItem = await (await userDocRef?.ref.collection("collections").add({
                         name: newItemName,
-                        client: client?.ref,
-                        project: project?.ref,
-                        task: task?.ref,
+                        client: client?.ref || "",
+                        project: project?.ref || "",
+                        task: task?.ref || "",
                         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                         lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                    })
+                    }))?.get()
+
+                    setBoard(newItem)
                     setAddingItem(false)
                     setNewItemName("")
                 }}>
