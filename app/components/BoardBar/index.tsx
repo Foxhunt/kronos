@@ -1,5 +1,5 @@
 import firebase from "../../firebase/clientApp"
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { useAtom } from "jotai"
 import styled from "styled-components"
 import {
@@ -15,7 +15,7 @@ import {
 
 import PlusSVG from "../../assets/svg/Icons/PLUS.svg"
 
-import { useBoards } from "../../hooks"
+import { useBoards, useScollIntoView } from "../../hooks"
 import { sortByOptions } from "../Filter"
 
 const Container = styled.div<{ top: number }>`
@@ -149,6 +149,9 @@ export default function Boards() {
         top += 31
     }
 
+    const selectedItemRef = useRef<HTMLDivElement>(null)
+    useScollIntoView(selectedItemRef)
+
     return <Container
         top={top}
         onWheel={event => {
@@ -165,6 +168,7 @@ export default function Boards() {
         </Item>
         {boards?.map(board =>
             <Item
+                ref={selectedBoard?.id === board.id ? selectedItemRef : undefined}
                 key={board.id}
                 selected={selectedBoard?.id === board.id}
                 onContextMenu={event => {
