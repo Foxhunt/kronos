@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react"
 import styled from "styled-components"
 import { AnimatePresence, motion } from "framer-motion"
 import dynamic from "next/dynamic"
-import Image from "next/image"
 
 import { useAtom } from "jotai"
 import {
@@ -17,12 +16,17 @@ import IconRightSVG from "../../assets/svg/Icons/RIGHT.svg"
 
 const PDFViewer = dynamic(import("./PDFViewer"), { ssr: false })
 
+const Image = styled.img`
+    object-fit: contain;
+    height: 90%;
+`
+
 const Container = styled.div`
     position: fixed;
     background-color: #dcdce1;
     top: 30px;
     left: 0px;
-
+    
     width: 100%;
     height: 100%;
 
@@ -94,7 +98,12 @@ export default function FilePreview({ files }: props) {
 
     const [src, setSrc] = useState("")
     useEffect(() => {
-        setSrc(previewFile?.get("renderedPDF.800") || previewFile?.get("downloadURL"))
+        const unsubscribe = previewFile?.ref.onSnapshot(snapshot => {
+            const data = snapshot.data()
+            data && setSrc(data.renderedPDF["800"] || data["downloadURL"])
+        })
+
+        return unsubscribe
     }, [previewFile])
 
     const [contentType, setContentType] = useState("")
@@ -182,16 +191,10 @@ export default function FilePreview({ files }: props) {
                         src && <PDFViewer
                             fileDocSnap={previewFile}
                             src={src}
-                            width={800}
                             height={800} />
                         :
                         src && <Image
-                            src={src}
-                            height={800}
-                            width={800}
-                            unoptimized
-                            layout={"intrinsic"}
-                            objectFit="contain" />
+                            src={src} />
                 }
             </Preview>
         </AnimatePresence>

@@ -4,18 +4,26 @@ import { useEffect, useState } from "react"
 import styled from "styled-components"
 import { motion, Variants } from "framer-motion"
 import dynamic from "next/dynamic"
-import Image from "next/image"
 import Circle from "../Shared/Circle"
 import { useAtom } from "jotai"
 import { showInteractionBarAtom } from "../../store"
 
 const PDFViewer = dynamic(import("./PDFViewer"), { ssr: false })
 
-const Container = styled(motion.div) <{ selected: boolean }>`
+const Image = styled.img`
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+`
+
+const Container = styled(motion.div) <{ selected: boolean, top: number }>`
     position: relative;
     background-color: #dcdce1;
 
-    height: 400px;
+    max-height: calc(100vh - ${({ top }) => top}px);
+    aspect-ratio: 5/6;
+
+    padding: 30px;
 
     box-sizing: border-box;
 
@@ -54,16 +62,17 @@ const Name = styled.div`
 `
 
 type props = {
+    top: number
     fileDocSnap: firebase.firestore.DocumentSnapshot
     selected: boolean
     onSelect?: () => void
     onDelete?: () => void
 }
 
-export default function FileComponent({ fileDocSnap, selected, onSelect, onDelete }: props) {
+export default function FileComponent({ top, fileDocSnap, selected, onSelect, onDelete }: props) {
     const [src, setSrc] = useState("")
     useEffect(() => {
-        setSrc(fileDocSnap.get("renderedPDF.350") || fileDocSnap.get("downloadURL"))
+        setSrc(fileDocSnap.get("renderedPDF.310") || fileDocSnap.get("downloadURL"))
     }, [fileDocSnap])
 
     const [contentType, setContentType] = useState("")
@@ -99,6 +108,7 @@ export default function FileComponent({ fileDocSnap, selected, onSelect, onDelet
     const [showInteractionBar] = useAtom(showInteractionBarAtom)
 
     return <Container
+        top={top}
         selected={selected}
         variants={variants}
         onHoverStart={() => setHovered(true)}
@@ -119,16 +129,10 @@ export default function FileComponent({ fileDocSnap, selected, onSelect, onDelet
                 src && <PDFViewer
                     fileDocSnap={fileDocSnap}
                     src={src}
-                    width={280}
-                    height={280} />
+                    height={310} />
                 :
                 src && <Image
-                    src={src}
-                    height={280}
-                    width={280}
-                    unoptimized
-                    layout={"intrinsic"}
-                    objectFit="contain" />
+                    src={src} />
         }
         <Details
             initial="hidden"

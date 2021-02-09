@@ -29,7 +29,7 @@ const Container = styled(motion.div)`
     outline: none;
 
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px,0.5fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
     grid-template-rows: 1fr;
     grid-gap: 8px;
 `
@@ -76,9 +76,24 @@ export default function FileGrid({ files, getRootProps }: props) {
         searchText
     })
 
+    let top = 30
+
+    if (showFolders || showFilter) {
+        top += 186
+    }
+
+    if (showInteractionBar) {
+        top += 31
+    }
+
+    if (task) {
+        top += 48
+    }
+
     const fileList = useMemo(() => (searchResult.length ? searchResult : files).map(
         fileDocSnap =>
             <FileComponent
+                top={top}
                 fileDocSnap={fileDocSnap}
                 selected={selectedFiles.some(selectedFile => selectedFile.id === fileDocSnap.id)}
                 onSelect={() => {
@@ -111,20 +126,6 @@ export default function FileGrid({ files, getRootProps }: props) {
     const [previewFile] = useAtom(previewFileAtom)
 
     const [, setFilesToUpload] = useAtom(filesToUploadAtom)
-
-    let top = 30
-
-    if (showFolders || showFilter) {
-        top += 186
-    }
-
-    if (showInteractionBar) {
-        top += 31
-    }
-
-    if (task) {
-        top += 48
-    }
 
     // @ts-ignore
     return <Container
