@@ -3,7 +3,6 @@ import { useState } from "react"
 import { useAtom } from "jotai"
 import styled from "styled-components"
 import {
-    boardsAtom,
     selectedClientDocRefAtom,
     selectedCollectionDocRefAtom,
     selectedProjectDocRefAtom,
@@ -15,6 +14,9 @@ import {
 } from "../../store"
 
 import PlusSVG from "../../assets/svg/Icons/PLUS.svg"
+
+import { useBoards } from "../../hooks"
+import { sortByOptions } from "../Filter"
 
 const Container = styled.div<{ top: number }>`
     position: sticky;
@@ -128,7 +130,7 @@ export default function Boards() {
     const [task] = useAtom(selectedTaskDocRefAtom)
 
     const [selectedBoard, setBoard] = useAtom(selectedCollectionDocRefAtom)
-    const [boards] = useAtom(boardsAtom)
+    const boards = useBoards(client, project, task, sortByOptions[1])
 
     const [addingItem, setAddingItem] = useState(false)
     const [newItemName, setNewItemName] = useState("")
