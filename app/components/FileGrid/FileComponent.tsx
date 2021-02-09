@@ -61,6 +61,8 @@ const Name = styled.div`
     line-height: initial;
 `
 
+const PDFSize = 310
+
 type props = {
     top: number
     fileDocSnap: firebase.firestore.DocumentSnapshot
@@ -72,7 +74,7 @@ type props = {
 export default function FileComponent({ top, fileDocSnap, selected, onSelect, onDelete }: props) {
     const [src, setSrc] = useState("")
     useEffect(() => {
-        setSrc(fileDocSnap.get("renderedPDF.310") || fileDocSnap.get("downloadURL"))
+        setSrc(fileDocSnap.get(`renderedPDF.${PDFSize}`) || fileDocSnap.get("downloadURL"))
     }, [fileDocSnap])
 
     const [contentType, setContentType] = useState("")
@@ -129,7 +131,7 @@ export default function FileComponent({ top, fileDocSnap, selected, onSelect, on
                 src && <PDFViewer
                     fileDocSnap={fileDocSnap}
                     src={src}
-                    height={310} />
+                    height={PDFSize} />
                 :
                 src && <Image
                     src={src} />

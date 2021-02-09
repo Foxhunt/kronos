@@ -18,7 +18,8 @@ const PDFViewer = dynamic(import("./PDFViewer"), { ssr: false })
 
 const Image = styled.img`
     object-fit: contain;
-    height: 90%;
+    width: 100%;
+    height: calc(100% - 50px);
 `
 
 const Container = styled.div`
@@ -28,7 +29,7 @@ const Container = styled.div`
     left: 0px;
     
     width: 100%;
-    height: 100%;
+    height: calc(100% - 30px);
 
     display: flex;
     justify-content: center;
@@ -89,6 +90,8 @@ const variants = {
     }
 }
 
+const PDFSize = 900
+
 interface props {
     files: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>[]
 }
@@ -100,7 +103,7 @@ export default function FilePreview({ files }: props) {
     useEffect(() => {
         const unsubscribe = previewFile?.ref.onSnapshot(snapshot => {
             const data = snapshot.data()
-            data && setSrc(data.renderedPDF["800"] || data["downloadURL"])
+            data && setSrc(data.renderedPDF[PDFSize] ? data.renderedPDF[PDFSize] : data["downloadURL"])
         })
 
         return unsubscribe
@@ -191,7 +194,7 @@ export default function FilePreview({ files }: props) {
                         src && <PDFViewer
                             fileDocSnap={previewFile}
                             src={src}
-                            height={800} />
+                            height={PDFSize} />
                         :
                         src && <Image
                             src={src} />
