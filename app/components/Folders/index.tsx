@@ -20,6 +20,7 @@ import { useClickedOutside } from "../../hooks"
 import FolderList from "./FolderList"
 
 const Container = styled.div`
+    background-color: white;
 `
 
 const Selectibles = styled.div`

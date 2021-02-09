@@ -18,6 +18,7 @@ import { Item } from "../Shared/ItemList"
 import Circle from "../Shared/Circle"
 
 const Container = styled.div`
+    background-color: white;
 `
 
 const TextSearch = styled.input`
@@ -30,6 +31,8 @@ const TextSearch = styled.input`
     border: none;
     border-bottom: black 2px solid;
     box-shadow: none;
+
+    background-color: inherit;
 
     font-family: "FuturaNowHeadline-Bd";
 

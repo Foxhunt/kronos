@@ -13,7 +13,7 @@ export const Item = styled.div<{ selected?: boolean }>`
     padding-left: 8px;
     border-bottom: black 1px solid;
 
-    background-color: white;
+    background-color: inherit;
 
     ${({ selected }) => selected ?
         `

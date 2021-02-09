@@ -14,7 +14,6 @@ const FolderCaption = styled(Item) <{ blue?: boolean }>`
 
 const CreateHint = styled(Item)`
     color: #0000ff;
-    background-color: white;
 `
 
 const Container = styled.div`
@@ -31,6 +30,8 @@ const ItemInput = styled.input`
     width: 100%;
     height: 100%;
     padding: unset;
+
+    background-color: inherit;
 
     border: none;
     box-shadow: none;
