@@ -24,14 +24,13 @@ const Container = styled.div`
 const ItemForm = styled.form`
     height: 30px;
     border-bottom: black 1px solid;
+    padding-left: 8px;
 `
 
 const ItemInput = styled.input`
-    width: calc(100% - 5px);
+    width: 100%;
     height: 100%;
     padding: unset;
-
-    padding-left: 8px;
 
     border: none;
     box-shadow: none;
