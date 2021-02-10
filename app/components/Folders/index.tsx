@@ -154,6 +154,7 @@ export default function Folders({ onHide }: props) {
                     setTask(newItem)
                     setBoard(undefined)
                 }} />}
+            {/* needs Cleanup! */}
             {boards && <FolderList
                 name={"boards"}
                 previousName={"level3"}
