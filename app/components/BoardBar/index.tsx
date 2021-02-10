@@ -97,6 +97,8 @@ const NewItemForm = styled.form`
 
     min-width: 150px;
     height: 30px;
+    
+    background-color: white;
         
     padding: 0px 5px;
     border: black solid 1px;
