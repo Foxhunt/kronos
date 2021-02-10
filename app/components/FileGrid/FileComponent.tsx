@@ -135,6 +135,7 @@ export default function FileComponent({ top, fileDocSnap, selected, onSelect, on
                     height={PDFSize} />
                 :
                 src && <Image
+                    loading="lazy"
                     src={src} />
         }
         <Details
