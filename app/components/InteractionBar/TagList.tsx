@@ -9,7 +9,7 @@ import { userDocRefAtom } from "../../store"
 
 const Container = styled.div`
     position: absolute;
-    top: -2px;
+    top: 30px;
     
     z-index: 1;
     background-color: white;
@@ -17,14 +17,22 @@ const Container = styled.div`
     width: 170px;
 `
 
+const NewItemForm = styled.form`
+    height: 29px;
+    border: black 1px solid;
+    
+    padding-left: 8px;
+`
+
 const NewItemInput = styled.input`
     padding: unset;
 
-    height: 25px;
     width: 100%;
+    height: 100%;
+
+    font-family: "FuturaNowHeadline-Bd";
 
     border: none;
-    border-bottom: black 1px solid;
     box-shadow: none;
 
     &:focus {
@@ -33,7 +41,23 @@ const NewItemInput = styled.input`
 `
 
 const Tag = styled.div`
+    height: 31px;
+    border: black 1px solid;
 
+    padding-left: 8px;
+    padding-bottom: 2px;
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+`
+
+const TagText = styled.div`
+    line-height: initial;
+    padding-bottom: 2px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 `
 
 type props = {
@@ -58,8 +82,9 @@ export default function TagList({ onSelectTag, onHide }: props) {
     useClickedOutside(containerRef, onHide)
 
     return <Container
-        ref={containerRef}>
-        <form
+        ref={containerRef}
+        onPointerDown={event => event.stopPropagation()}>
+        <NewItemForm
             onSubmit={event => {
                 event.preventDefault()
                 const tagRef = userDocRef?.ref.collection("tags").doc(newItemName)
@@ -73,7 +98,7 @@ export default function TagList({ onSelectTag, onHide }: props) {
                 onChange={event => {
                     setNewItemName(event.target.value)
                 }} />
-        </form>
+        </NewItemForm>
         {searchResult.length === 0 &&
             newItemName !== "" &&
             <Tag
@@ -93,7 +118,9 @@ export default function TagList({ onSelectTag, onHide }: props) {
                     tag && onSelectTag(tag)
                 }}
                 key={tags.id}>
-                {tags.get("name")}
+                <TagText>
+                    {tags.get("name")}
+                </TagText>
             </Tag>
         )}
     </Container >

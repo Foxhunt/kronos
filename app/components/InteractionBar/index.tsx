@@ -42,7 +42,7 @@ const StyledIconSelectedFineInaktiveSVGGreen = styled(IconSelectedFineInaktiveSV
 const Container = styled.ul<{ top: number }>`
     position: sticky;
     top: ${({ top }) => top}px;
-    z-index: 1;
+    z-index: 2;
 
     background-color: white;
 
@@ -60,8 +60,6 @@ const Container = styled.ul<{ top: number }>`
 `
 
 const Item = styled.li<{ active?: boolean }>`
-    position: relative;
-    
     list-style-type: none;
     margin-left: 8px;
     margin-right: 20px;
@@ -170,10 +168,8 @@ export default function InteractionBar() {
         </Item>
         <Item
             ref={tagToggleRef}
-            onPointerDown={(event) => {
-                if (event.target === tagToggleRef.current) {
-                    setShowTags(!showTags)
-                }
+            onPointerDown={() => {
+                setShowTags(!showTags)
             }}>
             <IconAddFineSVG />
             <PaddingLeft>
@@ -181,10 +177,8 @@ export default function InteractionBar() {
             </PaddingLeft>
             {showTags &&
                 <TagList
-                    onHide={event => {
-                        if (event.target !== tagToggleRef.current) {
-                            setShowTags(false)
-                        }
+                    onHide={() => {
+                        setShowTags(false)
                     }}
                     onSelectTag={tag => {
                         for (const file of selectedFiles) {
