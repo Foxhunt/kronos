@@ -29,6 +29,7 @@ const Container = styled(motion.div) <{ selected: boolean, top: number }>`
 
     ${({ selected }) => selected ? `
         border: 3px solid #fb2dfb;
+        padding: 27px;
     ` : ""}
 
     display: flex;
