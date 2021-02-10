@@ -4,6 +4,7 @@ import styled from "styled-components"
 import { ItemList, Item } from "../Shared/ItemList"
 
 export const Container = styled.div`
+    min-width: 0px;
 `
 
 interface props extends ComponentProps<"div"> {

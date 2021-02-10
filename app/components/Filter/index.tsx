@@ -187,7 +187,9 @@ export default function Filter({ onHide }: props) {
                     <Circle
                         fill={selectedTags.includes(tag.id) ? "#000000" : "#ffffff"}
                         stroke="#000000" />
-                    {tag.id}
+                    <div>
+                        {tag.id}
+                    </div>
                 </Item>)}
             </FilterList>
         </Selectibles>
