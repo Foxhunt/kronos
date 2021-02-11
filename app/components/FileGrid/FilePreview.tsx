@@ -103,7 +103,7 @@ export default function FilePreview({ files }: props) {
     useEffect(() => {
         const unsubscribe = previewFile?.ref.onSnapshot(snapshot => {
             const data = snapshot.data()
-            data && setSrc(data.renderedPDF[PDFSize] ? data.renderedPDF[PDFSize] : data["downloadURL"])
+            data && setSrc("renderedPDF" in data && PDFSize in data.renderedPDF ? data.renderedPDF[PDFSize] : data?.downloadURL)
         })
 
         return unsubscribe
