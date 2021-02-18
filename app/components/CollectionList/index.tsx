@@ -28,9 +28,8 @@ const StyledIconDownSVG = styled(IconDownSVG)`
 `
 
 const Hint = styled.label`
-    flex: 1;
     width: 100%;
-    height: 40px;
+    height: calc(100vh - 61px);
     display: flex;
     align-items: center;
     justify-content: center;
