@@ -152,6 +152,10 @@ export default function FileComponent({ top, fileDocSnap, selected, onSelect, on
                     fileDocSnap.ref.update({
                         favorite: !fileDocSnap.get("favorite")
                     })
+                    firebase.analytics().logEvent("favorite_file", {
+                        name: fileDocSnap.get("name"),
+                        fullPath: fileDocSnap.get("fullPath")
+                    })
                 }}
             />
             <Circle
@@ -161,6 +165,10 @@ export default function FileComponent({ top, fileDocSnap, selected, onSelect, on
                     event.stopPropagation()
                     fileDocSnap.ref.update({
                         marked: !fileDocSnap.get("marked")
+                    })
+                    firebase.analytics().logEvent("mark_file", {
+                        name: fileDocSnap.get("name"),
+                        fullPath: fileDocSnap.get("fullPath")
                     })
                 }}
             />

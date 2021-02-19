@@ -103,8 +103,16 @@ export default function FileGrid({ files, getRootProps }: props) {
                         } else {
                             setSelectedFiles(selectedFiles.filter(selectedFile => selectedFile.id !== fileDocSnap.id))
                         }
+                        firebase.analytics().logEvent("select_file", {
+                            name: fileDocSnap.get("name"),
+                            fullPath: fileDocSnap.get("fullPath")
+                        })
                     } else {
                         setPreviewFile(fileDocSnap)
+                        firebase.analytics().logEvent("preview_file", {
+                            name: fileDocSnap.get("name"),
+                            fullPath: fileDocSnap.get("fullPath")
+                        })
                     }
                 }}
                 onDelete={() => deleteFiles([fileDocSnap])}

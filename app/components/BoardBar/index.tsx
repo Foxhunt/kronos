@@ -205,6 +205,9 @@ export default function Boards() {
                     setBoard(newItem)
                     setAddingItem(false)
                     setNewItemName("")
+                    firebase.analytics().logEvent("create_collection", {
+                        name: newItemName
+                    })
                 }}>
                 <NewItemInput
                     type={"text"}

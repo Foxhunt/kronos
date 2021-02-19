@@ -90,6 +90,9 @@ export default function TagList({ onSelectTag, onHide }: props) {
                 const tagRef = userDocRef?.ref.collection("tags").doc(newItemName)
                 tagRef?.set({ name: newItemName })
                 setNewItemName("")
+                firebase.analytics().logEvent("create_tag", {
+                    name: newItemName
+                })
             }}>
             <NewItemInput
                 type={"text"}
@@ -107,6 +110,9 @@ export default function TagList({ onSelectTag, onHide }: props) {
                     const tagRef = userDocRef?.ref.collection("tags").doc(newItemName)
                     tagRef?.set({ name: newItemName })
                     setNewItemName("")
+                    firebase.analytics().logEvent("create_tag", {
+                        name: newItemName
+                    })
                 }}>
                 not found click to create
             </Tag>}

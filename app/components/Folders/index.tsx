@@ -83,6 +83,9 @@ export default function Folders({ onHide }: props) {
                     setProject(undefined)
                     setTask(undefined)
                     setBoard(undefined)
+                    firebase.analytics().logEvent("create_client", {
+                        name: itemName
+                    })
                 }} />
             {projects && <FolderList
                 name={"level2"}
@@ -111,6 +114,9 @@ export default function Folders({ onHide }: props) {
                     setProject(newItem)
                     setTask(undefined)
                     setBoard(undefined)
+                    firebase.analytics().logEvent("create_project", {
+                        name: itemName
+                    })
                 }} />}
             {tasks && <FolderList
                 name={"level3"}
@@ -153,6 +159,9 @@ export default function Folders({ onHide }: props) {
                     setProject(newItemProject)
                     setTask(newItem)
                     setBoard(undefined)
+                    firebase.analytics().logEvent("create_task", {
+                        name: itemName
+                    })
                 }} />}
             {/* needs Cleanup! */}
             {boards && <FolderList
@@ -196,6 +205,9 @@ export default function Folders({ onHide }: props) {
                     setProject(newItemProject)
                     setTask(newItemTask)
                     setBoard(newItem)
+                    firebase.analytics().logEvent("create_collection", {
+                        name: itemName
+                    })
                 }} />}
         </Selectibles>
     </Container>

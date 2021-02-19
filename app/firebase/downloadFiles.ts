@@ -18,4 +18,5 @@ export default async function downloadFiles(files: firebase.firestore.DocumentSn
 
     const zipBlob = await zip.generateAsync({ type: "blob" })
     saveAs(zipBlob, "download.zip")
+    firebase.analytics().logEvent("download_files")
 }
