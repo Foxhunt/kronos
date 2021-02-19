@@ -22,7 +22,7 @@ const Container = styled.div`
 `
 
 const TextSearch = styled.input`
-    width: calc(100% - 5px);
+    width: calc(100% - 8px);
     height: 29px;
     padding: unset;
 
