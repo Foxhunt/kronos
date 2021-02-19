@@ -51,7 +51,7 @@ export default function FileUpload() {
                     .map(newFile => limit(async () => {
                         // we want to split PDFs into pages and upload them individualy
                         if (newFile.type === "application/pdf") {
-                            const pdf = await PDFDocument.load(await newFile.arrayBuffer())
+                            const pdf = await PDFDocument.load(await newFile.arrayBuffer(), { ignoreEncryption: true })
                             const pageIndicies = pdf.getPageIndices()
 
                             // map convert and upload tasks
