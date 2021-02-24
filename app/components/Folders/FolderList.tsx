@@ -5,15 +5,28 @@ import { useClickedOutside, useOfflineSearch, useScollIntoView } from "../../hoo
 import { useAtom } from "jotai"
 import { filesToUploadAtom, userDocRefAtom } from "../../store"
 
+import IconLeftSVG from "../../assets/svg/Icons/LEFT.svg"
+import IconDownSVG from "../../assets/svg/Icons/DOWN.svg"
+
+const StyledIconLeftSVG = styled(IconLeftSVG) <{ fill?: string }>`
+    padding-right: 5px;
+    fill: #${({ fill }) => fill ? fill : "000000"};
+`
+
+const StyledIconDownSVG = styled(IconDownSVG)`
+    padding-right: 5px;
+`
+
 import { ItemList, Item } from "../Shared/ItemList"
 
-const FolderCaption = styled(Item) <{ blue?: boolean }>`
-    color: ${({ blue }) => blue ? "#ffffff" : ""};
-    background-color: ${({ blue }) => blue ? "#0000ff" : ""};
+const FolderCaption = styled(Item) <{ hint?: boolean }>`
+    color: ${({ hint }) => hint ? "#000000" : ""};
+    background-color: ${({ hint }) => hint ? "#ff0000" : ""};
 `
 
 const CreateHint = styled(Item)`
-    color: #0000ff;
+    background-color: #0000ff;
+    color: #ffffff;
 `
 
 const Container = styled.div`
@@ -37,6 +50,7 @@ const ItemInput = styled.input`
     box-shadow: none;
 
     font-family: "FuturaNowHeadline-Bd";
+    font-size: inherit;
 
     &::placeholder {
         color: #dfdfe4;
@@ -61,6 +75,7 @@ type props = {
 
 export default function FolderList({ name, previousName, selected, items, allowAdding, onSelect, onAdd }: props) {
     const [userDocRef] = useAtom(userDocRefAtom)
+    const [folderName, setFolderName] = useState(name)
 
     const [newItemName, setNewItemName] = useState("")
 
@@ -73,6 +88,7 @@ export default function FolderList({ name, previousName, selected, items, allowA
     const [isAdditingLevelName, setIsAdditingLevelName] = useState(false)
     const levelNameInputRef = useRef<HTMLInputElement>(null)
     useClickedOutside(levelNameInputRef, () => {
+        userDocRef?.ref.update({ [name]: folderName })
         setIsAdditingLevelName(false)
     })
 
@@ -87,7 +103,15 @@ export default function FolderList({ name, previousName, selected, items, allowA
                     setNewItemName("")
                 }
             }}>
-            {allowAdding ? "click to create" : `select ${previousName && userDocRef?.get(previousName)} to create`}
+            {
+                allowAdding ?
+                    `create ${newItemName}`
+                    :
+                    <>
+                        <StyledIconLeftSVG fill="ffffff" />
+                        select {previousName && userDocRef?.get(previousName)}
+                    </>
+            }
         </CreateHint >)
     }
 
@@ -134,26 +158,30 @@ export default function FolderList({ name, previousName, selected, items, allowA
                     onSubmit={event => {
                         event.preventDefault()
                         setIsAdditingLevelName(false)
+                        userDocRef?.ref.update({ [name]: folderName })
                     }}>
                     <ItemInput
                         autoFocus
                         ref={levelNameInputRef}
                         type={"text"}
-                        value={userDocRef?.get(name)}
+                        value={folderName}
                         onChange={event => {
-                            userDocRef?.ref.update({ [name]: event.target.value })
+                            setFolderName(event.target.value)
                         }} />
                 </ItemForm>
                 :
                 <FolderCaption
-                    blue={filesToUpload.length > 0 && !selected}
+                    hint={filesToUpload.length > 0 && !selected}
                     onDoubleClick={event => {
                         event.preventDefault()
                         setIsAdditingLevelName(true)
                     }}>
                     {
                         filesToUpload.length > 0 && !selected ?
-                            `Select a ${userDocRef?.get(name)}`
+                            <>
+                                {allowAdding ? <StyledIconDownSVG /> : <StyledIconLeftSVG />}
+                                Select or Create {userDocRef?.get(name)}
+                            </>
                             :
                             userDocRef?.get(name)
                     }
@@ -170,7 +198,7 @@ export default function FolderList({ name, previousName, selected, items, allowA
             <ItemInput
                 type={"text"}
                 autoFocus
-                placeholder={"search/create"}
+                placeholder={"create/search"}
                 value={newItemName}
                 onChange={event => {
                     setNewItemName(event.target.value)
