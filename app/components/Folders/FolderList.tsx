@@ -9,6 +9,9 @@ import IconLeftSVG from "../../assets/svg/Icons/LEFT.svg"
 import IconDownSVG from "../../assets/svg/Icons/DOWN.svg"
 
 const StyledIconLeftSVG = styled(IconLeftSVG) <{ fill?: string }>`
+    width: 10px;
+    height: 10px;
+
     padding-right: 5px;
     fill: #${({ fill }) => fill ? fill : "000000"};
 `
