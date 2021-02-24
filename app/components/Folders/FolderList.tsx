@@ -75,7 +75,7 @@ type props = {
 
 export default function FolderList({ name, previousName, selected, items, allowAdding, onSelect, onAdd }: props) {
     const [userDocRef] = useAtom(userDocRefAtom)
-    const [folderName, setFolderName] = useState(name)
+    const [folderName, setFolderName] = useState(userDocRef?.get(name))
 
     const [newItemName, setNewItemName] = useState("")
 
