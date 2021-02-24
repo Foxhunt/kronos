@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import deleteFiles from "../../firebase/deleteFiles"
 import downloadFiles from "../../firebase/downloadFiles"
-import favoriteFile from "../../firebase/favoriteFile"
-import markFile from "../../firebase/markFile"
+import favoriteFiles from "../../firebase/favoriteFile"
+import markFiles from "../../firebase/markFile"
 import tagFile from "../../firebase/tagFile"
 
 import styled from "styled-components"
@@ -146,9 +146,7 @@ export default function InteractionBar() {
         </Item>
         <Item
             onClick={() => {
-                for (const file of selectedFiles) {
-                    favoriteFile(file)
-                }
+                favoriteFiles(selectedFiles)
             }}>
             <StyledIconSelectedFineInaktiveSVGBlue />
             <PaddingLeft>
@@ -157,9 +155,7 @@ export default function InteractionBar() {
         </Item>
         <Item
             onClick={() => {
-                for (const file of selectedFiles) {
-                    markFile(file)
-                }
+                markFiles(selectedFiles)
             }}>
             <StyledIconSelectedFineInaktiveSVGGreen />
             <PaddingLeft>

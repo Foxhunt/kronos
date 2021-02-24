@@ -1,11 +1,23 @@
 import firebase from "./clientApp"
 
-export default function markFile(file: firebase.firestore.DocumentSnapshot) {
-    file.ref.update({
-        marked: true
-    })
-    firebase.analytics().logEvent("mark_file", {
-        name: file.get("name"),
-        fullPath: file.get("fullPath")
-    })
+export default async function markFiles(files: firebase.firestore.DocumentSnapshot[]) {
+    const freshFiles = await Promise.all(files.map(file => file.ref.get()))
+
+    const marked = freshFiles.every(file => file.get("marked"))
+
+    const batch = firebase.firestore().batch()
+
+    for (const file of files) {
+        batch.update(file.ref, {
+            marked: !marked
+        })
+
+        firebase.analytics().logEvent("marked_file", {
+            name: file.get("name"),
+            fullPath: file.get("fullPath")
+        })
+
+    }
+
+    batch.commit()
 }
