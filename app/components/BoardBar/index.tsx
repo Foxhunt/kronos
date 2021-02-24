@@ -176,6 +176,7 @@ export default function Boards() {
                 onContextMenu={event => {
                     event.preventDefault()
                     board.ref.delete()
+                    setBoard(undefined)
                 }}
                 onPointerDown={() => {
                     if (board === selectedBoard) {
