@@ -95,7 +95,7 @@ export default function CollectionList({ getRootProps }: props) {
         {...(getRootProps ? getRootProps({}) : {})}>
         <Row>
             <Cell onClick={() => setOrder("createdAt")}>
-                UPLOAD {orderBy === "createdAt" && <> {orderDirection === "desc" ? <StyledIconDownSVG /> : <StyledIconUpSVG />} </>}
+                UPLOADED {orderBy === "createdAt" && <> {orderDirection === "desc" ? <StyledIconDownSVG /> : <StyledIconUpSVG />} </>}
             </Cell>
             <Cell
                 onClick={() => setOrder("lastUpdatedAt")}>
