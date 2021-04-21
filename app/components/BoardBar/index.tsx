@@ -86,6 +86,7 @@ const ItemText = styled.div`
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    text-transform: uppercase;
 `
 
 const NewItemForm = styled.form`
@@ -224,7 +225,7 @@ export default function Boards() {
             <Item
                 onClick={() => setAddingItem(!addingItem)}>
                 <ItemText>
-                    <PlusSVG /> CREATE NEW BOARD
+                    <PlusSVG /> CREATE NEW {userDocRef?.get("boards")}
                 </ItemText>
             </Item>
         }
