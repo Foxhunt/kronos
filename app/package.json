@@ -5,6 +5,10 @@
   "repository": {
     "url": "https://github.com/Foxhunt/kronos"
   },
+  "engines": {
+    "node": "14",
+    "npm": "7"
+  },
   "scripts": {
     "dev": "next",
     "build": "next build",
