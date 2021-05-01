@@ -6,12 +6,11 @@
     "url": "https://github.com/Foxhunt/kronos"
   },
   "engines": {
-    "node": "14",
-    "npm": "7"
+    "node": "^14"
   },
   "scripts": {
     "dev": "next",
-    "build": "next build",
+    "build": "npm -v && node -v && next build",
     "start": "next start"
   },
   "dependencies": {
