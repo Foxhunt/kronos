@@ -5,9 +5,6 @@
   "repository": {
     "url": "https://github.com/Foxhunt/kronos"
   },
-  "engines": {
-    "node": "^14"
-  },
   "scripts": {
     "dev": "next",
     "build": "npm -v && node -v && next build",
