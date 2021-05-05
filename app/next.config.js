@@ -10,6 +10,9 @@ let config = {
     });
     return config;
   },
+  future: {
+    webpack5: true,
+  },
 };
 config = withBundleAnalyzer(config);
 
