@@ -8,7 +8,6 @@ import { useState } from "react"
 import { useAtom } from "jotai"
 import { filesToUploadAtom, userDocRefAtom } from "../../store"
 import { DropzoneRootProps } from "react-dropzone"
-import { useTasks } from "../../hooks"
 
 import IconUpSVG from "../../assets/svg/Icons/UP.svg"
 import IconDownSVG from "../../assets/svg/Icons/DOWN.svg"
@@ -86,7 +85,7 @@ export default function CollectionList({ getRootProps }: props) {
     const [orderBy, setOrderBy] = useState("createdAt")
     const [orderDirection, setOrderDirection] = useState<"asc" | "desc">("desc")
 
-    const [collections, loading, error] = useCollection<Collection>(
+    const [collections, loading] = useCollection<Collection>(
         userDocRef?.ref.collection("collections").orderBy(orderBy, orderDirection)
     )
 

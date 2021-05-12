@@ -1,6 +1,6 @@
 import firebase from "../../firebase/clientApp"
 import { useRouter } from 'next/router'
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import styled from "styled-components"
 
 import { useAtom } from "jotai"
