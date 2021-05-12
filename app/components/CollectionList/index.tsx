@@ -1,4 +1,6 @@
+import firebase from "../../firebase/clientApp"
 import styled from "styled-components"
+import { useCollection } from "react-firebase-hooks/firestore"
 
 import Collection from "./Collection"
 import { useState } from "react"
@@ -36,7 +38,7 @@ const Hint = styled.label`
 `
 
 const Overflow = styled.div`
-    max-height: calc(100vh - 41px - 30px);
+    max-height: calc(100vh - 41px - 60px);
     overflow-y: auto;
 `
 
@@ -46,8 +48,14 @@ const UploadInput = styled.input`
 
 export const Row = styled.div`
     display: grid;
-    grid-template-columns: repeat(2, 1fr) repeat(3, 2fr) repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr) 6fr repeat(2, 1fr);
     grid-template-rows: 30px;
+
+    border-bottom: 1px solid black;
+`
+
+const CreateCollection = styled.div`
+    height: 30px;
 
     border-bottom: 1px solid black;
 `
@@ -78,7 +86,9 @@ export default function CollectionList({ getRootProps }: props) {
     const [orderBy, setOrderBy] = useState("createdAt")
     const [orderDirection, setOrderDirection] = useState<"asc" | "desc">("desc")
 
-    const tasks = useTasks(undefined, undefined, { orderBy, orderDirection })
+    const [collections, loading, error] = useCollection<Collection>(
+        userDocRef?.ref.collection("collections").orderBy(orderBy, orderDirection)
+    )
 
     const setOrder = (newOrderBy: string) => {
         if (orderBy === newOrderBy) {
@@ -93,6 +103,17 @@ export default function CollectionList({ getRootProps }: props) {
 
     return <Container
         {...(getRootProps ? getRootProps({}) : {})}>
+        <CreateCollection
+            onClick={() => {
+                userDocRef?.ref.collection("collections").add({
+                    name: "new Collection!",
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    pinned: false
+                } as Collection)
+            }}>
+            Create Collection +
+        </CreateCollection>
         <Row>
             <Cell onClick={() => setOrder("createdAt")}>
                 UPLOADED {orderBy === "createdAt" && <> {orderDirection === "desc" ? <StyledIconDownSVG /> : <StyledIconUpSVG />} </>}
@@ -107,27 +128,18 @@ export default function CollectionList({ getRootProps }: props) {
                 {orderBy === "clientName" && <>{orderDirection === "desc" ? <StyledIconDownSVG /> : <StyledIconUpSVG />}</>}
             </Cell>
             <Cell
-                onClick={() => setOrder("projectName")}>
-                {userDocRef?.get("level2")}
-                {orderBy === "projectName" && <>{orderDirection === "desc" ? <StyledIconDownSVG /> : <StyledIconUpSVG />}</>}
-            </Cell>
-            <Cell
-                onClick={() => setOrder("name")}>
-                {userDocRef?.get("level3")}
-                {orderBy === "name" && <>{orderDirection === "desc" ? <StyledIconDownSVG /> : <StyledIconUpSVG />}</>}
-            </Cell>
-            <Cell
                 onClick={() => setOrder("pinned")}>
                 PIN {orderBy === "pinned" && <>{orderDirection === "desc" ? <StyledIconDownSVG /> : <StyledIconUpSVG />}</>}
             </Cell>
             <Cell></Cell>
         </Row>
-        {tasks.length ?
+        {loading && <div>loading ...</div>}
+        {collections?.docs.length ?
             <Overflow>
-                {tasks.map(task => (
+                {collections.docs.map(collection => (
                     <Collection
-                        key={task.id}
-                        taskDocSnap={task} />
+                        key={collection.id}
+                        taskDocSnap={collection} />
                 ))}
             </Overflow>
             :

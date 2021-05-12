@@ -7,8 +7,9 @@ interface User {
 
 interface Collection {
     name: string
-    createdAt: Date
-    lastUpdatedAt: Date
+    createdAt: FieldValue
+    lastUpdatedAt: FieldValue
+    pinned: boolean
     tags: string[]
 
     //references
@@ -17,7 +18,6 @@ interface Collection {
 
     //subcollections
     boards: Board[]
-
 }
 interface Board {
     name: string
