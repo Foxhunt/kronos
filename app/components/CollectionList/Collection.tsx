@@ -18,62 +18,89 @@ import IconCancelSVG from "../../assets/svg/Icons/X.svg"
 import Circle from "../Shared/Circle"
 
 import { useFiles } from "../../hooks"
+import { useCollection } from "react-firebase-hooks/firestore"
 
 const Container = styled.div``
 
 type props = {
-    taskDocSnap: firebase.firestore.DocumentSnapshot
+    collection: firebase.firestore.DocumentSnapshot
 }
 
-export default function Collection({ taskDocSnap }: props) {
+export default function Collection({ collection }: props) {
     const router = useRouter()
 
-
+    const [boards, loading] = useCollection(
+        collection?.ref.collection("boards").orderBy("createdAt", "desc")
+    )
 
     const [, setTask] = useAtom(selectedTaskDocRefAtom)
     const [, setBoard] = useAtom(selectedCollectionDocRefAtom)
 
-    const files = useFiles(undefined, undefined, taskDocSnap, undefined, 3)
+    const files = useFiles(undefined, undefined, collection, undefined, 3)
     const [showFiles, setShowFiles] = useState(false)
 
     return <Container
         onClick={async () => {
-            setTask(taskDocSnap)
+            setTask(collection)
             setBoard(undefined)
             router.push("archive")
+        }}
+        onContextMenu={async event => {
+            event.preventDefault()
+            await collection.ref.delete()
+            const boards = await collection.ref.collection("boards").get()
+
+            const batch = firebase.firestore().batch()
+
+            boards.docs.forEach(board => {
+                batch.delete(board.ref)
+            })
+
+            await batch.commit()
         }}>
         <Row>
             <Cell>
-                {taskDocSnap.get("createdAt") && <div>
-                    {taskDocSnap.get("createdAt")?.toDate().getDate()}
+                {collection.get("createdAt") && <div>
+                    {collection.get("createdAt")?.toDate().getDate()}
                 .
-                {taskDocSnap.get("createdAt")?.toDate()?.getMonth() + 1}
+                {collection.get("createdAt")?.toDate()?.getMonth() + 1}
                 .
-                {taskDocSnap.get("createdAt")?.toDate().getFullYear()}
+                {collection.get("createdAt")?.toDate().getFullYear()}
                 </div>}
             </Cell>
             <Cell>
-                {taskDocSnap.get("lastUpdatedAt") && <div>
-                    {taskDocSnap.get("lastUpdatedAt")?.toDate().getDate()}
+                {collection.get("lastUpdatedAt") && <div>
+                    {collection.get("lastUpdatedAt")?.toDate().getDate()}
                 .
-                {taskDocSnap.get("lastUpdatedAt")?.toDate().getMonth() + 1}
+                {collection.get("lastUpdatedAt")?.toDate().getMonth() + 1}
                 .
-                {taskDocSnap.get("lastUpdatedAt")?.toDate().getFullYear()}
+                {collection.get("lastUpdatedAt")?.toDate().getFullYear()}
                 </div>}
             </Cell>
             <Cell>
                 <div>
-                    {taskDocSnap?.get("name")}
+                    {collection?.get("name")}
+                </div>
+            </Cell>
+            <Cell>
+                <div>
+                    {loading && <div>loading ...</div>}
+                    {
+                        boards?.docs.length ?
+                            boards.docs.map(board => <span key={board.id}>{board.get("name")} </span>)
+                            :
+                            <></>
+                    }
                 </div>
             </Cell>
             <Cell>
                 <Circle
-                    fill={taskDocSnap.get("pinned") ? "#000000" : "#ffffff"}
+                    fill={collection.get("pinned") ? "#000000" : "#ffffff"}
                     stroke="#000000"
                     onClick={event => {
                         event.stopPropagation()
-                        taskDocSnap.ref.update({
-                            pinned: !taskDocSnap.get("pinned")
+                        collection.ref.update({
+                            pinned: !collection.get("pinned")
                         })
                     }} />
             </Cell>

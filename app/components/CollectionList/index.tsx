@@ -47,16 +47,19 @@ const UploadInput = styled.input`
 
 export const Row = styled.div`
     display: grid;
-    grid-template-columns: repeat(2, 1fr) 6fr repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr) 6fr repeat(2, 1fr);
     grid-template-rows: 30px;
 
     border-bottom: 1px solid black;
 `
 
-const CreateCollection = styled.div`
+const CreateCollectionForm = styled.form`
     height: 30px;
 
     border-bottom: 1px solid black;
+`
+
+const CreateCollection = styled.button`
 `
 
 export const Cell = styled.div`
@@ -85,7 +88,7 @@ export default function CollectionList({ getRootProps }: props) {
     const [orderBy, setOrderBy] = useState("createdAt")
     const [orderDirection, setOrderDirection] = useState<"asc" | "desc">("desc")
 
-    const [collections, loading] = useCollection<Collection>(
+    const [collections, loading] = useCollection(
         userDocRef?.ref.collection("collections").orderBy(orderBy, orderDirection)
     )
 
@@ -100,19 +103,60 @@ export default function CollectionList({ getRootProps }: props) {
 
     const [, setFilesToUpload] = useAtom(filesToUploadAtom)
 
+    const [newCollectionName, setNewCollectionName] = useState("")
+    const [newCollectionTags, setNewCollectionTags] = useState<string[]>([])
+    const [newCollectionTag, setNewCollectionTag] = useState("")
+
     return <Container
         {...(getRootProps ? getRootProps({}) : {})}>
-        <CreateCollection
-            onClick={() => {
-                userDocRef?.ref.collection("collections").add({
-                    name: "new Collection!",
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    pinned: false
-                } as Collection)
-            }}>
-            Create Collection +
+        <CreateCollectionForm>
+            <label>
+                <input
+                    type="text"
+                    placeholder={"Collection Name"}
+                    value={newCollectionName}
+                    onChange={event => setNewCollectionName(event.target.value)} />
+            </label>
+            <label>
+                {newCollectionTags.map(tag => <span key={tag}> {tag}</span>)}
+                <input
+                    type="text"
+                    placeholder={"Tags"}
+                    value={newCollectionTag}
+                    onKeyDown={event => {
+                        if (event.key === 'Enter' && newCollectionTag) {
+                            event.preventDefault()
+                            setNewCollectionTags([...newCollectionTags, newCollectionTag])
+                            setNewCollectionTag("")
+                        }
+                    }
+                    }
+                    onChange={event => setNewCollectionTag(event.target.value)} />
+            </label>
+            <CreateCollection
+                onClick={async event => {
+                    event.preventDefault()
+                    const newCollectionRef = await userDocRef?.ref.collection("collections").add({
+                        name: newCollectionName || "new Collection",
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        tags: newCollectionTags,
+                        pinned: false
+                    } as Collection)
+
+                    await newCollectionRef?.collection("boards").add({
+                        name: "new Board",
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    })
+
+                    setNewCollectionName("")
+                    setNewCollectionTags([])
+                    setNewCollectionTag("")
+                }}>
+                Create Collection +
         </CreateCollection>
+        </CreateCollectionForm>
         <Row>
             <Cell onClick={() => setOrder("createdAt")}>
                 UPLOADED {orderBy === "createdAt" && <> {orderDirection === "desc" ? <StyledIconDownSVG /> : <StyledIconUpSVG />} </>}
@@ -123,8 +167,11 @@ export default function CollectionList({ getRootProps }: props) {
             </Cell>
             <Cell
                 onClick={() => setOrder("clientName")}>
-                {userDocRef?.get("level1")}
+                Name
                 {orderBy === "clientName" && <>{orderDirection === "desc" ? <StyledIconDownSVG /> : <StyledIconUpSVG />}</>}
+            </Cell>
+            <Cell>
+                Boards
             </Cell>
             <Cell
                 onClick={() => setOrder("pinned")}>
@@ -138,7 +185,7 @@ export default function CollectionList({ getRootProps }: props) {
                 {collections.docs.map(collection => (
                     <Collection
                         key={collection.id}
-                        taskDocSnap={collection} />
+                        collection={collection} />
                 ))}
             </Overflow>
             :
