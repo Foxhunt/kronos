@@ -1,5 +1,4 @@
 import firebase from "../../firebase/clientApp"
-import styled from "styled-components"
 import { useCollection } from "react-firebase-hooks/firestore"
 
 import Collection from "./Collection"
@@ -9,75 +8,7 @@ import { useAtom } from "jotai"
 import { filesToUploadAtom, userDocRefAtom } from "../../store"
 import { DropzoneRootProps } from "react-dropzone"
 
-import IconUpSVG from "../../assets/svg/Icons/UP.svg"
-import IconDownSVG from "../../assets/svg/Icons/DOWN.svg"
-
-const Container = styled.div`
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    
-    outline: none;
-`
-
-const StyledIconUpSVG = styled(IconUpSVG)`
-    padding-left: 5px;
-`
-
-const StyledIconDownSVG = styled(IconDownSVG)`
-    padding-left: 5px;
-`
-
-const Hint = styled.label`
-    width: 100%;
-    height: calc(100vh - 61px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`
-
-const Overflow = styled.div`
-    max-height: calc(100vh - 41px - 60px);
-    overflow-y: auto;
-`
-
-const UploadInput = styled.input`
-    display: none;
-`
-
-export const Row = styled.div`
-    display: grid;
-    grid-template-columns: repeat(3, 1fr) 6fr repeat(2, 1fr);
-    grid-template-rows: 30px;
-
-    border-bottom: 1px solid black;
-`
-
-const CreateCollectionForm = styled.form`
-    height: 30px;
-
-    border-bottom: 1px solid black;
-`
-
-const CreateCollection = styled.button`
-`
-
-export const Cell = styled.div`
-    min-width: 0px;
-
-    display: flex;
-    justify-content: left;
-    align-items: center;
-
-    padding-left: 8px;
-
-    & > div {
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        line-height: initial;
-    }
-`
+import { Container, CreateCollectionForm, CreateCollection, Row, Cell, StyledIconDownSVG, StyledIconUpSVG, Overflow, Hint, UploadInput } from "./CollectionComponents"
 
 type props = {
     getRootProps?: (props?: DropzoneRootProps) => DropzoneRootProps
@@ -88,8 +19,16 @@ export default function CollectionList({ getRootProps }: props) {
     const [orderBy, setOrderBy] = useState("createdAt")
     const [orderDirection, setOrderDirection] = useState<"asc" | "desc">("desc")
 
-    const [collections, loading] = useCollection(
-        userDocRef?.ref.collection("collections").orderBy(orderBy, orderDirection)
+    const [collections, loadingCollections] = useCollection(
+        userDocRef?.ref.collection("collections")
+            .where("deleted", "==", false)
+            .orderBy(orderBy, orderDirection)
+    )
+
+    const [deletedCollections, loadingDeletedCollections] = useCollection(
+        userDocRef?.ref.collection("collections")
+            .where("deleted", "==", true)
+            .orderBy(orderBy, orderDirection)
     )
 
     const setOrder = (newOrderBy: string) => {
@@ -100,8 +39,6 @@ export default function CollectionList({ getRootProps }: props) {
             setOrderDirection(["createdAt", "lastUpdatedAt", "pinned"].includes(newOrderBy) ? "desc" : "asc")
         }
     }
-
-    const [, setFilesToUpload] = useAtom(filesToUploadAtom)
 
     const [newCollectionName, setNewCollectionName] = useState("")
     const [newCollectionTags, setNewCollectionTags] = useState<string[]>([])
@@ -141,7 +78,8 @@ export default function CollectionList({ getRootProps }: props) {
                         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                         lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp(),
                         tags: newCollectionTags,
-                        pinned: false
+                        pinned: false,
+                        deleted: false
                     } as Collection)
 
                     await newCollectionRef?.collection("boards").add({
@@ -166,9 +104,9 @@ export default function CollectionList({ getRootProps }: props) {
                 CHANGED {orderBy === "lastUpdatedAt" && <> {orderDirection === "desc" ? <StyledIconDownSVG /> : <StyledIconUpSVG />} </>}
             </Cell>
             <Cell
-                onClick={() => setOrder("clientName")}>
+                onClick={() => setOrder("name")}>
                 Name
-                {orderBy === "clientName" && <>{orderDirection === "desc" ? <StyledIconDownSVG /> : <StyledIconUpSVG />}</>}
+                {orderBy === "name" && <>{orderDirection === "desc" ? <StyledIconDownSVG /> : <StyledIconUpSVG />}</>}
             </Cell>
             <Cell>
                 Boards
@@ -177,30 +115,24 @@ export default function CollectionList({ getRootProps }: props) {
                 onClick={() => setOrder("pinned")}>
                 PIN {orderBy === "pinned" && <>{orderDirection === "desc" ? <StyledIconDownSVG /> : <StyledIconUpSVG />}</>}
             </Cell>
-            <Cell></Cell>
         </Row>
-        {loading && <div>loading ...</div>}
-        {collections?.docs.length ?
-            <Overflow>
-                {collections.docs.map(collection => (
-                    <Collection
-                        key={collection.id}
-                        collection={collection} />
-                ))}
-            </Overflow>
-            :
-            <Hint>
-                Click to upload files
-                <UploadInput
-                    multiple
-                    onChange={event => {
-                        if (event.target.files) {
-                            setFilesToUpload(Array.from(event.target.files))
-                        }
-                        event.target.value = ""
-                    }}
-                    type={"file"} />
-            </Hint>
-        }
+        {loadingCollections && <div>loading ...</div>}
+        <Overflow>
+            {collections?.docs.map(collection => (
+                <Collection
+                    key={collection.id}
+                    collection={collection} />
+            ))}
+            <Row>
+                <Cell>
+                    Deleted:
+                </Cell>
+            </Row>
+            {deletedCollections?.docs.map(collection => (
+                <Collection
+                    key={collection.id}
+                    collection={collection} />
+            ))}
+        </Overflow>
     </Container>
 }

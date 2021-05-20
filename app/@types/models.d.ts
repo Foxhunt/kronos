@@ -10,6 +10,7 @@ interface Collection {
     createdAt: FieldValue
     lastUpdatedAt: FieldValue
     pinned: boolean
+    deleted: boolean
     tags: string[]
 
     //references

@@ -1,24 +1,18 @@
 import firebase from "../../firebase/clientApp"
-import { useRouter } from 'next/router'
-import React, { useState } from "react"
+import { useState } from "react"
 import styled from "styled-components"
 
-import { useAtom } from "jotai"
-import {
-    selectedCollectionDocRefAtom,
-    selectedTaskDocRefAtom,
-} from "../../store"
-
 import FileGrid from "../FileGrid"
-import { Row, Cell } from "./index"
+import { Row, Cell } from "./CollectionComponents"
 
 import IconAddSVG from "../../assets/svg/Icons/PLUS.svg"
 import IconCancelSVG from "../../assets/svg/Icons/X.svg"
 
 import Circle from "../Shared/Circle"
 
-import { useFiles } from "../../hooks"
 import { useCollection } from "react-firebase-hooks/firestore"
+import { useFiles } from "../../hooks"
+import EditableField from "../Shared/EditableField"
 
 const Container = styled.div``
 
@@ -27,36 +21,18 @@ type props = {
 }
 
 export default function Collection({ collection }: props) {
-    const router = useRouter()
 
     const [boards, loading] = useCollection(
         collection?.ref.collection("boards").orderBy("createdAt", "desc")
     )
 
-    const [, setTask] = useAtom(selectedTaskDocRefAtom)
-    const [, setBoard] = useAtom(selectedCollectionDocRefAtom)
-
     const files = useFiles(undefined, undefined, collection, undefined, 3)
     const [showFiles, setShowFiles] = useState(false)
 
     return <Container
-        onClick={async () => {
-            setTask(collection)
-            setBoard(undefined)
-            router.push("archive")
-        }}
         onContextMenu={async event => {
             event.preventDefault()
-            await collection.ref.delete()
-            const boards = await collection.ref.collection("boards").get()
-
-            const batch = firebase.firestore().batch()
-
-            boards.docs.forEach(board => {
-                batch.delete(board.ref)
-            })
-
-            await batch.commit()
+            collection.ref.update({ deleted: true })
         }}>
         <Row>
             <Cell>
@@ -78,20 +54,18 @@ export default function Collection({ collection }: props) {
                 </div>}
             </Cell>
             <Cell>
-                <div>
-                    {collection?.get("name")}
-                </div>
+                <EditableField
+                    document={collection}
+                    fieldName={"name"} />
             </Cell>
             <Cell>
-                <div>
-                    {loading && <div>loading ...</div>}
-                    {
-                        boards?.docs.length ?
-                            boards.docs.map(board => <span key={board.id}>{board.get("name")} </span>)
-                            :
-                            <></>
-                    }
-                </div>
+                {loading && <div>loading ...</div>}
+                {boards?.docs.map(board =>
+                    <EditableField
+                        key={board.id}
+                        document={board}
+                        fieldName={"name"} />
+                )}
             </Cell>
             <Cell>
                 <Circle
@@ -113,5 +87,5 @@ export default function Collection({ collection }: props) {
             </Cell>
         </Row>
         {showFiles && <FileGrid files={files} />}
-    </Container>
+    </Container >
 }
