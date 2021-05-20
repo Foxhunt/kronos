@@ -11,11 +11,7 @@ export const createNewUser = functions
     .onCreate(async user => {
         try {
             await admin.firestore().collection("users").doc(user.uid).set({
-                email: user.email,
-                level1: "Level I",
-                level2: "Level II",
-                level3: "Level III",
-                boards: "Boards"
+                email: user.email
             })
             functions.logger.info(`createrd user ${user.email}`)
         } catch (error) {
