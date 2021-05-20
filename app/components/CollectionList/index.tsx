@@ -5,10 +5,10 @@ import Collection from "./Collection"
 import { useState } from "react"
 
 import { useAtom } from "jotai"
-import { filesToUploadAtom, userDocRefAtom } from "../../store"
+import { userDocRefAtom } from "../../store"
 import { DropzoneRootProps } from "react-dropzone"
 
-import { Container, CreateCollectionForm, CreateCollection, Row, Cell, StyledIconDownSVG, StyledIconUpSVG, Overflow, Hint, UploadInput } from "./CollectionComponents"
+import { Container, CreateCollectionForm, CreateCollection, Row, Cell, StyledIconDownSVG, StyledIconUpSVG, Overflow } from "./CollectionComponents"
 
 type props = {
     getRootProps?: (props?: DropzoneRootProps) => DropzoneRootProps
@@ -116,8 +116,8 @@ export default function CollectionList({ getRootProps }: props) {
                 PIN {orderBy === "pinned" && <>{orderDirection === "desc" ? <StyledIconDownSVG /> : <StyledIconUpSVG />}</>}
             </Cell>
         </Row>
-        {loadingCollections && <div>loading ...</div>}
         <Overflow>
+            {loadingCollections && <div>loading ...</div>}
             {collections?.docs.map(collection => (
                 <Collection
                     key={collection.id}
@@ -128,6 +128,7 @@ export default function CollectionList({ getRootProps }: props) {
                     Deleted:
                 </Cell>
             </Row>
+            {loadingDeletedCollections && <div>loading ...</div>}
             {deletedCollections?.docs.map(collection => (
                 <Collection
                     key={collection.id}
