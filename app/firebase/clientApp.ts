@@ -23,15 +23,11 @@ if (typeof window !== 'undefined' && !firebase.apps.length) {
     firebase.performance()
 
     if (location.hostname === "localhost") {
-        firebase.auth().useEmulator("http://127.0.0.1:9099")
-        firebase.functions().useEmulator("127.0.0.1", 5001)
-        firebase.firestore().useEmulator("127.0.0.1", 8080)
-        firebase.storage().useEmulator("127.0.0.1", 9199)
+        // firebase.auth().useEmulator("http://127.0.0.1:9099")
+        // firebase.functions().useEmulator("127.0.0.1", 5001)
+        // firebase.firestore().useEmulator("127.0.0.1", 8080)
+        // firebase.storage().useEmulator("127.0.0.1", 9199)
     }
-
-    // firebase.firestore().enablePersistence({
-    //     synchronizeTabs: true
-    // })
 
     // To enable analytics. https://firebase.google.com/docs/analytics/get-started
     if ('measurementId' in clientCredentials) firebase.analytics()
