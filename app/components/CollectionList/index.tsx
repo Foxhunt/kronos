@@ -135,22 +135,25 @@ export default function CollectionList() {
         </Row>
         <Overflow>
             {loadingCollections && <div>loading ...</div>}
-            {collections?.docs.map(collection => (
-                <Collection
-                    key={collection.id}
-                    collection={collection} />
-            ))}
-            {!deletedCollections?.empty && <Row>
+            {collections?.docs
+                .filter(collection => !collection.get("deleted"))
+                .map(collection => (
+                    <Collection
+                        key={collection.id}
+                        collection={collection} />
+                ))}
+            {collections?.docs.find(collection => collection.get("deleted")) && <Row>
                 <Cell>
                     Deleted:
                 </Cell>
             </Row>}
-            {loadingDeletedCollections && <div>loading ...</div>}
-            {deletedCollections?.docs.map(collection => (
-                <Collection
-                    key={collection.id}
-                    collection={collection} />
-            ))}
+            {collections?.docs
+                .filter(collection => collection.get("deleted"))
+                .map(collection => (
+                    <Collection
+                        key={collection.id}
+                        collection={collection} />
+                ))}
         </Overflow>
     </Container >
 }
