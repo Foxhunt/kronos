@@ -31,13 +31,19 @@ export const UploadInput = styled.input`
   display: none;
 `;
 
-export const Row = styled.div`
+export const Row = styled.div<DropzoneRootProps>`
   display: grid;
   grid-template-columns: repeat(2, 100px) 2fr 6fr repeat(2, 50px);
-  grid-template-rows: 30px;
+
+  background-color: ${({ isDragActive }) => isDragActive ? "green" : "initial"};
+  height: ${({ isDragActive }) => isDragActive ? 60 : 30}px;
+
+  transition: background-color 300ms ease,
+              height 300ms ease;
 
   border-bottom: 1px solid black;
 `;
+
 export const CreateCollectionForm = styled.form<DropzoneRootProps>`
   height: 30px;
 
