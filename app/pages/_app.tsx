@@ -6,7 +6,6 @@ import "../firebase/clientApp"
 
 import User from "../services/User"
 import FileUpload from "../services/FileUpload"
-import FirbaseSubscriptions from "../services/FirestoreSubscriptions"
 
 import Header from "../components/Header"
 
@@ -23,7 +22,6 @@ export default function App({ Component, pageProps }: Props) {
     <Provider>
       <User />
       <FileUpload />
-      <FirbaseSubscriptions />
       <Header />
       <Component {...pageProps} />
     </Provider>
