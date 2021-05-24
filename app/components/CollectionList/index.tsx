@@ -12,7 +12,7 @@ import { Container, CreateCollectionForm, CreateCollection, Row, Cell, StyledIco
 import { useDropzone } from "react-dropzone"
 
 export default function CollectionList() {
-    const [userDocRef] = useAtom<firebase.firestore.DocumentSnapshot>(userDocRefAtom)
+    const [userDocRef] = useAtom<firebase.firestore.DocumentSnapshot | undefined>(userDocRefAtom)
     const [orderBy, setOrderBy] = useState("createdAt")
     const [orderDirection, setOrderDirection] = useState<"asc" | "desc">("desc")
 
@@ -45,7 +45,7 @@ export default function CollectionList() {
         const batch = firebase.firestore().batch()
 
         const newCollectionRef = userDocRef?.ref.collection("collections").doc()
-        batch.set(newCollectionRef, {
+        newCollectionRef && batch.set(newCollectionRef, {
             name: newCollectionName || "new Collection",
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
             lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -55,7 +55,7 @@ export default function CollectionList() {
         })
 
         const newBoardRef = newCollectionRef?.collection("boards").doc()
-        batch.set(newBoardRef, {
+        newBoardRef && batch.set(newBoardRef, {
             name: "new Board",
             collection: newCollectionRef,
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -73,8 +73,10 @@ export default function CollectionList() {
     const onDrop = async (files: File[]) => {
         const [collection, board] = await createCollection()
 
-        for (const file of files) {
-            uploadFile(file, collection, board)
+        if (collection && board) {
+            for (const file of files) {
+                uploadFile(file, collection, board)
+            }
         }
     }
     const { getRootProps, isDragActive } = useDropzone({ onDrop })
