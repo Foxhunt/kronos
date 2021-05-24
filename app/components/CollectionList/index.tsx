@@ -16,17 +16,14 @@ export default function CollectionList() {
     const [orderBy, setOrderBy] = useState("createdAt")
     const [orderDirection, setOrderDirection] = useState<"asc" | "desc">("desc")
 
-    const [collections, loadingCollections] = useCollection(
+    const [collections, loadingCollections, collectionsError] = useCollection(
         userDocRef?.ref.collection("collections")
-            .where("deleted", "==", false)
             .orderBy(orderBy, orderDirection)
     )
 
-    const [deletedCollections, loadingDeletedCollections] = useCollection(
-        userDocRef?.ref.collection("collections")
-            .where("deleted", "==", true)
-            .orderBy(orderBy, orderDirection)
-    )
+    if (collectionsError) {
+        console.error(collectionsError)
+    }
 
     const setOrder = (newOrderBy: string) => {
         if (orderBy === newOrderBy) {
