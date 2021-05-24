@@ -2,20 +2,17 @@ import firebase from "../../firebase/clientApp"
 import { useCollection } from "react-firebase-hooks/firestore"
 
 import Collection from "./Collection"
+import uploadFile from "../../firebase/uploadFile"
 import { useState } from "react"
 
 import { useAtom } from "jotai"
 import { userDocRefAtom } from "../../store"
-import { DropzoneRootProps } from "react-dropzone"
 
 import { Container, CreateCollectionForm, CreateCollection, Row, Cell, StyledIconDownSVG, StyledIconUpSVG, Overflow } from "./CollectionComponents"
+import { useDropzone } from "react-dropzone"
 
-type props = {
-    getRootProps?: (props?: DropzoneRootProps) => DropzoneRootProps
-}
-
-export default function CollectionList({ getRootProps }: props) {
-    const [userDocRef] = useAtom(userDocRefAtom)
+export default function CollectionList() {
+    const [userDocRef] = useAtom<firebase.firestore.DocumentSnapshot>(userDocRefAtom)
     const [orderBy, setOrderBy] = useState("createdAt")
     const [orderDirection, setOrderDirection] = useState<"asc" | "desc">("desc")
 
@@ -44,9 +41,47 @@ export default function CollectionList({ getRootProps }: props) {
     const [newCollectionTags, setNewCollectionTags] = useState<string[]>([])
     const [newCollectionTag, setNewCollectionTag] = useState("")
 
-    return <Container
-        {...(getRootProps ? getRootProps({}) : {})}>
-        <CreateCollectionForm>
+    const createCollection = async () => {
+        const batch = firebase.firestore().batch()
+
+        const newCollectionRef = userDocRef?.ref.collection("collections").doc()
+        batch.set(newCollectionRef, {
+            name: newCollectionName || "new Collection",
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            tags: newCollectionTags,
+            pinned: false,
+            deleted: false
+        })
+
+        const newBoardRef = newCollectionRef?.collection("boards").doc()
+        batch.set(newBoardRef, {
+            name: "new Board",
+            collection: newCollectionRef,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        })
+
+        setNewCollectionName("")
+        setNewCollectionTags([])
+        setNewCollectionTag("")
+
+        batch.commit()
+        return [newCollectionRef, newBoardRef]
+    }
+
+    const onDrop = async (files: File[]) => {
+        const [collection, board] = await createCollection()
+
+        for (const file of files) {
+            uploadFile(file, collection, board)
+        }
+    }
+    const { getRootProps, isDragActive } = useDropzone({ onDrop })
+
+    return <Container>
+        <CreateCollectionForm
+            {...getRootProps({ isDragActive })}>
             <label>
                 <input
                     type="text"
@@ -71,29 +106,12 @@ export default function CollectionList({ getRootProps }: props) {
                     onChange={event => setNewCollectionTag(event.target.value)} />
             </label>
             <CreateCollection
-                onClick={async event => {
+                onClick={event => {
                     event.preventDefault()
-                    const newCollectionRef = await userDocRef?.ref.collection("collections").add({
-                        name: newCollectionName || "new Collection",
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        tags: newCollectionTags,
-                        pinned: false,
-                        deleted: false
-                    } as Collection)
-
-                    await newCollectionRef?.collection("boards").add({
-                        name: "new Board",
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    })
-
-                    setNewCollectionName("")
-                    setNewCollectionTags([])
-                    setNewCollectionTag("")
+                    createCollection()
                 }}>
                 Create Collection +
-        </CreateCollection>
+            </CreateCollection>
         </CreateCollectionForm>
         <Row>
             <Cell onClick={() => setOrder("createdAt")}>
@@ -123,11 +141,11 @@ export default function CollectionList({ getRootProps }: props) {
                     key={collection.id}
                     collection={collection} />
             ))}
-            <Row>
+            {!deletedCollections?.empty && <Row>
                 <Cell>
                     Deleted:
                 </Cell>
-            </Row>
+            </Row>}
             {loadingDeletedCollections && <div>loading ...</div>}
             {deletedCollections?.docs.map(collection => (
                 <Collection
@@ -135,5 +153,5 @@ export default function CollectionList({ getRootProps }: props) {
                     collection={collection} />
             ))}
         </Overflow>
-    </Container>
+    </Container >
 }

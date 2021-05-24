@@ -2,13 +2,10 @@ import firebase from "./clientApp"
 
 export default async function uploadFile(
     file: File,
-    client: firebase.firestore.DocumentSnapshot,
-    project: firebase.firestore.DocumentSnapshot,
-    task: firebase.firestore.DocumentSnapshot,
-    collection: firebase.firestore.DocumentSnapshot,
-    userDocRef: firebase.firestore.DocumentSnapshot
+    collection: firebase.firestore.DocumentReference,
+    board: firebase.firestore.DocumentReference
 ) {
-    const storageRef = firebase.storage().ref(collection.ref.path)
+    const storageRef = firebase.storage().ref(collection.path)
     const fileRef = storageRef.child(`${file.name}`)
 
     const uploadTask = fileRef.put(file, {
@@ -20,12 +17,16 @@ export default async function uploadFile(
             null,
             null,
             async () => {
-                const fileCollection = userDocRef.ref.collection("files")
+                const fileCollection = board.collection("files")
 
                 const array = new Uint32Array(1)
                 window.crypto.getRandomValues(array)
 
-                task.ref.update({
+                collection.update({
+                    lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                })
+
+                board.update({
                     lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
                 })
 
@@ -33,10 +34,8 @@ export default async function uploadFile(
                     name: fileRef.name,
                     favorite: false,
                     marked: false,
-                    client: client.ref,
-                    project: project.ref,
-                    task: task.ref,
-                    collection: collection.ref,
+                    collection: collection,
+                    board: board,
                     fullPath: fileRef.fullPath,
                     downloadURL: await fileRef.getDownloadURL(),
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),

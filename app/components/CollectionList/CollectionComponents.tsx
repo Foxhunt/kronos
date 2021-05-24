@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import IconUpSVG from "../../assets/svg/Icons/UP.svg";
 import IconDownSVG from "../../assets/svg/Icons/DOWN.svg";
+import { DropzoneRootProps } from "react-dropzone";
 
 export const Container = styled.div`
   flex: 1;
@@ -23,7 +24,7 @@ export const Hint = styled.label`
   justify-content: center;
 `;
 export const Overflow = styled.div`
-  max-height: calc(100vh - 41px - 60px);
+  height: calc(100vh - 41px - 60px);
   overflow-y: auto;
 `;
 export const UploadInput = styled.input`
@@ -37,8 +38,10 @@ export const Row = styled.div`
 
   border-bottom: 1px solid black;
 `;
-export const CreateCollectionForm = styled.form`
+export const CreateCollectionForm = styled.form<DropzoneRootProps>`
   height: 30px;
+
+  background-color: ${({ isDragActive }) => isDragActive ? "green" : "initial"};
 
   border-bottom: 1px solid black;
 `;
