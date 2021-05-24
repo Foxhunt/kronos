@@ -29,9 +29,9 @@ if (typeof window !== 'undefined' && !firebase.apps.length) {
         firebase.storage().useEmulator("127.0.0.1", 9199)
     }
 
-    firebase.firestore().enablePersistence({
-        synchronizeTabs: true
-    })
+    // firebase.firestore().enablePersistence({
+    //     synchronizeTabs: true
+    // })
 
     // To enable analytics. https://firebase.google.com/docs/analytics/get-started
     if ('measurementId' in clientCredentials) firebase.analytics()
