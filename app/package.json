@@ -13,6 +13,7 @@
   "dependencies": {
     "@svgr/webpack": "^5.4.0",
     "algoliasearch": "^4.8.4",
+    "date-fns": "^2.21.3",
     "file-saver": "^2.0.5",
     "firebase": "^8.2.6",
     "framer-motion": "^4.1.11",
