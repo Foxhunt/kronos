@@ -5,7 +5,6 @@ import { Provider } from "jotai"
 import "../firebase/clientApp"
 
 import User from "../services/User"
-import FileUpload from "../services/FileUpload"
 
 import Header from "../components/Header"
 
@@ -21,7 +20,6 @@ export default function App({ Component, pageProps }: Props) {
   return (
     <Provider>
       <User />
-      <FileUpload />
       <Header />
       <Component {...pageProps} />
     </Provider>
