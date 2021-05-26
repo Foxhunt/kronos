@@ -9,7 +9,7 @@ const Value = styled.div`
     transition: background-color 300ms ease;
 
     &:hover{
-        background-color: #e2e2e2
+        background-color: #e2e2e2;
     }
 `
 
