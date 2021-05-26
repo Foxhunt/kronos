@@ -38,7 +38,7 @@ export default function CollectionList() {
     const [newCollectionTags, setNewCollectionTags] = useState<string[]>([])
     const [newCollectionTag, setNewCollectionTag] = useState("")
 
-    const createCollection = async () => {
+    const createCollection = async (withBoard: boolean) => {
         const batch = firebase.firestore().batch()
 
         const newCollectionRef = userDocRef?.ref.collection("collections").doc()
@@ -52,13 +52,17 @@ export default function CollectionList() {
             deleted: false
         })
 
-        const newBoardRef = newCollectionRef?.collection("boards").doc()
-        newBoardRef && batch.set(newBoardRef, {
-            name: "new Board",
-            collection: newCollectionRef,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        })
+        let newBoardRef
+        if (withBoard) {
+            newBoardRef = newCollectionRef?.collection("boards").doc()
+            newBoardRef && batch.set(newBoardRef, {
+                name: "new Board",
+                owner: userDocRef?.ref,
+                collection: newCollectionRef,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            })
+        }
 
         setNewCollectionName("")
         setNewCollectionTags([])
@@ -69,7 +73,7 @@ export default function CollectionList() {
     }
 
     const onDrop = async (files: File[]) => {
-        const [collection, board] = await createCollection()
+        const [collection, board] = await createCollection(files.length > 0)
 
         if (collection && board) {
             for (const file of files) {
@@ -82,13 +86,11 @@ export default function CollectionList() {
     return <Container>
         <CreateCollectionForm
             {...getRootProps({ isDragActive })}>
-            <label>
-                <input
-                    type="text"
-                    placeholder={"Collection Name"}
-                    value={newCollectionName}
-                    onChange={event => setNewCollectionName(event.target.value)} />
-            </label>
+            <input
+                type="text"
+                placeholder={"Collection Name"}
+                value={newCollectionName}
+                onChange={event => setNewCollectionName(event.target.value)} />
             <label>
                 {newCollectionTags.map(tag => <span key={tag}> {tag}</span>)}
                 <input
@@ -108,7 +110,7 @@ export default function CollectionList() {
             <CreateCollection
                 onClick={event => {
                     event.preventDefault()
-                    createCollection()
+                    createCollection(false)
                 }}>
                 Create Collection +
             </CreateCollection>
