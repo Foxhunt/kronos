@@ -44,6 +44,7 @@ export default function CollectionList() {
         const newCollectionRef = userDocRef?.ref.collection("collections").doc()
         newCollectionRef && batch.set(newCollectionRef, {
             name: newCollectionName || "new Collection",
+            owner: userDocRef?.ref,
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
             lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp(),
             tags: newCollectionTags,
@@ -72,7 +73,7 @@ export default function CollectionList() {
 
         if (collection && board) {
             for (const file of files) {
-                uploadFile(file, collection, board)
+                userDocRef && uploadFile(file, userDocRef.ref, collection, board)
             }
         }
     }

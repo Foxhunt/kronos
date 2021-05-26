@@ -45,7 +45,7 @@ export default function Collection({ collection }: props) {
         })
 
         for (const file of files) {
-            uploadFile(file, collection.ref, board)
+            uploadFile(file, collection.get("owner"), collection.ref, board)
         }
     }
     const { getRootProps, isDragActive } = useDropzone({ onDrop })
@@ -111,7 +111,7 @@ function Board({ board }: boardProps) {
         const collection = board.get("collection")
 
         for (const file of files) {
-            uploadFile(file, collection, board.ref)
+            uploadFile(file, collection.get("owner"), collection.ref, board.ref)
         }
     }
     const { getRootProps, isDragActive } = useDropzone({ onDrop })

@@ -2,6 +2,7 @@ import firebase from "./clientApp"
 
 export default async function uploadFile(
     file: File,
+    owner: firebase.firestore.DocumentReference,
     collection: firebase.firestore.DocumentReference,
     board: firebase.firestore.DocumentReference
 ) {
@@ -34,6 +35,7 @@ export default async function uploadFile(
                     name: fileRef.name,
                     favorite: false,
                     marked: false,
+                    owner: owner,
                     collection: collection,
                     board: board,
                     fullPath: fileRef.fullPath,
