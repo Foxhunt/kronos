@@ -24,7 +24,7 @@ export const Hint = styled.label`
   justify-content: center;
 `;
 export const Overflow = styled.div`
-  height: calc(100vh - 41px - 60px);
+  max-height: calc(100vh - 41px - 60px);
   overflow-y: auto;
 `;
 export const UploadInput = styled.input`
@@ -35,19 +35,24 @@ export const Row = styled.div<DropzoneRootProps>`
   display: grid;
   grid-template-columns: repeat(2, 100px) 2fr 6fr repeat(2, 50px);
 
-  background-color: ${({ isDragActive }) => isDragActive ? "green" : "initial"};
+  background-color: ${({ isDragActive }) => isDragActive ? "#e2e2e2" : "initial"};
   height: ${({ isDragActive }) => isDragActive ? 60 : 30}px;
 
   transition: background-color 300ms ease,
-              height 300ms ease;
+              height 500ms ease;
 
   border-bottom: 1px solid black;
 `;
 
 export const CreateCollectionForm = styled.form<DropzoneRootProps>`
-  height: 30px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
 
-  background-color: ${({ isDragActive }) => isDragActive ? "green" : "initial"};
+  height: ${({ isDragActive }) => isDragActive ? 60 : 30}px;
+  background-color: ${({ isDragActive }) => isDragActive ? "#e2e2e2" : "initial"};
+
+  transition: background-color 300ms ease,
+              height 500ms ease;
 
   border-bottom: 1px solid black;
 `;
@@ -56,9 +61,13 @@ export const CreateCollection = styled.button``;
 export const Cell = styled.div`
   min-width: 0px;
 
+  overflow-x: hidden;
+
   display: flex;
   justify-content: left;
   align-items: center;
+
+  gap: 5px;
 
   padding-left: 8px;
 

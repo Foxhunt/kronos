@@ -1,6 +1,6 @@
 import firebase from "../../firebase/clientApp"
 import { useState } from "react"
-import styled from "styled-components"
+import styled, { keyframes } from "styled-components"
 import { lightFormat } from "date-fns"
 
 import { Row, Cell } from "./CollectionComponents"
@@ -16,8 +16,31 @@ import { DropEvent, DropzoneRootProps, FileRejection, useDropzone } from "react-
 import uploadFile from "../../firebase/uploadFile"
 
 const BoardName = styled.div<DropzoneRootProps>`
-    padding: 0px 12px;
-    background-color: ${({ isDragActive }) => isDragActive ? "blue" : "initial"};
+    min-width: fit-content;
+    padding: 0px ${({ isDragActive }) => isDragActive ? 15 : 10}px;
+    background-color: ${({ isDragActive }) => isDragActive ? "#c0c0c0" : "#d6d6d6"};
+    
+    transition: background-color 300ms ease,
+                padding 500ms ease;
+`
+
+const shine = keyframes`
+    from {
+		background-position-x: 100%;
+	}
+
+    to {
+		background-position-x: -100%;
+	}
+`
+
+const NewBummyBoard = styled.div<DropzoneRootProps>`
+    min-width: fit-content;
+    padding: 0px 10px;
+
+    background: linear-gradient(90deg,#ffffff 0%,#d6d6d6 40%,#d6d6d6 60%,#ffffff 100%);
+    background-size: 200%;
+    animation: ${shine} 2s cubic-bezier(0.24, -0.01, 0.65, 0.35) infinite;
 `
 
 type props = {
@@ -79,6 +102,7 @@ export default function Collection({ collection }: props) {
                     key={board.id}
                     board={board} />
             )}
+            {isDragActive && <NewBummyBoard>new Board</NewBummyBoard>}
         </Cell>
         <Cell>
             <Circle
