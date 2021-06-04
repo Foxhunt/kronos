@@ -15,8 +15,7 @@ import {
 
 import PlusSVG from "../../assets/svg/Icons/PLUS.svg"
 
-import { useBoards, useScollIntoView } from "../../hooks"
-import { sortByOptions } from "../Filter"
+import { useScollIntoView } from "../../hooks"
 
 const Container = styled.div<{ top: number }>`
     position: sticky;
@@ -126,14 +125,17 @@ const NewItemInput = styled.input`
     }
 `
 
-export default function Boards() {
+interface props {
+    boards: firebase.firestore.QueryDocumentSnapshot<firebase.firestore.DocumentData>[] | undefined
+}
+
+export default function Boards({ boards }: props) {
     const [userDocRef] = useAtom(userDocRefAtom)
     const [client] = useAtom(selectedClientDocRefAtom)
     const [project] = useAtom(selectedProjectDocRefAtom)
     const [task] = useAtom(selectedTaskDocRefAtom)
 
     const [selectedBoard, setBoard] = useAtom(selectedCollectionDocRefAtom)
-    const boards = useBoards(client, project, task, sortByOptions[1])
 
     const [addingItem, setAddingItem] = useState(false)
     const [newItemName, setNewItemName] = useState("")
@@ -221,7 +223,7 @@ export default function Boards() {
                     }} />
             </NewItemForm>
         }
-        {task && !addingItem &&
+        {!addingItem &&
             <Item
                 onClick={() => setAddingItem(!addingItem)}>
                 <ItemText>

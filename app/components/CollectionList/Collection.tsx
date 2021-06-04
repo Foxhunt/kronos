@@ -14,6 +14,7 @@ import { useCollection } from "react-firebase-hooks/firestore"
 import EditableField from "../Shared/EditableField"
 import { DropEvent, DropzoneRootProps, FileRejection, useDropzone } from "react-dropzone"
 import uploadFile from "../../firebase/uploadFile"
+import { useRouter } from "next/router"
 
 const BoardName = styled.div<DropzoneRootProps>`
     min-width: fit-content;
@@ -48,6 +49,7 @@ type props = {
 }
 
 export default function Collection({ collection }: props) {
+    const router = useRouter()
 
     const [boards, loading, error] = useCollection(
         collection?.ref.collection("boards").orderBy("createdAt", "desc")
@@ -82,6 +84,9 @@ export default function Collection({ collection }: props) {
             onContextMenu: async event => {
                 event.preventDefault()
                 collection.ref.update({ deleted: !collection.get("deleted") })
+            },
+            onClick: () => {
+                router.push(`/${collection.id}`)
             }
         })}>
         <Cell>

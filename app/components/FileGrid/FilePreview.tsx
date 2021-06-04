@@ -112,7 +112,7 @@ export default function FilePreview({ files }: props) {
     const [contentType, setContentType] = useState("")
     useEffect(() => {
         async function fetchContentType() {
-            const fileRef = firebase.storage().refFromURL(src)
+            const fileRef = firebase.storage().ref(previewFile?.get("fullPath"))
             setContentType((await fileRef.getMetadata()).contentType)
         }
 

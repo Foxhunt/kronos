@@ -81,7 +81,7 @@ export default function FileComponent({ top, fileDocSnap, selected, onSelect, on
     const [contentType, setContentType] = useState("")
     useEffect(() => {
         async function fetchContentType() {
-            const fileRef = firebase.storage().refFromURL(src)
+            const fileRef = firebase.storage().ref(fileDocSnap.get("fullPath"))
             setContentType((await fileRef.getMetadata()).contentType)
         }
 

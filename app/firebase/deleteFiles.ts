@@ -4,7 +4,7 @@ export default function deleteFiles(files: firebase.firestore.DocumentSnapshot[]
     const batch = firebase.firestore().batch()
 
     for (const file of files) {
-        firebase.storage().refFromURL(file.get("downloadURL")).delete()
+        firebase.storage().ref(file.get("fullPath")).delete()
 
         const renderedPDFs = file.get("renderedPDF")
 

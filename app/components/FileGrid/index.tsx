@@ -52,7 +52,7 @@ const UploadInput = styled.input`
     display: none;
 `
 
-type props = {
+interface props {
     files: firebase.firestore.DocumentSnapshot<firebase.firestore.DocumentData>[]
     getRootProps?: (props?: DropzoneRootProps) => DropzoneRootProps
 }
