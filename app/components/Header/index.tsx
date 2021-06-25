@@ -117,7 +117,9 @@ export default function Header() {
         <Navigation>
             {userDocRef &&
                 <>
-                    <Link href={"/"}>
+                    <Link
+                        passHref
+                        href={"/"}>
                         <div>
                             <Circle
                                 fill={router.route === "/" ? "#ffffff" : "#00000000"}
@@ -125,7 +127,9 @@ export default function Header() {
                             Index
                         </div>
                     </Link >
-                    <Link href={"/archive"}>
+                    <Link
+                        passHref
+                        href={"/archive"}>
                         <div>
                             <Circle
                                 fill={router.route === "/archive" ? "#ffffff" : "#00000000"}

@@ -80,7 +80,7 @@ export function ItemList({ children, lenght }: props) {
             setCanScrollUp(ItemsRef.current.scrollTop >= 31)
             setCanScrollDown(ItemsRef.current.scrollHeight - ItemsRef.current.scrollTop - ItemsRef.current.clientHeight >= 31)
         }
-    }, [ItemsRef.current, children])
+    }, [children])
 
     return <Items
         ref={ItemsRef}

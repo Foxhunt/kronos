@@ -117,7 +117,7 @@ export default function FileGrid({ files, getRootProps }: props) {
                 }}
                 onDelete={() => deleteFiles([fileDocSnap])}
                 key={fileDocSnap.id} />
-    ), [searchResult, selectedFiles, showInteractionBar])
+    ), [files, searchResult, selectedFiles, setPreviewFile, setSelectedFiles, showInteractionBar, top])
 
     const variants: Variants = {
         hidden: {
@@ -149,7 +149,7 @@ export default function FileGrid({ files, getRootProps }: props) {
                 top={top}>
                 Drag and drop or <br />
                 click to upload files
-            <UploadInput
+                <UploadInput
                     multiple
                     onChange={event => {
                         if (event.target.files) {

@@ -1,5 +1,5 @@
 import firebase from "../../firebase/clientApp"
-import { useState } from "react"
+import React, { useState } from "react"
 import styled, { keyframes } from "styled-components"
 import { lightFormat } from "date-fns"
 
@@ -81,7 +81,7 @@ export default function Collection({ collection }: props) {
     return <Row
         {...getRootProps({
             isDragActive,
-            onContextMenu: async event => {
+            onContextMenu: (event: React.MouseEvent) => {
                 event.preventDefault()
                 collection.ref.update({ deleted: !collection.get("deleted") })
             },

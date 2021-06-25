@@ -96,7 +96,7 @@ export default function InteractionBar() {
     }, [files, selectedFiles])
 
     // clear selection
-    useEffect(() => () => { setSelectedFiles([]) }, [])
+    useEffect(() => () => { setSelectedFiles([]) }, [setSelectedFiles])
 
     const [showTags, setShowTags] = useState(false)
 

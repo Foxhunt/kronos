@@ -119,7 +119,7 @@ export default function FilePreview({ files }: props) {
         if (src !== "") {
             fetchContentType()
         }
-    }, [src])
+    }, [previewFile, src])
 
     const isPDF = contentType === "application/pdf"
 
@@ -146,7 +146,7 @@ export default function FilePreview({ files }: props) {
         }
         window.addEventListener("keydown", handleKeydown)
         return () => window.removeEventListener("keydown", handleKeydown)
-    }, [previewFile, files])
+    }, [previewFile, files, setPreviewfile])
 
     const [direction, setDirection] = useState(0)
     const [isDragging, setDragging] = useState(false)
@@ -197,6 +197,7 @@ export default function FilePreview({ files }: props) {
                             height={PDFSize} />
                         :
                         src && <Image
+                            alt="no Image"
                             src={src} />
                 }
             </Preview>

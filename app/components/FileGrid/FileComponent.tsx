@@ -88,7 +88,7 @@ export default function FileComponent({ top, fileDocSnap, selected, onSelect, on
         if (src !== "") {
             fetchContentType()
         }
-    }, [src])
+    }, [fileDocSnap, src])
 
     const isPDF = contentType === "application/pdf"
 
@@ -135,6 +135,7 @@ export default function FileComponent({ top, fileDocSnap, selected, onSelect, on
                     height={PDFSize} />
                 :
                 src && <Image
+                    alt="no Image"
                     loading="lazy"
                     src={src} />
         }

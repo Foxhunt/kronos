@@ -40,7 +40,7 @@ export default function Catalogue() {
                 setFiles(snapshot.docs)
             })
         return cleanup
-    }, [selectedTag, favorites])
+    }, [selectedTag, favorites, userDocRef?.ref])
 
     return <>
         <Head>

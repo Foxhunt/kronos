@@ -24,7 +24,7 @@ const EnterMailHint = styled.div`
     margin: 10px 0px;
 `
 
-export default function login() {
+export default function Login() {
     const router = useRouter()
 
     const [eMail, setEMail] = useState("")

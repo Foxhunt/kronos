@@ -5,7 +5,7 @@ import { userDocRefAtom } from "../store"
 
 import CollectionList from "../components/CollectionList"
 
-export default function files() {
+export default function Index() {
     const [userDocRef] = useAtom(userDocRefAtom)
 
     return <>
