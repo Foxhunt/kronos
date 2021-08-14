@@ -1,13 +1,9 @@
-import { AppProps } from "next/dist/next-server/lib/router/router"
-import { ComponentType } from "react"
 import { Provider } from "jotai"
-
-import "../firebase/clientApp"
-
-import User from "../services/User"
-
+import { AppProps } from "next/dist/shared/lib/router/router"
+import { ComponentType } from "react"
 import Header from "../components/Header"
-
+import "../firebase/clientApp"
+import User from "../services/User"
 import "../styles.css"
 
 type Props = {
