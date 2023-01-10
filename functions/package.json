@@ -18,7 +18,7 @@
   "dependencies": {
     "@google-cloud/vision": "^2.1.2",
     "algoliasearch": "^4.8.3",
-    "firebase-admin": "^9.4.1",
+    "firebase-admin": "^11.4.1",
     "firebase-functions": "^3.11.0"
   },
   "devDependencies": {
